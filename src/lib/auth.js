@@ -2,63 +2,80 @@ import { MongoClient } from "mongodb";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { APIError } from "better-auth/api";
-import { PASSWORD_RULE_MESSAGE, resolveRole, validatePassword } from "@/lib/auth-rules";
+import {
+  PASSWORD_RULE_MESSAGE,
+  resolveRole,
+  validatePassword,
+} from "@/lib/auth-rules";
 
-const uri = process.env.MONGODB_URI;
+// Built lazily on first request. Eager construction at module scope made the
+// production build fail whenever MONGODB_URI was absent, which would also break
+// every preview deployment. Build time must not depend on runtime secrets.
+let cached = null;
 
-if (!uri) {
-  throw new Error("MONGODB_URI is not set — copy .env.example to .env.local");
-}
+function createAuth() {
+  const uri = process.env.MONGODB_URI;
 
-const client = new MongoClient(uri);
-const db = client.db(process.env.DB_NAME || "equipra");
+  if (!uri) {
+    throw new Error("MONGODB_URI is not set — copy .env.example to .env.local");
+  }
 
-const baseURL = process.env.BETTER_AUTH_URL;
+  const client = new MongoClient(uri);
+  const db = client.db(process.env.DB_NAME || "equipra");
+  const baseURL = process.env.BETTER_AUTH_URL;
 
-export const auth = betterAuth({
-  database: mongodbAdapter(db, { client }),
-  baseURL,
-  secret: process.env.BETTER_AUTH_SECRET,
-  // Filtered so an unset BETTER_AUTH_URL does not become a trusted [undefined].
-  trustedOrigins: [baseURL].filter(Boolean),
-  emailAndPassword: {
-    enabled: true,
-    autoSignIn: true,
-    // Spec (01-PRODUCT-SPEC): >= 6 chars. BetterAuth defaults to 8 and would
-    // reject valid 6-7 char passwords before our rule ever runs.
-    minPasswordLength: 6,
-  },
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  return betterAuth({
+    database: mongodbAdapter(db, { client }),
+    baseURL,
+    secret: process.env.BETTER_AUTH_SECRET,
+    // Filtered so an unset BETTER_AUTH_URL does not become a trusted [undefined].
+    trustedOrigins: [baseURL].filter(Boolean),
+    emailAndPassword: {
+      enabled: true,
+      autoSignIn: true,
+      // Spec (01-PRODUCT-SPEC): >= 6 chars. BetterAuth defaults to 8 and would
+      // reject valid 6-7 char passwords before our rule ever runs.
+      minPasswordLength: 6,
     },
-  },
-  user: {
-    additionalFields: {
-      role: { type: "string", defaultValue: "customer", input: false },
-      phone: { type: "string", input: false },
-      address: { type: "string", input: false },
+    socialProviders: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      },
     },
-  },
-  databaseHooks: {
     user: {
-      create: {
-        // Signup may only ever produce customer or owner. Anything else,
-        // including every Google signup, falls back to customer — so `admin`
-        // can never be self-assigned.
-        before: async (user, ctx) => {
-          const password = ctx?.body?.password;
+      additionalFields: {
+        role: { type: "string", defaultValue: "customer", input: false },
+        phone: { type: "string", input: false },
+        address: { type: "string", input: false },
+      },
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          // Signup may only ever produce customer or owner. Anything else,
+          // including every Google signup, falls back to customer — so `admin`
+          // can never be self-assigned.
+          before: async (user, ctx) => {
+            const password = ctx?.body?.password;
 
-          if (typeof password === "string" && !validatePassword(password)) {
-            throw new APIError("BAD_REQUEST", { message: PASSWORD_RULE_MESSAGE });
-          }
+            if (typeof password === "string" && !validatePassword(password)) {
+              throw new APIError("BAD_REQUEST", {
+                message: PASSWORD_RULE_MESSAGE,
+              });
+            }
 
-          return {
-            data: { ...user, role: resolveRole(ctx?.body?.accountType) },
-          };
+            return {
+              data: { ...user, role: resolveRole(ctx?.body?.accountType) },
+            };
+          },
         },
       },
     },
-  },
-});
+  });
+}
+
+export function getAuth() {
+  if (!cached) cached = createAuth();
+  return cached;
+}
