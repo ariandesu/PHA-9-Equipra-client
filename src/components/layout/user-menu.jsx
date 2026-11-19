@@ -39,23 +39,34 @@ export function UserSkeleton() {
   );
 }
 
+export function performLogout() {
+  return authClient.signOut().then(({ error }) => {
+    if (error) {
+      toast.error(error.message || "Could not sign out.");
+      return false;
+    }
+
+    toast.success("Signed out.");
+    return true;
+  }, (error) => {
+    toast.error(error.message || "Could not sign out.");
+    return false;
+  });
+}
+
 export function LogoutButton({ onDone, className = "" }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
 
   async function handleLogout() {
     setPending(true);
+    const ok = await performLogout();
+    setPending(false);
+    if (!ok) return;
 
-    try {
-      await authClient.signOut();
-      toast.success("Signed out.");
-      onDone?.();
-      router.push("/");
-      router.refresh();
-    } catch {
-      toast.error("Could not sign out.");
-      setPending(false);
-    }
+    router.push("/");
+    router.refresh();
+    onDone?.();
   }
 
   return (
@@ -77,16 +88,12 @@ export function UserDropdown({ user }) {
 
   async function handleLogout() {
     setPending(true);
+    const ok = await performLogout();
+    setPending(false);
+    if (!ok) return;
 
-    try {
-      await authClient.signOut();
-      toast.success("Signed out.");
-      router.push("/");
-      router.refresh();
-    } catch {
-      toast.error("Could not sign out.");
-      setPending(false);
-    }
+    router.push("/");
+    router.refresh();
   }
 
   return (
