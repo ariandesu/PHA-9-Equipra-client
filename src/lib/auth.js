@@ -1,0 +1,64 @@
+import { MongoClient } from "mongodb";
+import { betterAuth } from "better-auth";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { APIError } from "better-auth/api";
+import { PASSWORD_RULE_MESSAGE, resolveRole, validatePassword } from "@/lib/auth-rules";
+
+const uri = process.env.MONGODB_URI;
+
+if (!uri) {
+  throw new Error("MONGODB_URI is not set — copy .env.example to .env.local");
+}
+
+const client = new MongoClient(uri);
+const db = client.db(process.env.DB_NAME || "equipra");
+
+const baseURL = process.env.BETTER_AUTH_URL;
+
+export const auth = betterAuth({
+  database: mongodbAdapter(db, { client }),
+  baseURL,
+  secret: process.env.BETTER_AUTH_SECRET,
+  // Filtered so an unset BETTER_AUTH_URL does not become a trusted [undefined].
+  trustedOrigins: [baseURL].filter(Boolean),
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    // Spec (01-PRODUCT-SPEC): >= 6 chars. BetterAuth defaults to 8 and would
+    // reject valid 6-7 char passwords before our rule ever runs.
+    minPasswordLength: 6,
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+  },
+  user: {
+    additionalFields: {
+      role: { type: "string", defaultValue: "customer", input: false },
+      phone: { type: "string", input: false },
+      address: { type: "string", input: false },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        // Signup may only ever produce customer or owner. Anything else,
+        // including every Google signup, falls back to customer — so `admin`
+        // can never be self-assigned.
+        before: async (user, ctx) => {
+          const password = ctx?.body?.password;
+
+          if (typeof password === "string" && !validatePassword(password)) {
+            throw new APIError("BAD_REQUEST", { message: PASSWORD_RULE_MESSAGE });
+          }
+
+          return {
+            data: { ...user, role: resolveRole(ctx?.body?.accountType) },
+          };
+        },
+      },
+    },
+  },
+});
