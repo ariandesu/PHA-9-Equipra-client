@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import { clearTokenCache } from "@/lib/api";
 
 export function initialsOf(name = "", email = "") {
   const source = name.trim() || email.split("@")[0] || "?";
@@ -47,6 +48,7 @@ export function performLogout() {
     }
 
     toast.success("Signed out.");
+    clearTokenCache();
     return true;
   }, (error) => {
     toast.error(error.message || "Could not sign out.");
