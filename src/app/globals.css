@@ -64,9 +64,37 @@
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --radius-card: 22px;
   --radius-input: 10px;
+  /* shadcn/ui token aliases — see the component-token block below. */
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* shadcn/ui component tokens.
+   The primitives are generated against shadcn's own token vocabulary; these are
+   aliases onto the design-system tokens above, not new values. Focus fills must
+   carry a contrasting foreground or focused menu items render orange on orange. */
+:root,
+.dark {
+  --muted-foreground: var(--muted);
+  --secondary: var(--raised);
+  --secondary-foreground: var(--foreground);
+  --popover: var(--surface);
+  --popover-foreground: var(--foreground);
+  --input: var(--border-strong);
+  --ring: var(--primary);
+  --destructive: var(--danger);
+  --accent-foreground: var(--primary-foreground);
+  --radius-md: var(--radius-input);
 }
