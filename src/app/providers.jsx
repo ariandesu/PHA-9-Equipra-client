@@ -1,9 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { useState } from "react";
+import WelcomeFlag from "@/components/auth/welcome-flag";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(
@@ -23,6 +25,9 @@ export default function Providers({ children }) {
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
         {children}
+        <Suspense fallback={null}>
+          <WelcomeFlag />
+        </Suspense>
         <Toaster theme="dark" position="top-center" richColors />
       </QueryClientProvider>
     </ThemeProvider>

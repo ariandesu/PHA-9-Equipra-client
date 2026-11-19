@@ -1,7 +1,5 @@
-import { Suspense } from "react";
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
-import WelcomeFlag from "@/components/auth/welcome-flag";
 
 export default function SiteLayout({ children }) {
   return (
@@ -16,9 +14,6 @@ export default function SiteLayout({ children }) {
       <main id="main" className="flex-1">
         {children}
       </main>
-      <Suspense fallback={null}>
-        <WelcomeFlag />
-      </Suspense>
       <Footer />
     </>
   );
