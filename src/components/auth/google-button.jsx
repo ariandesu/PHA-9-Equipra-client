@@ -5,16 +5,33 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
-export default function GoogleButton({ label = "Continue with Google" }) {
+function withWelcome(path) {
+  return path.includes("?") ? `${path}&welcome=1` : `${path}?welcome=1`;
+}
+
+export default function GoogleButton({
+  label = "Continue with Google",
+  redirectTo = "/dashboard",
+}) {
   const [pending, setPending] = useState(false);
 
   async function handleClick() {
     setPending(true);
 
     try {
-      await authClient.signIn.social({ provider: "google", callbackURL: "/" });
+      // signIn.social resolves with { error } rather than throwing, so the
+      // result has to be inspected or failures vanish silently.
+      const { error } = await authClient.signIn.social({
+        provider: "google",
+        callbackURL: withWelcome(redirectTo),
+      });
+
+      if (error) {
+        toast.error(error.message || "Google sign-in failed. Please try again.");
+        setPending(false);
+      }
     } catch {
-      toast.error("Google sign-in isn't available right now.");
+      toast.error("Could not reach Google. Please try again.");
       setPending(false);
     }
   }

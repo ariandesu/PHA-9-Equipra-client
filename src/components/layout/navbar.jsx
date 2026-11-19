@@ -6,6 +6,12 @@ import { Menu } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import Logo from "@/components/layout/logo";
 import ThemeToggle from "@/components/layout/theme-toggle";
+import {
+  UserMenu,
+  initialsOf,
+  UserSkeleton,
+  LogoutButton,
+} from "@/components/layout/user-menu";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,6 +19,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { authClient } from "@/lib/auth-client";
 
 const links = [
   { href: "/", label: "Home" },
@@ -22,10 +30,44 @@ const links = [
   { href: "/#contact", label: "Contact" },
 ];
 
+function AuthActions({ session, className = "" }) {
+  // One component decides the whole state so exactly one control renders:
+  // skeleton while pending, the avatar menu when signed in, links otherwise.
+  if (session.isPending) {
+    return (
+      <div className={className}>
+        <UserSkeleton />
+      </div>
+    );
+  }
+
+  if (session.data?.user) {
+    return (
+      <div className={className}>
+        <UserMenu session={session} />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      <Button asChild variant="ghost" size="sm">
+        <Link href="/login">Log in</Link>
+      </Button>
+      <Button asChild variant="action" size="sm">
+        <Link href="/register">Get started</Link>
+      </Button>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const reduced = useReducedMotion();
+  const session = authClient.useSession();
   const [hovered, setHovered] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const user = session.data?.user;
 
   return (
     <header className="sticky top-4 z-50 mx-auto w-full max-w-[1100px] px-4">
@@ -64,12 +106,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <Link href="/login">Log in</Link>
-          </Button>
-          <Button asChild variant="action" size="sm" className="hidden sm:inline-flex">
-            <Link href="/register">Get started</Link>
-          </Button>
+          <AuthActions session={session} className="hidden sm:flex" />
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -96,14 +133,44 @@ export default function Navbar() {
                     </Link>
                   </li>
                 ))}
-                <li className="flex gap-2 pt-4">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href="/login">Log in</Link>
-                  </Button>
-                  <Button asChild variant="action" size="sm">
-                    <Link href="/register">Get started</Link>
-                  </Button>
-                </li>
+
+                {user ? (
+                  <li className="border-t border-border pt-4">
+                    <div className="mb-2 flex items-center gap-2 px-3">
+                      <Avatar className="size-9">
+                        {user.image && <AvatarImage src={user.image} alt="" />}
+                        <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                          {initialsOf(user.name, user.email)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">{user.name}</p>
+                        <p className="truncate text-xs text-muted">{user.email}</p>
+                      </div>
+                    </div>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className="block rounded-[10px] px-3 py-2 text-sm text-muted hover:bg-raised hover:text-foreground"
+                    >
+                      Dashboard
+                    </Link>
+                    <LogoutButton onDone={() => setOpen(false)} />
+                  </li>
+                ) : (
+                  <li className="flex gap-2 pt-4">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href="/login" onClick={() => setOpen(false)}>
+                        Log in
+                      </Link>
+                    </Button>
+                    <Button asChild variant="action" size="sm">
+                      <Link href="/register" onClick={() => setOpen(false)}>
+                        Get started
+                      </Link>
+                    </Button>
+                  </li>
+                )}
               </ul>
             </SheetContent>
           </Sheet>

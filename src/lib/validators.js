@@ -12,7 +12,14 @@ const password = z
 export const registerSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(80, "Name is too long"),
   email: z.string().trim().toLowerCase().email("Enter a valid email address"),
-  photoURL: z.string().trim().url("Enter a valid image URL").or(z.literal("")),
+  // Optional, so the empty case must be accepted before the URL check. A
+  // refinement validates only when a value was actually typed.
+  photoURL: z
+    .string()
+    .trim()
+    .refine((value) => value === "" || /^https?:\/\/\S+$/i.test(value), {
+      message: "Enter a valid image URL",
+    }),
   accountType: z.enum(["renter", "owner"]),
   password,
 });
