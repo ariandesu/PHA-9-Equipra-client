@@ -13,6 +13,7 @@ import { AuthError, AuthField, AuthHeading } from "@/components/auth/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/lib/validators";
+import { safeRedirect } from "@/lib/redirect";
 import { authClient } from "@/lib/auth-client";
 
 const roleOptions = [
@@ -23,7 +24,7 @@ const roleOptions = [
 export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const redirectTo = safeRedirect(searchParams.get("redirect"));
 
   const {
     register,
@@ -68,6 +69,15 @@ export default function RegisterPage() {
     router.refresh();
   }
 
+  function onInvalid(formErrors) {
+    // Spec: the password rule violation needs a toast as well as inline text.
+    const message =
+      formErrors.password?.message ??
+      Object.values(formErrors)[0]?.message ??
+      "Please check the highlighted fields.";
+    toast.error(message);
+  }
+
   return (
     <AuthShell>
       <div className="space-y-6">
@@ -83,7 +93,7 @@ export default function RegisterPage() {
           }
         />
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-5" noValidate>
           <div className="grid gap-4 sm:grid-cols-2">
             <AuthField label="Full name" htmlFor="name" error={errors.name?.message}>
               <Input
@@ -171,7 +181,7 @@ export default function RegisterPage() {
           <span className="h-px flex-1 bg-border" />
         </div>
 
-        <GoogleButton />
+        <GoogleButton redirectTo={redirectTo} />
 
         <p className="text-xs text-subtle">
           Google sign-ups start as Customers. Owners can switch role from their

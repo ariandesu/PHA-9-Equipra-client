@@ -11,12 +11,13 @@ import { AuthError, AuthField, AuthHeading } from "@/components/auth/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/lib/validators";
+import { safeRedirect } from "@/lib/redirect";
 import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const redirectTo = safeRedirect(searchParams.get("redirect"));
 
   const {
     register,
@@ -46,6 +47,15 @@ export default function LoginPage() {
     router.refresh();
   }
 
+  function onInvalid(formErrors) {
+    // Spec: validation failures must toast as well as show inline errors.
+    const message =
+      formErrors.password?.message ??
+      formErrors.email?.message ??
+      "Please check the highlighted fields.";
+    toast.error(message);
+  }
+
   return (
     <AuthShell>
       <div className="space-y-6">
@@ -61,7 +71,7 @@ export default function LoginPage() {
           }
         />
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-5" noValidate>
           <AuthField label="Email" htmlFor="email" error={errors.email?.message}>
             <Input
               id="email"
@@ -101,7 +111,7 @@ export default function LoginPage() {
           <span className="h-px flex-1 bg-border" />
         </div>
 
-        <GoogleButton label="Continue with Google" />
+        <GoogleButton label="Continue with Google" redirectTo={redirectTo} />
       </div>
     </AuthShell>
   );
