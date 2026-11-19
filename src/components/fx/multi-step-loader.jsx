@@ -4,18 +4,23 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { Loader2 } from "lucide-react";
 
-export default function MultiStepLoader({ steps, activeIndex = 2 }) {
+export default function MultiStepLoader({
+  steps,
+  activeIndex = 0,
+  intervalMs = 700,
+}) {
   const reduced = useReducedMotion();
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    if (reduced) return;
+    // Reduced motion means no cycling; the caller controls the visible step.
+    if (reduced) return undefined;
 
-    const timer = setInterval(() => setTick((n) => n + 1), 700);
+    const timer = setInterval(() => setTick((n) => n + 1), intervalMs);
     return () => clearInterval(timer);
-  }, [reduced]);
+  }, [reduced, intervalMs]);
 
-  const current = reduced ? activeIndex : activeIndex + (tick % steps.length);
+  const current = reduced ? activeIndex : (activeIndex + tick) % steps.length;
 
   return (
     <div className="w-full max-w-md rounded-[22px] border border-border bg-surface p-7">
