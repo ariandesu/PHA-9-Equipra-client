@@ -6,33 +6,60 @@ const api = axios.create({
 
 let cachedToken = null;
 let cachedExpiresAt = null;
+let tokenPromise = null;
 
+// Fetch the JWT from the Next app's own /api/token route (same-origin),
+// never from the Express baseURL. The token route carries the BetterAuth
+// session cookie, so a cross-origin fetch to Express would never carry it.
 async function getToken() {
   const now = Date.now();
 
-  // Refresh when missing or under 60 seconds to expiry.
+  // Return cached token if still valid (with 60s buffer).
   if (cachedToken && cachedExpiresAt && now < cachedExpiresAt - 60 * 1000) {
     return cachedToken;
   }
 
-  const res = await fetch(`${api.defaults.baseURL}/api/auth/token`, {
-    cache: 'no-store',
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch token');
+  // De-duplicate concurrent refreshes: only one in-flight request at a time.
+  if (tokenPromise) {
+    return tokenPromise;
   }
 
-  const { token, expiresAt } = await res.json();
-  cachedToken = token;
-  cachedExpiresAt = new Date(expiresAt).getTime();
+  tokenPromise = (async () => {
+    try {
+      const res = await fetch('/api/token', {
+        cache: 'no-store',
+        credentials: 'same-origin',
+      });
 
-  return token;
+      // 401 means anonymous — not an error, just no token.
+      if (res.status === 401) {
+        cachedToken = null;
+        cachedExpiresAt = null;
+        return null;
+      }
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch token: ${res.status}`);
+      }
+
+      const { token, expiresAt } = await res.json();
+      cachedToken = token;
+      cachedExpiresAt = new Date(expiresAt).getTime();
+
+      return token;
+    } finally {
+      tokenPromise = null;
+    }
+  })();
+
+  return tokenPromise;
 }
 
 api.interceptors.request.use(async (config) => {
   const token = await getToken();
-  config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
@@ -41,16 +68,24 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    // Retry once only if the original request carried a token.
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.headers.Authorization
+    ) {
       originalRequest._retry = true;
 
       try {
-        // Force a fresh token on 401, then retry once.
         cachedToken = null;
         cachedExpiresAt = null;
+        tokenPromise = null;
         const token = await getToken();
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-        return api(originalRequest);
+        if (token) {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return api(originalRequest);
+        }
       } catch (refreshError) {
         return Promise.reject(refreshError);
       }
@@ -63,6 +98,7 @@ api.interceptors.response.use(
 export function clearTokenCache() {
   cachedToken = null;
   cachedExpiresAt = null;
+  tokenPromise = null;
 }
 
 export default api;

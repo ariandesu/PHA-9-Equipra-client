@@ -1,17 +1,25 @@
 export const dynamic = 'force-dynamic';
 import { headers } from 'next/headers';
 import { getAuth } from '@/lib/auth';
-import { sign } from 'jsonwebtoken';
+import { sign, decode } from 'jsonwebtoken';
 
 export async function GET() {
+  if (
+    !process.env.JWT_SECRET ||
+    !process.env.JWT_ISSUER ||
+    !process.env.JWT_AUDIENCE
+  ) {
+    return Response.json(
+      { message: 'Token signing is not configured', code: 'TOKEN_MISCONFIGURED' },
+      { status: 503 },
+    );
+  }
+
   const authInstance = await getAuth();
   const session = await authInstance.api.getSession({ headers: await headers() });
 
   if (!session || !session.user) {
-    return new Response(JSON.stringify({ message: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
   const token = sign(
@@ -25,13 +33,11 @@ export async function GET() {
     }
   );
 
-  const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+  const decoded = decode(token);
+  const expiresAt = new Date(Number(decoded?.exp) * 1000).toISOString();
 
-  return new Response(JSON.stringify({ token, expiresAt }), {
+  return Response.json({ token, expiresAt }, {
     status: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-store',
-    },
+    headers: { 'Cache-Control': 'no-store' },
   });
 }
