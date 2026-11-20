@@ -1,0 +1,79 @@
+/* 03-DESIGN-SYSTEM.md §4 FX primitives shared by GlowCard and MovingBorder.
+   `--ang` is registered so the conic border can actually interpolate its angle
+   while it spins; without @property the keyframe would snap. */
+
+@property --ang {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes fx-ang {
+  to {
+    --ang: 360deg;
+  }
+}
+
+.fx-spin {
+  animation: fx-ang 4s linear infinite;
+}
+
+/* 03 §4 GlowCard: the conic border only spins while the card is hovered. */
+[data-slot="glow-card"]:hover .fx-spin-on-hover {
+  animation: fx-ang 4s linear infinite;
+}
+
+/* 03 §4 GlowCard: conic-gradient border spin. */
+.fx-glow-ring {
+  background: conic-gradient(
+    from var(--ang),
+    transparent 0deg,
+    transparent 205deg,
+    var(--accent) 285deg,
+    var(--accent-2) 330deg,
+    transparent 360deg
+  );
+}
+
+/* 03 §4 MovingBorder: rotating conic gradient behind 1.5px padding. */
+.fx-moving-ring {
+  background: conic-gradient(
+    from var(--ang),
+    var(--accent) 0deg,
+    var(--accent-2) 70deg,
+    transparent 155deg,
+    transparent 295deg,
+    var(--accent) 360deg
+  );
+}
+
+/* Keeps only the padding box of the element, so a padded layer renders as a
+   thin ring with a fully transparent centre. */
+.fx-ring-mask {
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* 03 §4 GridBackground / DotBackground: 56px lines and 22px dots with a
+   radial mask so the pattern fades out at the edges. */
+.fx-grid {
+  background-image:
+    linear-gradient(to right, #1a1a1a 1px, transparent 1px),
+    linear-gradient(to bottom, #1a1a1a 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
+}
+
+.fx-dots {
+  background-image: radial-gradient(#262626 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
+}
