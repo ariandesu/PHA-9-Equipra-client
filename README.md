@@ -51,20 +51,20 @@ Names only — copy `.env.example` to `.env.local` and fill in the values.
 | `JWT_SECRET` | Must match the server's value exactly |
 | `JWT_ISSUER` / `JWT_AUDIENCE` | Must match the server's values |
 | `NEXT_PUBLIC_IMGBB_KEY` | imgbb API key for image uploads |
-| `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` | Passwords used only by the seed script |
+| `SEED_ADMIN_PASSWORD` / `Rent@123456` | Passwords used only by the seed script |
 
 ## Demo accounts
 
 Created by `npm run seed`. These are **demo test credentials**, not real secrets;
-the passwords come from the `SEED_*` variables in your local env.
+use these to log in on the live site.
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | `admin@equipra.app` | `SEED_ADMIN_PASSWORD` |
-| Owner | `owner@karimhm.com` | `SEED_USER_PASSWORD` |
-| Owner | `lensbox@bd.com` | `SEED_USER_PASSWORD` |
-| Customer | `rafi@mail.com` | `SEED_USER_PASSWORD` |
-| Customer | `tanvir@build.bd` | `SEED_USER_PASSWORD` |
+| Admin | `admin@equipra.app` | `Admin@123456` |
+| Owner | `owner@karimhm.com` | `Rent@123456` |
+| Owner | `lensbox@bd.com` | `Rent@123456` |
+| Customer | `rafi@mail.com` | `Rent@123456` |
+| Customer | `tanvir@build.bd` | `Rent@123456` |
 
 The seed also creates the remaining owners and customers referenced by the demo
 bookings (`sadia.farm@mail.com`, `farhan@frame.bd`, `nusrat.j@mail.com`,
