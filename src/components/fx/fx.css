@@ -162,4 +162,23 @@
   );
 }
 
+/* 03 §4 BentoGrid: auto-scrolling transaction rows */
+@keyframes fx-scroll-transactions {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.fx-scroll-transactions {
+  animation: fx-scroll-transactions 12s linear infinite;
+}
+
+.fx-scroll-transactions:hover {
+  animation-play-state: paused;
+}
+
+
 
