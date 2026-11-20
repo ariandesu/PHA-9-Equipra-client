@@ -1,9 +1,15 @@
 import Hero from "@/components/home/hero";
+import Showcase from "@/components/home/showcase";
+import LogoCloud from "@/components/home/logo-cloud";
+import Stats from "@/components/home/stats";
 
 export default function Home() {
   return (
     <div className="flex flex-col">
       <Hero />
+      <Showcase />
+      <LogoCloud />
+      <Stats />
     </div>
   );
 }

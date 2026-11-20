@@ -81,3 +81,30 @@
   -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
   mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
 }
+
+/* 03 §4 LogoCloud: infinite marquee (translateX -50%), hover: siblings blur(2px) */
+@keyframes fx-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.fx-marquee {
+  display: flex;
+  width: max-content;
+  animation: fx-marquee 28s linear infinite;
+}
+
+.fx-marquee:hover {
+  animation-play-state: paused;
+}
+
+.fx-marquee-group:hover > :not(:hover) {
+  filter: blur(2px);
+  opacity: 0.45;
+  transition: filter 0.25s ease, opacity 0.25s ease;
+}
+
