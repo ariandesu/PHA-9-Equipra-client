@@ -17,10 +17,7 @@ function ReviewCard({ review }) {
   const commentText = review.comment.replace(/^“|”$/g, "");
 
   return (
-    <div
-      tabIndex={0}
-      className="flex w-[320px] sm:w-[400px] shrink-0 flex-col justify-between rounded-[22px] border border-border bg-surface p-5 sm:p-6 shadow-sm transition-colors hover:border-border-strong focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
-    >
+    <div className="flex w-[320px] sm:w-[400px] shrink-0 flex-col justify-between rounded-[22px] border border-border bg-surface p-5 sm:p-6 shadow-sm transition-colors hover:border-border-strong">
       <div>
         <div
           role="img"
@@ -91,30 +88,44 @@ export default function Reviews() {
       ) : (
         <div className="flex flex-col gap-6">
           {/* Row 1 moving left */}
-          <div className="fx-cards-row relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          <div
+            tabIndex={0}
+            role="region"
+            aria-label="Customer reviews, row 1"
+            className="fx-cards-row relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+          >
             <div className="fx-cards-left flex w-max gap-6 py-2">
-              {[...row1, ...row1, ...row1].map((rev, idx) => (
-                <div
-                  key={`${rev.id}-${idx}`}
-                  aria-hidden={idx >= row1.length ? "true" : undefined}
-                >
-                  <ReviewCard review={rev} />
-                </div>
-              ))}
+              <div className="flex gap-6">
+                {row1.map((rev) => (
+                  <ReviewCard key={rev.id} review={rev} />
+                ))}
+              </div>
+              <div aria-hidden="true" inert="" className="flex gap-6">
+                {[...row1, ...row1].map((rev, idx) => (
+                  <ReviewCard key={`${rev.id}-dup-${idx}`} review={rev} />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Row 2 moving right */}
-          <div className="fx-cards-row relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          <div
+            tabIndex={0}
+            role="region"
+            aria-label="Customer reviews, row 2"
+            className="fx-cards-row relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20"
+          >
             <div className="fx-cards-right flex w-max gap-6 py-2">
-              {[...row2, ...row2, ...row2].map((rev, idx) => (
-                <div
-                  key={`${rev.id}-${idx}`}
-                  aria-hidden={idx >= row2.length ? "true" : undefined}
-                >
-                  <ReviewCard review={rev} />
-                </div>
-              ))}
+              <div className="flex gap-6">
+                {row2.map((rev) => (
+                  <ReviewCard key={rev.id} review={rev} />
+                ))}
+              </div>
+              <div aria-hidden="true" inert="" className="flex gap-6">
+                {[...row2, ...row2].map((rev, idx) => (
+                  <ReviewCard key={`${rev.id}-dup-${idx}`} review={rev} />
+                ))}
+              </div>
             </div>
           </div>
         </div>

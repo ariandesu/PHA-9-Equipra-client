@@ -344,7 +344,7 @@ export const reviews = [
     name: 'Farhan Kabir',
     role: 'Filmmaker · Chattogram',
     equipmentType: 'CAMERA RIG',
-    rating: 5,
+    rating: 4,
     comment:
       'The camera rig arrived with every battery charged. Stripe checkout took less than a minute.',
     createdAt: '2026-10-16T08:00:00.000Z',
@@ -364,7 +364,7 @@ export const reviews = [
     name: 'Arif Hossain',
     role: 'Photographer · Sylhet',
     equipmentType: 'DRONE',
-    rating: 4,
+    rating: 5,
     comment:
       'Favorited three drones, compared specs, booked the Mavic in two clicks. Exactly what I needed.',
     createdAt: '2026-10-30T08:00:00.000Z',
