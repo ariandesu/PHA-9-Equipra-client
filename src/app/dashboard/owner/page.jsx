@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "Owner overview — Equipra",
+  description: "Owner analytics for your equipment.",
+};
+
 import { requireRole } from "@/lib/require-role";
 import OwnerOverview from "@/components/dashboard/owner-overview";
 

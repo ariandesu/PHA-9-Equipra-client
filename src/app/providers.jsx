@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { useState } from "react";
 import WelcomeFlag from "@/components/auth/welcome-flag";
+import CommandMenu from "@/components/layout/command-menu";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(
@@ -25,6 +26,7 @@ export default function Providers({ children }) {
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <QueryClientProvider client={queryClient}>
         {children}
+        <CommandMenu />
         <Suspense fallback={null}>
           <WelcomeFlag />
         </Suspense>

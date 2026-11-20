@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "Profile — Equipra",
+  description: "Your Equipra profile.",
+};
+
 import { requireRole } from "@/lib/require-role";
 import ProfileForm from "@/components/dashboard/profile-form";
 

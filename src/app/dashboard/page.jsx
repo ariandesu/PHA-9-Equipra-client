@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "Dashboard — Equipra",
+  description: "Your Equipra dashboard.",
+};
+
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/require-role";
 

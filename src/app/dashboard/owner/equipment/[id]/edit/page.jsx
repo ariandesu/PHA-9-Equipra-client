@@ -1,28 +1,15 @@
-"use client";
+export const metadata = {
+  title: "Edit equipment — Equipra",
+  description: "Update your equipment listing.",
+};
 
-import { use } from "react";
-import { notFound } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import EquipmentForm from "@/components/dashboard/equipment-form";
-import { useEquipment } from "@/lib/data/hooks";
+import { requireRole } from "@/lib/require-role";
+import OwnerEditEquipmentForm from "@/components/dashboard/owner-edit-equipment-form";
 
-export default function OwnerEditEquipmentPage({ params }) {
-  const { id } = use(params);
-  const { data: itemRes, isPending, isError } = useEquipment(id);
-  const item = itemRes?.data;
-
-  if (!isPending && (isError || !item)) {
-    notFound();
-  }
-
-  if (isPending || !item) {
-    return (
-      <div className="flex items-center gap-2 text-sm text-muted animate-pulse py-12">
-        <Loader2 className="size-5 animate-spin" />
-        <span>Loading equipment details...</span>
-      </div>
-    );
-  }
-
-  return <EquipmentForm initialData={item} isEdit={true} equipmentId={id} />;
+// Audit X1: the guard runs on the server; the form itself stays a client
+// component because it needs react-hook-form, imgbb upload and TanStack Query.
+export default async function OwnerEditEquipmentPage({ params }) {
+  await requireRole(["owner"]);
+  const { id } = await params;
+  return <OwnerEditEquipmentForm equipmentId={id} />;
 }

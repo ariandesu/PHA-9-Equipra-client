@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "Home — Equipra",
+  description: "Equipra is an equipment rental marketplace. Owners list gear, admins approve it, customers book and pay online.",
+};
+
 import Hero from "@/components/home/hero";
 import Showcase from "@/components/home/showcase";
 import LogoCloud from "@/components/home/logo-cloud";
