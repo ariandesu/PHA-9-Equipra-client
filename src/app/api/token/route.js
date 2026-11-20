@@ -1,9 +1,19 @@
-export const dynamic = 'force-dynamic';
 import { headers } from 'next/headers';
 import { getAuth } from '@/lib/auth';
 import { sign, decode } from 'jsonwebtoken';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
+  const authInstance = await getAuth();
+  const session = await authInstance.api.getSession({ headers: await headers() });
+
+  // Anonymous visitors always get 401, even if signing isn't configured.
+  if (!session || !session.user) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Only signed-in users need signing config.
   if (
     !process.env.JWT_SECRET ||
     !process.env.JWT_ISSUER ||
@@ -13,13 +23,6 @@ export async function GET() {
       { message: 'Token signing is not configured', code: 'TOKEN_MISCONFIGURED' },
       { status: 503 },
     );
-  }
-
-  const authInstance = await getAuth();
-  const session = await authInstance.api.getSession({ headers: await headers() });
-
-  if (!session || !session.user) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
   const token = sign(

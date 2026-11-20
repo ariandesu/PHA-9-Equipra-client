@@ -4,15 +4,31 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
 });
 
+// This client is for client components / TanStack Query only.
+// Server components must not import it — they have no browser fetch or
+// document.cookie, and the JWT lives in an HttpOnly cookie.
 let cachedToken = null;
 let cachedExpiresAt = null;
+let cachedAnonymous = null; // null result cached for 30s
+let anonymousExpiresAt = 0;
 let tokenPromise = null;
 
 // Fetch the JWT from the Next app's own /api/token route (same-origin),
 // never from the Express baseURL. The token route carries the BetterAuth
 // session cookie, so a cross-origin fetch to Express would never carry it.
 async function getToken() {
+  // Only the browser can read the BetterAuth session cookie.
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   const now = Date.now();
+
+  // Return cached anonymous result for 30s so a logged-out visitor doesn't
+  // hit /api/token before every request.
+  if (!cachedToken && anonymousExpiresAt && now < anonymousExpiresAt) {
+    return null;
+  }
 
   // Return cached token if still valid (with 60s buffer).
   if (cachedToken && cachedExpiresAt && now < cachedExpiresAt - 60 * 1000) {
@@ -31,10 +47,11 @@ async function getToken() {
         credentials: 'same-origin',
       });
 
-      // 401 means anonymous — not an error, just no token.
+      // 401 means anonymous — not an error, just no token. Cache for 30s.
       if (res.status === 401) {
         cachedToken = null;
         cachedExpiresAt = null;
+        anonymousExpiresAt = Date.now() + 30 * 1000;
         return null;
       }
 
@@ -45,6 +62,7 @@ async function getToken() {
       const { token, expiresAt } = await res.json();
       cachedToken = token;
       cachedExpiresAt = new Date(expiresAt).getTime();
+      anonymousExpiresAt = 0;
 
       return token;
     } finally {
@@ -80,6 +98,7 @@ api.interceptors.response.use(
       try {
         cachedToken = null;
         cachedExpiresAt = null;
+        anonymousExpiresAt = 0;
         tokenPromise = null;
         const token = await getToken();
         if (token) {
@@ -98,6 +117,7 @@ api.interceptors.response.use(
 export function clearTokenCache() {
   cachedToken = null;
   cachedExpiresAt = null;
+  anonymousExpiresAt = 0;
   tokenPromise = null;
 }
 
