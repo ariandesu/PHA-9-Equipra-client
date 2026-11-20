@@ -10,7 +10,7 @@ import MultiStepLoader from "@/components/fx/multi-step-loader";
 import BookingForm from "@/components/details/booking-form";
 import BookingSummary from "@/components/details/booking-summary";
 import { quoteBooking } from "@/lib/pricing";
-import { useCreateBooking } from "@/lib/data/hooks";
+import { useCreateBooking, useCreateCheckout } from "@/lib/data/hooks";
 
 const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
 
@@ -25,6 +25,7 @@ function futureDayUTC(days) {
 export default function BookingModal({ item, open, onOpenChange }) {
   const router = useRouter();
   const createBooking = useCreateBooking();
+  const createCheckout = useCreateCheckout();
 
   const [startDate, setStartDate] = useState(futureDayUTC(1));
   const [endDate, setEndDate] = useState(futureDayUTC(3));
@@ -87,12 +88,36 @@ export default function BookingModal({ item, open, onOpenChange }) {
         notes: notes.trim(),
       });
 
-      setTimeout(() => {
+      const bookingId = res?.data?.id;
+
+      // Step 2 of the 02 §5 flow: ask the server for a Stripe Checkout URL.
+      let checkoutUrl = null;
+      try {
+        const checkout = await createCheckout.mutateAsync(bookingId);
+        checkoutUrl = checkout?.url || null;
+      } catch (checkoutError) {
         setIsSubmitting(false);
-        onOpenChange(false);
-        const bookingId = res?.data?.id || "demo-booking";
+        if (checkoutError?.status === 503) {
+          toast.error("Payments are not configured yet. Your reservation is held for 30 minutes.");
+        } else {
+          toast.error(checkoutError?.message || "Could not start the payment session.");
+        }
+        return;
+      }
+
+      onOpenChange(false);
+      setIsSubmitting(false);
+
+      if (checkoutUrl) {
+        // Absolute Stripe URLs leave the app; the mock returns a relative demo path.
+        if (/^https?:\/\//i.test(checkoutUrl)) {
+          window.location.assign(checkoutUrl);
+        } else {
+          router.push(checkoutUrl);
+        }
+      } else {
         router.push(`/payment/success?demo=1&booking=${encodeURIComponent(bookingId)}`);
-      }, 1400);
+      }
     } catch (err) {
       setIsSubmitting(false);
       toast.error(err.message || "Failed to create booking");

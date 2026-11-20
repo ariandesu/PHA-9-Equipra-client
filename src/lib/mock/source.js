@@ -290,6 +290,23 @@ async function createBooking(body = {}) {
   return { data: booking };
 }
 
+// Mock mode never charges money: checkout hands the caller the demo success URL.
+async function createCheckout(bookingId) {
+  await delay();
+  return { url: `/payment/success?demo=1&booking=${encodeURIComponent(bookingId)}` };
+}
+
+async function confirmPayment(sessionId) {
+  await delay();
+  const booking = store.bookings.find((row) => row.id === sessionId) || null;
+  if (booking) {
+    booking.paymentStatus = 'paid';
+    booking.status = 'confirmed';
+    booking.updatedAt = new Date().toISOString();
+  }
+  return { data: { booking, payment: null } };
+}
+
 async function myBookings(params = {}) {
   await delay();
   const rows = store.bookings
@@ -535,6 +552,8 @@ export const mockSource = {
   addFavorite,
   removeFavorite,
   createBooking,
+  createCheckout,
+  confirmPayment,
   myBookings,
   ownerBookings,
   adminBookings,

@@ -57,6 +57,15 @@ async function createBooking(body) {
   return request(api.post('/bookings', body));
 }
 
+// Returns { url } exactly as 02 §5 specifies (not wrapped in { data }).
+async function createCheckout(bookingId) {
+  return request(api.post('/payments/checkout', { bookingId }));
+}
+
+async function confirmPayment(sessionId) {
+  return request(api.post('/payments/confirm', { sessionId }));
+}
+
 async function myBookings(params = {}) {
   return request(api.get('/bookings/mine', { params }));
 }
@@ -136,6 +145,8 @@ export const apiSource = {
   addFavorite,
   removeFavorite,
   createBooking,
+  createCheckout,
+  confirmPayment,
   myBookings,
   ownerBookings,
   adminBookings,

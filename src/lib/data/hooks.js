@@ -145,6 +145,25 @@ export function useCreateBooking() {
   });
 }
 
+// Booking flow step 2 (02 §5): reservation -> checkout -> Stripe redirect.
+export function useCreateCheckout() {
+  return useMutation({
+    mutationFn: (bookingId) => source.createCheckout(bookingId),
+  });
+}
+
+// Called by /payment/success with the Stripe session id.
+export function useConfirmPayment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (sessionId) => source.confirmPayment(sessionId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+    },
+  });
+}
+
 export function useUpdateBookingStatus() {
   const queryClient = useQueryClient();
 
