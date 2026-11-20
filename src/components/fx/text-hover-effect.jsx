@@ -19,7 +19,7 @@ export default function TextHoverEffect({ text = "EQUIPRA", className = "" }) {
     >
       <span
         style={{ fontSize: "clamp(90px, 17vw, 250px)" }}
-        className="font-sans font-extrabold tracking-tighter text-transparent [-webkit-text-stroke:1.5px_#262626] dark:[-webkit-text-stroke:1.5px_#262626] transition-colors"
+        className="font-sans font-extrabold tracking-tighter text-transparent [-webkit-text-stroke:1.5px_var(--border-strong)] transition-colors"
       >
         {text}
       </span>

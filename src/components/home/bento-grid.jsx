@@ -37,7 +37,7 @@ export default function BentoGrid() {
   const reduced = useReducedMotion();
 
   return (
-    <section className="relative w-full py-20 sm:py-28">
+    <section id="about" className="relative w-full py-20 sm:py-28 scroll-mt-20">
       <div className="mx-auto flex max-w-[1100px] flex-col gap-12 sm:gap-16 px-4">
         {/* Header */}
         <div className="flex flex-col items-center gap-3 text-center">
@@ -64,21 +64,21 @@ export default function BentoGrid() {
             <div className="relative mt-6 flex h-48 sm:h-56 items-end justify-around rounded-xl border border-border/60 bg-raised/30 p-2 sm:p-4 pb-3 overflow-hidden">
               <div aria-hidden="true" className="fx-dots pointer-events-none absolute inset-0 opacity-40" />
               {PRICE_BARS.map((bar) => (
-                <div key={bar.label} className="relative z-10 flex h-full w-20 sm:w-24 flex-col items-center justify-end gap-1.5 sm:gap-2">
-                  <span className={`font-mono text-[11px] sm:text-xs font-semibold ${bar.highlight ? "text-accent" : "text-foreground"}`}>
-                    {bar.cost}
-                  </span>
-                  <div className="flex w-12 sm:w-20 items-end justify-center h-28 sm:h-36">
+                <div key={bar.label} className="relative z-10 flex h-full w-20 sm:w-24 flex-col items-center justify-end">
+                  <div className="flex w-12 sm:w-20 flex-col items-center justify-end h-28 sm:h-36">
+                    <span className={`mb-1 font-mono text-[11px] sm:text-xs font-semibold ${bar.highlight ? "text-accent" : "text-foreground"}`}>
+                      {bar.cost}
+                    </span>
                     <motion.div
                       style={{ height: bar.height, transformOrigin: "bottom" }}
                       initial={reduced ? undefined : { scaleY: 0 }}
                       whileInView={reduced ? undefined : { scaleY: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
-                      className={`w-full rounded-t-lg ${bar.highlight ? "bg-gradient-to-t from-accent to-accent-2 shadow-lg shadow-accent/25" : "bg-[#1F1F1F] border-t border-x border-white/5"}`}
+                      className={`w-full rounded-t-lg ${bar.highlight ? "bg-gradient-to-t from-accent to-accent-2 shadow-lg shadow-accent/25" : "bg-border-strong dark:bg-[#1F1F1F] border-t border-x border-border/30 dark:border-white/5"}`}
                     />
                   </div>
-                  <span className={`font-mono text-[10px] sm:text-[11px] text-center leading-tight ${bar.highlight ? "font-semibold text-foreground" : "text-muted"}`}>
+                  <span className={`mt-2 font-mono text-[10px] sm:text-[11px] text-center leading-tight ${bar.highlight ? "font-semibold text-foreground" : "text-muted"}`}>
                     {bar.label}
                   </span>
                 </div>
@@ -102,12 +102,12 @@ export default function BentoGrid() {
           </div>
 
           {/* Tile 3: Flexible periods (2 cols) */}
-          <div className="lg:col-span-2 flex flex-col justify-between rounded-[22px] border border-border bg-surface p-6 sm:p-7 shadow-sm">
+          <div className="lg:col-span-2 flex flex-col rounded-[22px] border border-border bg-surface p-6 sm:p-7 shadow-sm">
             <div>
               <h3 className="text-xl font-bold tracking-tight text-foreground">Flexible periods</h3>
               <p className="mt-1 text-sm text-muted">A weekend shoot or a six-month site.</p>
             </div>
-            <div className="my-6 flex flex-col gap-3">
+            <div className="mt-5 flex flex-col gap-3">
               {PERIOD_ROWS.map((period) => (
                 <div key={period.label} className="flex items-center justify-between gap-3 rounded-full border border-border bg-raised/40 px-3.5 py-2">
                   <span className="text-xs font-semibold text-foreground w-14">{period.label}</span>

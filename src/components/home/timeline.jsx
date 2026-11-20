@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 function StepOne() {
   return (
-    <div className="flex flex-col gap-3 rounded-[20px] border border-border bg-[#0E0E0E] p-4 sm:p-5 shadow-xl">
+    <div className="flex flex-col gap-3 rounded-[20px] border border-border bg-raised/50 dark:bg-[#0E0E0E] p-4 sm:p-5 shadow-xl">
       <div className="flex items-center justify-between rounded-lg border border-border bg-surface px-3 py-1.5 text-xs">
         <span className="flex items-center gap-1.5 font-mono text-[11px] text-foreground">
           <Search className="size-3.5 text-muted" aria-hidden="true" />
@@ -40,7 +40,7 @@ function StepOne() {
 function StepTwo() {
   const days = Array.from({ length: 28 }, (_, i) => i + 1);
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-[20px] border border-border bg-[#0E0E0E] p-4 sm:p-5 shadow-xl">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-[20px] border border-border bg-raised/50 dark:bg-[#0E0E0E] p-4 sm:p-5 shadow-xl">
       <div className="grid grid-cols-7 gap-1 text-center text-xs">
         {days.map((d) => (
           <span
@@ -84,18 +84,18 @@ function StepTwo() {
 
 function StepThree() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[20px] border border-border bg-[#0E0E0E] p-5 sm:p-6 shadow-xl">
-      <div className="w-full max-w-sm rounded-xl border border-white/10 bg-black/60 p-4 backdrop-blur">
-        <div className="flex items-center justify-between border-b border-white/10 pb-2.5 text-xs">
-          <span className="font-semibold text-white">Equipra Checkout</span>
-          <span className="font-mono text-[10px] uppercase tracking-wider text-[#A3A3A3]">SECURED BY STRIPE</span>
+    <div className="flex flex-col items-center justify-center rounded-[20px] border border-border bg-raised/50 dark:bg-[#0E0E0E] p-5 sm:p-6 shadow-xl">
+      <div className="w-full max-w-sm rounded-xl border border-border dark:border-white/10 bg-surface dark:bg-black/60 p-4 backdrop-blur shadow-md">
+        <div className="flex items-center justify-between border-b border-border dark:border-white/10 pb-2.5 text-xs">
+          <span className="font-semibold text-foreground dark:text-white">Equipra Checkout</span>
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted">SECURED BY STRIPE</span>
         </div>
-        <div className="py-3 font-mono text-sm tracking-widest text-[#D4D4D4]">•••• •••• •••• 4242</div>
-        <div className="flex items-baseline justify-between border-t border-white/10 pt-2.5 text-xs">
-          <span className="text-[#A3A3A3]">Total due</span>
-          <span className="font-mono text-base font-bold text-white">৳55,500</span>
+        <div className="py-3 font-mono text-sm tracking-widest text-muted">•••• •••• •••• 4242</div>
+        <div className="flex items-baseline justify-between border-t border-border dark:border-white/10 pt-2.5 text-xs">
+          <span className="text-muted">Total due</span>
+          <span className="font-mono text-base font-bold text-foreground dark:text-white">৳55,500</span>
         </div>
-        <div className="mt-3 flex w-full items-center justify-center rounded-full bg-white py-2 text-xs font-bold text-black">
+        <div className="mt-3 flex w-full items-center justify-center rounded-full bg-foreground text-background py-2 text-xs font-bold transition-opacity hover:opacity-90">
           Pay ৳55,500
         </div>
       </div>

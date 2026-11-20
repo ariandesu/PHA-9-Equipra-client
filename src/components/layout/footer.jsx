@@ -89,7 +89,12 @@ export default function Footer() {
         </div>
 
         {columns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
+          <nav
+            key={column.title}
+            id={column.title === "Contact" ? "contact" : undefined}
+            className={column.title === "Contact" ? "scroll-mt-20" : undefined}
+            aria-label={column.title}
+          >
             <h2 className="font-mono text-[11px] uppercase tracking-[0.14em] text-subtle">
               {column.title}
             </h2>

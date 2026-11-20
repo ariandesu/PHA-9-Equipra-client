@@ -153,15 +153,6 @@
   );
 }
 
-:root:not(.dark) .fx-marquee-scrim {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(255, 255, 255, 0.48) 35%,
-    transparent 60%
-  );
-}
-
 /* 03 §4 BentoGrid: auto-scrolling transaction rows */
 @keyframes fx-scroll-transactions {
   from {

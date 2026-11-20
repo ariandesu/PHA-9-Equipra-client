@@ -38,7 +38,7 @@ export default function Marquee3D() {
         {/* Bordered rounded-[22px] panel matching design 01 */}
         <div
           data-slot="marquee-panel"
-          className="group/marquee relative h-[460px] sm:h-[640px] w-full overflow-hidden rounded-[22px] border border-border bg-[#0B0B0B] text-center [perspective:1400px]"
+          className="dark group/marquee relative h-[460px] sm:h-[640px] w-full overflow-hidden rounded-[22px] border border-border bg-[#0B0B0B] text-center [perspective:1400px]"
         >
           {/* Tilted photo wall filling the panel with center aligned */}
           <div

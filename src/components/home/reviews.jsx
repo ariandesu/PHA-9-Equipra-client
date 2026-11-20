@@ -6,6 +6,12 @@ import { useReviews } from "@/lib/data/hooks";
 import { cn } from "@/lib/utils";
 import "@/components/fx/fx.css";
 
+const AVATAR_ACCENTS = {
+  TA: "bg-[#FF6A2B] text-white border-transparent",
+  FK: "bg-[#0284C7] dark:bg-[#38BDF8] text-white dark:text-black border-transparent",
+  MH: "bg-[#FF6A2B] text-white border-transparent",
+};
+
 function ReviewCard({ review }) {
   const initials = review.name
     .split(/\s+/)
@@ -15,6 +21,7 @@ function ReviewCard({ review }) {
     .toUpperCase();
 
   const commentText = review.comment.replace(/^“|”$/g, "");
+  const avatarStyle = AVATAR_ACCENTS[initials] || "border-border bg-raised text-foreground";
 
   return (
     <div className="flex w-[320px] sm:w-[400px] shrink-0 flex-col justify-between rounded-[22px] border border-border bg-surface p-5 sm:p-6 shadow-sm transition-colors hover:border-border-strong">
@@ -43,7 +50,7 @@ function ReviewCard({ review }) {
 
       <div className="mt-6 flex items-center justify-between gap-3 border-t border-border/60 pt-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex size-9 items-center justify-center rounded-full border border-border bg-raised font-mono text-xs font-bold text-foreground">
+          <div className={cn("flex size-9 items-center justify-center rounded-full border font-mono text-xs font-bold", avatarStyle)}>
             {initials}
           </div>
           <div className="text-left">
