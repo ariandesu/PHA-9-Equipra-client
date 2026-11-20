@@ -180,5 +180,40 @@
   animation-play-state: paused;
 }
 
+/* 03 §4 InfiniteMovingCards: two rows moving in opposite directions, pause on hover & focus */
+@keyframes fx-cards-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fx-cards-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.fx-cards-left {
+  animation: fx-cards-left 36s linear infinite;
+}
+
+.fx-cards-right {
+  animation: fx-cards-right 36s linear infinite;
+}
+
+.fx-cards-row:hover .fx-cards-left,
+.fx-cards-row:hover .fx-cards-right,
+.fx-cards-row:focus-within .fx-cards-left,
+.fx-cards-row:focus-within .fx-cards-right {
+  animation-play-state: paused;
+}
+
+
 
 

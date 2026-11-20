@@ -7,6 +7,8 @@ import Marquee3D from "@/components/home/marquee-3d";
 import FocusCards from "@/components/home/focus-cards";
 import Timeline from "@/components/home/timeline";
 import BentoGrid from "@/components/home/bento-grid";
+import Reviews from "@/components/home/reviews";
+import FAQ from "@/components/home/faq";
 
 export default function Home() {
   return (
@@ -20,6 +22,8 @@ export default function Home() {
       <FocusCards />
       <Timeline />
       <BentoGrid />
+      <Reviews />
+      <FAQ />
     </div>
   );
 }

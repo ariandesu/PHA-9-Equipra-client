@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiSource } from './api-source.js';
 import { source } from './source.js';
+import { getReviews } from './reviews.js';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 const TEN_MINUTES = 10 * 60 * 1000;
@@ -46,6 +47,15 @@ export function useStats() {
     queryKey: ['stats'],
     queryFn: () => source.getStats(),
     staleTime: TEN_MINUTES,
+  });
+}
+
+// Reviews
+export function useReviews() {
+  return useQuery({
+    queryKey: ['reviews'],
+    queryFn: () => getReviews(),
+    staleTime: Infinity,
   });
 }
 
