@@ -56,6 +56,15 @@ test('createBooking stores the phone normalised as +8801…', async () => {
   assert.equal(created.data.address, 'Dhaka');
 });
 
+test('getFeatured returns eq-001 through eq-006 in that exact order', async () => {
+  const res = await mockSource.getFeatured();
+  assert.equal(res.data.length, 6);
+  assert.deepEqual(
+    res.data.map((item) => item.id),
+    ['eq-001', 'eq-002', 'eq-003', 'eq-004', 'eq-005', 'eq-006']
+  );
+});
+
 test('createEquipment stamps the owner as Karim (o1)', async () => {
   const created = await mockSource.createEquipment({
     name: 'Test Wheel Loader',

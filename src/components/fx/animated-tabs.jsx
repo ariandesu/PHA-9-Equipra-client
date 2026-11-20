@@ -12,6 +12,7 @@ export default function AnimatedTabs({
   tabs,
   activeTab,
   onChange,
+  panelId = "featured-panel",
   className = "",
 }) {
   const reduced = useReducedMotion();
@@ -58,7 +59,7 @@ export default function AnimatedTabs({
             role="tab"
             type="button"
             id={`tab-${tab.id}`}
-            aria-controls={`tabpanel-${tab.id}`}
+            aria-controls={panelId}
             aria-selected={isActive}
             tabIndex={isActive ? 0 : -1}
             onClick={() => onChange(tab.id)}

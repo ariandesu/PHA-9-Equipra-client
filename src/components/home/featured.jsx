@@ -67,7 +67,7 @@ export default function Featured() {
         {/* Content Panel */}
         <div
           role="tabpanel"
-          id={`tabpanel-${activeTab}`}
+          id="featured-panel"
           aria-labelledby={`tab-${activeTab}`}
           className="w-full"
         >
