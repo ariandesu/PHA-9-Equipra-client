@@ -3,6 +3,8 @@ import Showcase from "@/components/home/showcase";
 import LogoCloud from "@/components/home/logo-cloud";
 import Stats from "@/components/home/stats";
 import Featured from "@/components/home/featured";
+import Marquee3D from "@/components/home/marquee-3d";
+import FocusCards from "@/components/home/focus-cards";
 
 export default function Home() {
   return (
@@ -12,6 +14,8 @@ export default function Home() {
       <LogoCloud />
       <Stats />
       <Featured />
+      <Marquee3D />
+      <FocusCards />
     </div>
   );
 }

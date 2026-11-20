@@ -108,3 +108,36 @@
   transition: filter 0.25s ease, opacity 0.25s ease;
 }
 
+/* 03 §4 Marquee3D: columns translateY loop alternating directions */
+@keyframes fx-marquee-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes fx-marquee-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.fx-col-up {
+  animation: fx-marquee-up 24s linear infinite;
+}
+
+.fx-col-down {
+  animation: fx-marquee-down 24s linear infinite;
+}
+
+.fx-marquee-3d:hover .fx-col-up,
+.fx-marquee-3d:hover .fx-col-down {
+  animation-play-state: paused;
+}
+
+
