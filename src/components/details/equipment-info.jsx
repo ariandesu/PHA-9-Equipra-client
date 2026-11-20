@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { MapPin, Calendar, Heart, ShieldCheck, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import MovingBorder from "@/components/fx/moving-border";
 import Spotlight from "@/components/fx/spotlight";
+import BookingModal from "@/components/details/booking-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import { formatBDT } from "@/lib/money";
@@ -22,6 +24,7 @@ const SHORT_CATEGORY = {
 };
 
 export default function EquipmentInfo({ item }) {
+  const [bookingOpen, setBookingOpen] = useState(false);
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const isCustomer = !user || user.role === "customer";
@@ -110,15 +113,30 @@ export default function EquipmentInfo({ item }) {
         ) : (
           <div className="flex flex-wrap items-center gap-3">
             <MovingBorder className="rounded-full">
-              <Button
-                variant="primary"
-                size="lg"
-                disabled={unavailable}
-                className="rounded-full bg-foreground text-background font-bold px-7"
-              >
-                <Calendar className="size-4 mr-1.5" aria-hidden="true" />
-                Book now
-              </Button>
+              {user ? (
+                <Button
+                  variant="primary"
+                  size="lg"
+                  disabled={unavailable}
+                  onClick={() => setBookingOpen(true)}
+                  className="rounded-full bg-foreground text-background font-bold px-7"
+                >
+                  <Calendar className="size-4 mr-1.5" aria-hidden="true" />
+                  Book now
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  size="lg"
+                  asChild
+                  className="rounded-full bg-foreground text-background font-bold px-7"
+                >
+                  <Link href={`/login?redirect=/equipment/${item.id}`}>
+                    <Calendar className="size-4 mr-1.5" aria-hidden="true" />
+                    Book now
+                  </Link>
+                </Button>
+              )}
             </MovingBorder>
 
             {user ? (
@@ -168,6 +186,12 @@ export default function EquipmentInfo({ item }) {
           <span>Verified owner</span>
         </div>
       </div>
+
+      <BookingModal
+        item={item}
+        open={bookingOpen}
+        onOpenChange={setBookingOpen}
+      />
     </div>
   );
 }
