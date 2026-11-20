@@ -1,15 +1,7 @@
 import { requireRole } from "@/lib/require-role";
+import EquipmentForm from "@/components/dashboard/equipment-form";
 
 export default async function OwnerAddEquipmentPage() {
   await requireRole(["owner"]);
-
-  return (
-    <div className="flex flex-col gap-4 text-left">
-      <div className="flex flex-col gap-1">
-        <p className="font-mono text-xs uppercase tracking-wider text-muted">DASHBOARD / ADD EQUIPMENT</p>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">Add equipment</h1>
-      </div>
-      <p className="text-sm text-muted">Owner add equipment form lands in task F-19.</p>
-    </div>
-  );
+  return <EquipmentForm isEdit={false} />;
 }
