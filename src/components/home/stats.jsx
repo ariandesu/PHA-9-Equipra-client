@@ -11,14 +11,22 @@ export default function Stats() {
   const reduced = useReducedMotion();
   const { data: statsData } = useStats();
 
-  const stats = statsData?.data ?? {
-    listings: 1240,
-    cities: 38,
-    completedRentals: 9600,
-    avgRating: 4.8,
-  };
-
+  const stats = statsData?.data;
   const shouldAnimate = isInView || reduced;
+
+  const listingsVal = shouldAnimate && stats ? stats.listings : 0;
+  const citiesVal = shouldAnimate && stats ? stats.cities : 0;
+  const rentalsVal = shouldAnimate && stats ? stats.completedRentals : 0;
+  const ratingVal = shouldAnimate && stats ? stats.avgRating : 0;
+
+  const listingsText = stats
+    ? `${new Intl.NumberFormat("en-IN").format(stats.listings)}+`
+    : "0";
+  const citiesText = stats ? `${stats.cities}` : "0";
+  const rentalsText = stats
+    ? `${new Intl.NumberFormat("en-IN").format(stats.completedRentals)}+`
+    : "0";
+  const ratingText = stats ? `${stats.avgRating.toFixed(1)}` : "0.0";
 
   return (
     <section
@@ -28,9 +36,13 @@ export default function Stats() {
       <div className="mx-auto grid max-w-[1100px] grid-cols-2 gap-8 px-4 text-center lg:grid-cols-4">
         {/* Stat 1: Listings */}
         <div className="flex flex-col items-center">
-          <div className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+          <span className="sr-only">{listingsText}</span>
+          <div
+            aria-hidden="true"
+            className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground"
+          >
             <NumberFlow
-              value={shouldAnimate ? stats.listings : 0}
+              value={listingsVal}
               format={{ useGrouping: true }}
             />
             <span className="text-primary">+</span>
@@ -40,17 +52,25 @@ export default function Stats() {
 
         {/* Stat 2: Cities */}
         <div className="flex flex-col items-center">
-          <div className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
-            <NumberFlow value={shouldAnimate ? stats.cities : 0} />
+          <span className="sr-only">{citiesText}</span>
+          <div
+            aria-hidden="true"
+            className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground"
+          >
+            <NumberFlow value={citiesVal} />
           </div>
           <p className="mt-2 text-xs sm:text-sm text-muted">Cities covered</p>
         </div>
 
         {/* Stat 3: Completed Rentals */}
         <div className="flex flex-col items-center">
-          <div className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+          <span className="sr-only">{rentalsText}</span>
+          <div
+            aria-hidden="true"
+            className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground"
+          >
             <NumberFlow
-              value={shouldAnimate ? stats.completedRentals : 0}
+              value={rentalsVal}
               format={{ useGrouping: true }}
             />
             <span className="text-primary">+</span>
@@ -60,9 +80,13 @@ export default function Stats() {
 
         {/* Stat 4: Average Rating */}
         <div className="flex flex-col items-center">
-          <div className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+          <span className="sr-only">{ratingText}</span>
+          <div
+            aria-hidden="true"
+            className="flex items-baseline font-mono text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground"
+          >
             <NumberFlow
-              value={shouldAnimate ? stats.avgRating : 0}
+              value={ratingVal}
               format={{ minimumFractionDigits: 1, maximumFractionDigits: 1 }}
             />
           </div>

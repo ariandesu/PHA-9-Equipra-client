@@ -43,10 +43,12 @@ export default function LogoCloud() {
         <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
           <div className="fx-marquee fx-marquee-group py-2">
             {[...OWNERS, ...OWNERS].map((owner, idx) => {
+              const isDuplicate = idx >= OWNERS.length;
               const Icon = owner.icon;
               return (
                 <div
                   key={`${owner.name}-${idx}`}
+                  aria-hidden={isDuplicate ? "true" : undefined}
                   className="mx-4 flex shrink-0 items-center gap-2.5 rounded-full border border-border bg-surface px-5 py-2.5 text-sm font-medium text-muted transition-all hover:border-border-strong hover:bg-raised hover:text-foreground"
                 >
                   <Icon className="size-4 text-primary" aria-hidden="true" />

@@ -20,41 +20,44 @@ export default function Showcase() {
             <span className="size-3 rounded-full bg-[#FFBD2E]" />
             <span className="size-3 rounded-full bg-[#27C93F]" />
           </div>
-          <div className="rounded-full border border-white/10 bg-black/40 px-4 py-1 font-mono text-[11px] text-[#A3A3A3]">
+          <div className="max-w-[170px] sm:max-w-none truncate whitespace-nowrap rounded-full border border-white/10 bg-black/40 px-3 sm:px-4 py-1 font-mono text-[11px] text-[#A3A3A3]">
             equipra.app/equipment/cat-320
           </div>
           <div className="w-12" aria-hidden="true" />
         </div>
 
         {/* Browser Content */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[20px] bg-surface">
-          <Image
-            fill
-            src={HERO_PHOTO}
-            alt="CAT 320 Hydraulic Excavator on construction site"
-            sizes="(max-width: 1200px) 100vw, 1100px"
-            priority
-            className="object-cover"
-          />
+        <div className="relative w-full rounded-[20px] bg-surface sm:aspect-[16/10] sm:overflow-hidden">
+          {/* Photo area with title overlay */}
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[16px] sm:rounded-none sm:absolute sm:inset-0 sm:aspect-auto">
+            <Image
+              fill
+              src={HERO_PHOTO}
+              alt="CAT 320 Hydraulic Excavator on construction site"
+              sizes="(max-width: 1200px) 100vw, 1100px"
+              priority
+              className="object-cover"
+            />
 
-          {/* Dark gradient vignette over the photo */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"
-          />
+            {/* Dark gradient vignette over the photo */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"
+            />
 
-          {/* Bottom-left equipment title overlay */}
-          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex flex-col items-start gap-1.5 sm:gap-2 text-left text-white max-w-sm sm:max-w-md">
-            <span className="rounded-full border border-white/15 bg-black/60 px-2.5 py-0.5 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-primary backdrop-blur">
-              CONSTRUCTION · GAZIPUR
-            </span>
-            <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-white drop-shadow-md">
-              Hydraulic Excavator 20T — CAT 320
-            </h2>
+            {/* Bottom-left equipment title overlay */}
+            <div className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 flex flex-col items-start gap-1 sm:gap-2 text-left text-white max-w-[calc(100%-1.5rem)] sm:max-w-md">
+              <span className="rounded-full border border-white/15 bg-black/60 px-2 sm:px-2.5 py-0.5 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-primary backdrop-blur">
+                CONSTRUCTION · GAZIPUR
+              </span>
+              <h2 className="text-base sm:text-2xl font-bold tracking-tight text-white drop-shadow-md">
+                Hydraulic Excavator 20T — CAT 320
+              </h2>
+            </div>
           </div>
 
-          {/* Top-right floating booking panel */}
-          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 w-[250px] sm:w-[290px] rounded-2xl border border-white/15 bg-black/80 p-3.5 sm:p-4.5 text-left text-white backdrop-blur-md shadow-2xl">
+          {/* Booking panel: in normal flow on mobile (<sm), floating top-right on sm+ */}
+          <div className="relative mt-3 w-full rounded-2xl border border-white/15 bg-black/80 p-3.5 sm:mt-0 sm:absolute sm:top-6 sm:right-6 sm:w-[290px] sm:p-4.5 text-left text-white backdrop-blur-md shadow-2xl">
             {/* Price line */}
             <div className="flex items-baseline justify-between border-b border-white/10 pb-3">
               <div>
@@ -98,7 +101,7 @@ export default function Showcase() {
             {/* Book Now Button */}
             <Link
               href="/equipment/eq-001"
-              className="flex w-full items-center justify-center rounded-full bg-primary py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="flex w-full items-center justify-center rounded-full bg-primary py-2.5 sm:py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               Book now
             </Link>
