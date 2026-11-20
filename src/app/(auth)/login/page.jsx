@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/lib/validators";
 import { safeRedirect } from "@/lib/redirect";
 import { authClient } from "@/lib/auth-client";
+import { clearTokenCache } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export default function LoginPage() {
     }
 
     toast.success("Welcome back!");
+    clearTokenCache();
     router.push(redirectTo);
     router.refresh();
   }

@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { registerSchema } from "@/lib/validators";
 import { safeRedirect } from "@/lib/redirect";
 import { authClient } from "@/lib/auth-client";
+import { clearTokenCache } from "@/lib/api";
 
 const roleOptions = [
   { value: "renter", label: "Rent equipment", hint: "I want to rent gear." },
@@ -65,6 +66,7 @@ export default function RegisterPage() {
     }
 
     toast.success(`Welcome aboard, ${values.name.split(" ")[0]}! Account created.`);
+    clearTokenCache();
     router.push(redirectTo);
     router.refresh();
   }

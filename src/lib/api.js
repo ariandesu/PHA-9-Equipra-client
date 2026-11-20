@@ -4,12 +4,12 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
 });
 
-// This client is for client components / TanStack Query only.
+// Client-side API client for TanStack Query and browser components only.
 // Server components must not import it — they have no browser fetch or
-// document.cookie, and the JWT lives in an HttpOnly cookie.
+// document.cookie. The JWT is cached in memory; the BetterAuth session
+// cookie is HttpOnly and managed by the browser.
 let cachedToken = null;
 let cachedExpiresAt = null;
-let cachedAnonymous = null; // null result cached for 30s
 let anonymousExpiresAt = 0;
 let tokenPromise = null;
 
