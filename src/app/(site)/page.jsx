@@ -9,6 +9,7 @@ import Timeline from "@/components/home/timeline";
 import BentoGrid from "@/components/home/bento-grid";
 import Reviews from "@/components/home/reviews";
 import FAQ from "@/components/home/faq";
+import OwnerCTA from "@/components/home/owner-cta";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <BentoGrid />
       <Reviews />
       <FAQ />
+      <OwnerCTA />
     </div>
   );
 }

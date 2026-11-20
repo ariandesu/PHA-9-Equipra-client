@@ -41,7 +41,7 @@ const FAQ_ITEMS = [
 
 export default function FAQ() {
   return (
-    <section className="relative w-full py-20 sm:py-28">
+    <section id="faq" className="relative w-full py-20 sm:py-28 scroll-mt-20">
       <div className="mx-auto flex max-w-[1100px] flex-col gap-10 sm:gap-14 px-4 text-left">
         {/* Header */}
         <div className="flex flex-col items-start gap-2 max-w-2xl">
