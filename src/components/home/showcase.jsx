@@ -11,7 +11,7 @@ const HERO_PHOTO =
 
 export default function Showcase() {
   return (
-    <section className="relative w-full px-4 pt-4 pb-16">
+    <section className="relative w-full overflow-hidden px-4 pt-4 pb-16">
       <ContainerScroll>
         {/* Browser Mockup Top Bar */}
         <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5 text-xs text-muted">

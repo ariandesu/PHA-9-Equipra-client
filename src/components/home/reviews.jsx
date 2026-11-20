@@ -100,7 +100,7 @@ export default function Reviews() {
                   <ReviewCard key={rev.id} review={rev} />
                 ))}
               </div>
-              <div aria-hidden="true" inert="" className="flex gap-6">
+              <div aria-hidden="true" inert className="flex gap-6">
                 {[...row1, ...row1].map((rev, idx) => (
                   <ReviewCard key={`${rev.id}-dup-${idx}`} review={rev} />
                 ))}
@@ -121,7 +121,7 @@ export default function Reviews() {
                   <ReviewCard key={rev.id} review={rev} />
                 ))}
               </div>
-              <div aria-hidden="true" inert="" className="flex gap-6">
+              <div aria-hidden="true" inert className="flex gap-6">
                 {[...row2, ...row2].map((rev, idx) => (
                   <ReviewCard key={`${rev.id}-dup-${idx}`} review={rev} />
                 ))}

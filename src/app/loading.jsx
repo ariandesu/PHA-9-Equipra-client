@@ -1,11 +1,14 @@
+import MultiStepLoader from "@/components/fx/multi-step-loader";
+
 export default function Loading() {
   return (
     <div
-      className="flex min-h-[60vh] items-center justify-center"
+      className="flex min-h-[75vh] items-center justify-center px-4 py-16"
       role="status"
-      aria-label="Loading"
+      aria-label="Loading — Preparing your booking"
     >
-      <span className="size-8 animate-spin rounded-full border-2 border-border-strong border-t-primary" />
+      <span className="sr-only">Loading — Preparing your booking…</span>
+      <MultiStepLoader />
     </div>
   );
 }

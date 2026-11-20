@@ -32,10 +32,12 @@ const links = [
 
 function AuthActions({ session, className = "" }) {
   // One component decides the whole state so exactly one control renders:
-  // skeleton while pending, the avatar menu when signed in, links otherwise.
+  // placeholder while pending, Dashboard button + avatar menu when signed in,
+  // login/register links otherwise. Same footprint so navbar never shifts.
   if (session.isPending) {
     return (
-      <div className={className}>
+      <div className={`flex items-center gap-2 ${className}`}>
+        <div className="h-9 w-24 rounded-full bg-raised animate-pulse" />
         <UserSkeleton />
       </div>
     );
@@ -43,7 +45,10 @@ function AuthActions({ session, className = "" }) {
 
   if (session.data?.user) {
     return (
-      <div className={className}>
+      <div className={`flex items-center gap-2 ${className}`}>
+        <Button asChild variant="outline" size="sm" className="rounded-full">
+          <Link href="/dashboard">Dashboard</Link>
+        </Button>
         <UserMenu session={session} />
       </div>
     );
@@ -120,7 +125,7 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
-              <SheetTitle>Menu</SheetTitle>
+              <SheetTitle className="px-3 pt-4">Menu</SheetTitle>
               <ul className="mt-6 space-y-2">
                 {links.map((link) => (
                   <li key={link.href}>

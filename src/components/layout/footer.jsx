@@ -27,7 +27,7 @@ const columns = [
     links: [
       { href: "mailto:support@equipra.app", label: "support@equipra.app" },
       { href: "tel:+8801700000000", label: "+880 1700-000000" },
-      { href: "/#faq", label: "Banani, Dhaka 1213" },
+      { label: "Banani, Dhaka 1213" },
     ],
   },
 ];
@@ -96,12 +96,16 @@ export default function Footer() {
             <ul className="mt-4 space-y-2">
               {column.links.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.href ? (
+                    <Link
+                      href={link.href}
+                      className="text-sm text-muted transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <span className="text-sm text-muted">{link.label}</span>
+                  )}
                 </li>
               ))}
             </ul>
