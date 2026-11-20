@@ -205,6 +205,30 @@
   animation-play-state: paused;
 }
 
+/* 03 §4 Meteors: 8-14 absolutely positioned streaks, CSS keyframes */
+@keyframes fx-meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-500px);
+    opacity: 0;
+  }
+}
+
+.fx-meteor {
+  position: absolute;
+  height: 2px;
+  width: 50px;
+  background: linear-gradient(to right, rgba(255, 106, 43, 0), var(--accent));
+  animation: fx-meteor 5s linear infinite;
+}
+
+
 
 
 
