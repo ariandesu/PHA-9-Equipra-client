@@ -5,6 +5,7 @@ import Stats from "@/components/home/stats";
 import Featured from "@/components/home/featured";
 import Marquee3D from "@/components/home/marquee-3d";
 import FocusCards from "@/components/home/focus-cards";
+import Timeline from "@/components/home/timeline";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Featured />
       <Marquee3D />
       <FocusCards />
+      <Timeline />
     </div>
   );
 }
