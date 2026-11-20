@@ -1,37 +1,43 @@
+'use client';
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiSource } from './api-source.js';
 import { source } from './source.js';
 
-// Equipment queries
-export function useEquipment(params = {}) {
+const FIVE_MINUTES = 5 * 60 * 1000;
+const TEN_MINUTES = 10 * 60 * 1000;
+
+// Public catalog
+export function useEquipmentList(params = {}) {
   return useQuery({
-    queryKey: ['equipment', params],
-    queryFn: () => source.getEquipment(params),
-    staleTime: 5 * 60 * 1000,
+    queryKey: ['equipment', 'list', params],
+    queryFn: () => source.listEquipment(params),
+    staleTime: FIVE_MINUTES,
   });
 }
 
-export function useEquipmentById(id) {
+export function useEquipment(id) {
   return useQuery({
-    queryKey: ['equipment', id],
-    queryFn: () => source.getEquipmentById(id),
+    queryKey: ['equipment', 'detail', id],
+    queryFn: () => source.getEquipment(id),
     enabled: !!id,
-    staleTime: 5 * 60 * 1000,
+    staleTime: FIVE_MINUTES,
   });
 }
 
 export function useFeatured() {
   return useQuery({
-    queryKey: ['featured'],
+    queryKey: ['equipment', 'featured'],
     queryFn: () => source.getFeatured(),
-    staleTime: 5 * 60 * 1000,
+    staleTime: FIVE_MINUTES,
   });
 }
 
 export function useCategories() {
   return useQuery({
-    queryKey: ['categories'],
+    queryKey: ['equipment', 'categories'],
     queryFn: () => source.getCategories(),
-    staleTime: 10 * 60 * 1000,
+    staleTime: TEN_MINUTES,
   });
 }
 
@@ -39,15 +45,16 @@ export function useStats() {
   return useQuery({
     queryKey: ['stats'],
     queryFn: () => source.getStats(),
-    staleTime: 10 * 60 * 1000,
+    staleTime: TEN_MINUTES,
   });
 }
 
-export function useFavorites() {
+// Favorites
+export function useFavorites(params = {}) {
   return useQuery({
-    queryKey: ['favorites'],
-    queryFn: () => source.getFavorites(),
-    staleTime: 5 * 60 * 1000,
+    queryKey: ['favorites', 'list', params],
+    queryFn: () => source.listFavorites(params),
+    staleTime: FIVE_MINUTES,
   });
 }
 
@@ -55,42 +62,103 @@ export function useFavoriteIds() {
   return useQuery({
     queryKey: ['favorite-ids'],
     queryFn: () => source.getFavoriteIds(),
-    staleTime: 5 * 60 * 1000,
+    staleTime: FIVE_MINUTES,
   });
 }
 
-// Mutation hooks
 export function useToggleFavorite() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ equipmentId }) => source.toggleFavorite(equipmentId),
-    onMutate: async (equipmentId) => {
-      await queryClient.cancelQueries({ queryKey: ['favorites'] });
-      const previous = queryClient.getQueryData(['favorites']);
-      queryClient.setQueryData(['favorites'], (old) => {
-        if (!old) return old;
-        return old.map((e) => {
-          if (e.id === equipmentId) {
-            return { ...e, quantity: e.quantity - 1 };
-          }
-          return e;
-        });
+    mutationFn: ({ equipmentId, favorited }) =>
+      favorited
+        ? source.removeFavorite(equipmentId)
+        : source.addFavorite(equipmentId),
+    onMutate: async ({ equipmentId, favorited }) => {
+      await queryClient.cancelQueries({ queryKey: ['favorite-ids'] });
+      const previous = queryClient.getQueryData(['favorite-ids']);
+      queryClient.setQueryData(['favorite-ids'], (old) => {
+        const ids = old?.data ?? [];
+        return {
+          ...old,
+          data: favorited
+            ? ids.filter((id) => id !== equipmentId)
+            : [...ids, equipmentId],
+        };
       });
       return { previous };
     },
-    onError: (err, equipmentId, context) => {
-      queryClient.setQueryData(['favorites'], context.previous);
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData(['favorite-ids'], context.previous);
     },
     onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorite-ids'] });
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
     },
   });
 }
 
+// Bookings
+export function useMyBookings(params = {}) {
+  return useQuery({
+    queryKey: ['bookings', 'mine', params],
+    queryFn: () => source.myBookings(params),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useOwnerBookings(params = {}) {
+  return useQuery({
+    queryKey: ['bookings', 'owner', params],
+    queryFn: () => source.ownerBookings(params),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useAdminBookings(params = {}) {
+  return useQuery({
+    queryKey: ['bookings', 'admin', params],
+    queryFn: () => source.adminBookings(params),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
 export function useCreateBooking() {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (data) => source.createBooking(data),
+    mutationFn: (body) => source.createBooking(body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+    },
+  });
+}
+
+export function useUpdateBookingStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, status }) => source.updateBookingStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+    },
+  });
+}
+
+// Equipment management
+export function useMyEquipment(params = {}) {
+  return useQuery({
+    queryKey: ['equipment', 'mine', params],
+    queryFn: () => source.myEquipment(params),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useAdminEquipment(params = {}) {
+  return useQuery({
+    queryKey: ['equipment', 'admin', params],
+    queryFn: () => source.adminEquipment(params),
+    staleTime: FIVE_MINUTES,
   });
 }
 
@@ -98,7 +166,7 @@ export function useCreateEquipment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data) => source.createEquipment(data),
+    mutationFn: (body) => source.createEquipment(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['equipment'] });
     },
@@ -109,10 +177,9 @@ export function useUpdateEquipment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, ...data }) => source.updateEquipment(id, data),
-    onSuccess: (_, { id }) => {
+    mutationFn: ({ id, ...body }) => source.updateEquipment(id, body),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['equipment'] });
-      queryClient.invalidateQueries({ queryKey: ['equipment', id] });
     },
   });
 }
@@ -128,88 +195,33 @@ export function useDeleteEquipment() {
   });
 }
 
-export function useMyEquipment() {
-  return useQuery({
-    queryKey: ['my-equipment'],
-    queryFn: () => source.getMyEquipment(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useMyEquipmentRentals() {
-  return useQuery({
-    queryKey: ['my-equipment-rentals'],
-    queryFn: () => source.getMyEquipmentRentals(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useMyRentals() {
-  return useQuery({
-    queryKey: ['my-rentals'],
-    queryFn: () => source.getMyRentals(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useOwnerBookings() {
-  return useQuery({
-    queryKey: ['owner-bookings'],
-    queryFn: () => source.getOwnerBookings(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useAdminBookings() {
-  return useQuery({
-    queryKey: ['admin-bookings'],
-    queryFn: () => source.getAdminBookings(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useAllEquipment() {
-  return useQuery({
-    queryKey: ['all-equipment'],
-    queryFn: () => source.getAllEquipment(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useAllUsers() {
-  return useQuery({
-    queryKey: ['admin-users'],
-    queryFn: () => source.getAllUsers(),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export function useAnalytics(isAdmin = false) {
-  return useQuery({
-    queryKey: ['analytics', isAdmin ? 'admin' : 'owner'],
-    queryFn: () => source.getAnalytics(isAdmin),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
 export function useUpdateEquipmentStatus() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, status }) => source.updateEquipmentStatus(id, status),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-equipment'] });
+      queryClient.invalidateQueries({ queryKey: ['equipment'] });
     },
   });
 }
 
-export function useUpdateUserRole() {
+// Admin users
+export function useAdminUsers(params = {}) {
+  return useQuery({
+    queryKey: ['admin', 'users', params],
+    queryFn: () => source.adminUsers(params),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useUpdateRole() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, role }) => source.updateUserRole(id, role),
+    mutationFn: ({ id, role }) => source.updateRole(id, role),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
     },
   });
 }
@@ -220,28 +232,34 @@ export function useDeleteUser() {
   return useMutation({
     mutationFn: (id) => source.deleteUser(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
     },
   });
 }
 
-export function useUpdateBookingStatus() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, status }) => source.updateBookingStatus(id, status),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-bookings'] });
-      queryClient.invalidateQueries({ queryKey: ['owner-bookings'] });
-    },
+// Analytics
+export function useAdminAnalytics() {
+  return useQuery({
+    queryKey: ['analytics', 'admin'],
+    queryFn: () => source.adminAnalytics(),
+    staleTime: FIVE_MINUTES,
   });
 }
 
+export function useOwnerAnalytics() {
+  return useQuery({
+    queryKey: ['analytics', 'owner'],
+    queryFn: () => source.ownerAnalytics(),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+// Profile — always the real endpoint, it already exists on the server.
 export function useMe() {
   return useQuery({
     queryKey: ['me'],
-    queryFn: () => source.getMe(),
-    staleTime: 5 * 60 * 1000,
+    queryFn: () => apiSource.getMe(),
+    staleTime: FIVE_MINUTES,
   });
 }
 
@@ -249,7 +267,7 @@ export function useUpdateMe() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data) => source.updateMe(data),
+    mutationFn: (body) => apiSource.updateMe(body),
     onSuccess: (data) => {
       queryClient.setQueryData(['me'], data);
     },

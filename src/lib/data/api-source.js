@@ -1,131 +1,156 @@
 import api from '@/lib/api';
 
-export async function getEquipment(params = {}) {
-  const res = await api.get('/equipment', { params });
-  return res.data;
+// The API contract (02 §5): lists { items, total, page, pages }, singles { data },
+// errors { message }. The mock source uses the same shapes, so a component never
+// has to care which source is active.
+async function request(promise) {
+  try {
+    const res = await promise;
+    return res.data;
+  } catch (error) {
+    const status = error.response?.status ?? 500;
+    const message =
+      error.response?.data?.message ??
+      error.message ??
+      'Something went wrong. Please try again.';
+    throw { status, message };
+  }
 }
 
-export async function getEquipmentById(id) {
-  const res = await api.get(`/equipment/${id}`);
-  return res.data;
+async function listEquipment(params = {}) {
+  return request(api.get('/equipment', { params }));
 }
 
-export async function getFeatured() {
-  const res = await api.get('/equipment/featured');
-  return res.data;
+async function getFeatured() {
+  return request(api.get('/equipment/featured'));
 }
 
-export async function getCategories() {
-  const res = await api.get('/equipment/categories');
-  return res.data;
+async function getCategories() {
+  return request(api.get('/equipment/categories'));
 }
 
-export async function getStats() {
-  const res = await api.get('/stats/public');
-  return res.data;
+async function getEquipment(id) {
+  return request(api.get(`/equipment/${id}`));
 }
 
-export async function getFavorites() {
-  const res = await api.get('/favorites');
-  return res.data;
+async function getStats() {
+  return request(api.get('/stats/public'));
 }
 
-export async function getFavoriteIds() {
-  const res = await api.get('/favorites/ids');
-  return res.data;
+async function listFavorites(params = {}) {
+  return request(api.get('/favorites', { params }));
 }
 
-export async function toggleFavorite(equipmentId) {
-  const res = await api.post(`/favorites/${equipmentId}`);
-  return res.data;
+async function getFavoriteIds() {
+  return request(api.get('/favorites/ids'));
 }
 
-export async function createBooking(data) {
-  const res = await api.post('/bookings', data);
-  return res.data;
+async function addFavorite(id) {
+  return request(api.post('/favorites', { equipmentId: id }));
 }
 
-export async function getMe() {
-  const res = await api.get('/users/me');
-  return res.data;
+async function removeFavorite(id) {
+  return request(api.delete(`/favorites/${id}`));
 }
 
-export async function updateMe(data) {
-  const res = await api.patch('/users/me', data);
-  return res.data;
+async function createBooking(body) {
+  return request(api.post('/bookings', body));
 }
 
-export async function createEquipment(data) {
-  const res = await api.post('/equipment', data);
-  return res.data;
+async function myBookings(params = {}) {
+  return request(api.get('/bookings/mine', { params }));
 }
 
-export async function updateEquipment(id, data) {
-  const res = await api.patch(`/equipment/${id}`, data);
-  return res.data;
+async function ownerBookings(params = {}) {
+  return request(api.get('/bookings/owner', { params }));
 }
 
-export async function deleteEquipment(id) {
-  const res = await api.delete(`/equipment/${id}`);
-  return res.data;
+async function adminBookings(params = {}) {
+  return request(api.get('/admin/bookings', { params }));
 }
 
-export async function getMyEquipment() {
-  const res = await api.get('/equipment/mine/list');
-  return res.data;
+async function updateBookingStatus(id, status) {
+  return request(api.patch(`/admin/bookings/${id}/status`, { status }));
 }
 
-export async function getMyEquipmentRentals() {
-  const res = await api.get('/bookings/owner');
-  return res.data;
+async function myEquipment(params = {}) {
+  return request(api.get('/equipment/mine/list', { params }));
 }
 
-export async function getMyRentals() {
-  const res = await api.get('/bookings/mine');
-  return res.data;
+async function createEquipment(body) {
+  return request(api.post('/equipment', body));
 }
 
-export async function getAllEquipment() {
-  const res = await api.get('/admin/equipment');
-  return res.data;
+async function updateEquipment(id, body) {
+  return request(api.patch(`/equipment/${id}`, body));
 }
 
-export async function updateEquipmentStatus(id, status) {
-  const res = await api.patch(`/admin/equipment/${id}/status`, { status });
-  return res.data;
+async function deleteEquipment(id) {
+  return request(api.delete(`/equipment/${id}`));
 }
 
-export async function getAllUsers() {
-  const res = await api.get('/admin/users');
-  return res.data;
+async function adminEquipment(params = {}) {
+  return request(api.get('/admin/equipment', { params }));
 }
 
-export async function updateUserRole(id, role) {
-  const res = await api.patch(`/admin/users/${id}/role`, { role });
-  return res.data;
+async function updateEquipmentStatus(id, status) {
+  return request(api.patch(`/admin/equipment/${id}/status`, { status }));
 }
 
-export async function deleteUser(id) {
-  const res = await api.delete(`/admin/users/${id}`);
-  return res.data;
+async function adminUsers(params = {}) {
+  return request(api.get('/admin/users', { params }));
 }
 
-export async function getAdminBookings() {
-  const res = await api.get('/admin/bookings');
-  return res.data;
+async function updateRole(id, role) {
+  return request(api.patch(`/admin/users/${id}/role`, { role }));
 }
 
-export async function getOwnerBookings() {
-  const res = await api.get('/bookings/owner');
-  return res.data;
+async function deleteUser(id) {
+  return request(api.delete(`/admin/users/${id}`));
 }
 
-export async function updateBookingStatus(id, status) {
-  const res = await api.patch(`/admin/bookings/${id}/status`, { status });
-  return res.data;
+async function adminAnalytics() {
+  return request(api.get('/analytics/admin'));
 }
 
-export async function getAnalytics(isAdmin = false) {
-  const res = await api.get(isAdmin ? '/analytics/admin' : '/analytics/owner');
-  return res.data;
+async function ownerAnalytics() {
+  return request(api.get('/analytics/owner'));
 }
+
+async function getMe() {
+  return request(api.get('/users/me'));
+}
+
+async function updateMe(body) {
+  return request(api.patch('/users/me', body));
+}
+
+export const apiSource = {
+  listEquipment,
+  getFeatured,
+  getCategories,
+  getEquipment,
+  getStats,
+  listFavorites,
+  getFavoriteIds,
+  addFavorite,
+  removeFavorite,
+  createBooking,
+  myBookings,
+  ownerBookings,
+  adminBookings,
+  updateBookingStatus,
+  myEquipment,
+  createEquipment,
+  updateEquipment,
+  deleteEquipment,
+  adminEquipment,
+  updateEquipmentStatus,
+  adminUsers,
+  updateRole,
+  deleteUser,
+  adminAnalytics,
+  ownerAnalytics,
+  getMe,
+  updateMe,
+};

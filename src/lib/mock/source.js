@@ -1,275 +1,526 @@
 import {
-  equipment as demoEquipment,
-  favorites as demoFavorites,
-  reviews,
-  stats,
+  bookings as seedBookings,
+  categories as seedCategories,
+  equipment as seedEquipment,
+  favorites as seedFavorites,
+  stats as seedStats,
+  users as seedUsers,
 } from './data.js';
+import { quoteBooking } from '../pricing.js';
 
-const DELAY_MS = 300 + Math.random() * 300;
+const MIN_DELAY_MS = 300;
+const MAX_DELAY_MS = 600;
+const DEFAULT_LIMIT = 9;
+const MAX_LIMIT = 24;
+const HOLD_MINUTES = 30;
+
+const store = {
+  equipment: seedEquipment.map((item) => ({ ...item })),
+  bookings: seedBookings.map((booking) => ({ ...booking })),
+  favorites: seedFavorites.map((favorite) => ({ ...favorite })),
+  users: seedUsers.map((user) => ({ ...user })),
+};
+
+// The mock session. The server always reads the role from the database.
+const viewer = store.users.find((user) => user.role === 'customer');
+const ownerUser = store.users.find((user) => user.role === 'owner');
+
+let idCounter = 100;
 
 function delay() {
-  return new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+  const ms =
+    MIN_DELAY_MS +
+    Math.floor(Math.random() * (MAX_DELAY_MS - MIN_DELAY_MS + 1));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function delaySync() {
-  return new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+// Errors are plain { status, message } objects, exactly like the API contract.
+function fail(status, message) {
+  throw { status, message };
 }
 
-// Mutable in-memory state
-let equipment = [...demoEquipment.map((e) => ({ ...e }))];
-let favorites = new Set(demoFavorites.map((f) => f.equipmentId));
-let bookings = [];
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-export async function getEquipmentList(params = {}) {
+function paginate(rows, params = {}) {
+  const page = Math.max(1, Number.parseInt(params.page, 10) || 1);
+  const limit = Math.min(
+    MAX_LIMIT,
+    Math.max(1, Number.parseInt(params.limit, 10) || DEFAULT_LIMIT)
+  );
+  const total = rows.length;
+  return {
+    items: rows.slice((page - 1) * limit, (page - 1) * limit + limit),
+    total,
+    page,
+    pages: Math.ceil(total / limit),
+  };
+}
+
+function byNewest(a, b) {
+  return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+}
+
+function findEquipment(id) {
+  const item = store.equipment.find((row) => row.id === id);
+  if (!item) fail(404, 'Equipment not found');
+  return item;
+}
+
+function findBooking(id) {
+  const booking = store.bookings.find((row) => row.id === id);
+  if (!booking) fail(404, 'Booking not found');
+  return booking;
+}
+
+function findUser(id) {
+  const user = store.users.find((row) => row.id === id);
+  if (!user) fail(404, 'User not found');
+  return user;
+}
+
+function nextId(prefix) {
+  idCounter += 1;
+  return `${prefix}-${idCounter}`;
+}
+
+async function listEquipment(params = {}) {
   await delay();
+  let rows = store.equipment.filter((item) => item.status === 'approved');
 
-  let result = [...equipment];
-
-  // Filter: approved only for public catalog
-  result = result.filter((e) => e.status === 'approved');
-
-  // Search: matches name OR location OR category (case-insensitive, regex-escaped)
-  if (params.search) {
-    const searchTerm = params.search.trim().toLowerCase();
-    if (searchTerm.length > 0) {
-      const escaped = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const re = new RegExp(escaped, 'i');
-      result = result.filter(
-        (e) => re.test(e.name) || re.test(e.location) || re.test(e.category)
-      );
-    }
+  const search =
+    typeof params.search === 'string' ? params.search.trim().slice(0, 60) : '';
+  if (search) {
+    const pattern = new RegExp(escapeRegex(search), 'i');
+    rows = rows.filter(
+      (item) =>
+        pattern.test(item.name) ||
+        pattern.test(item.location) ||
+        pattern.test(item.category)
+    );
   }
 
-  // Filter by category
   if (params.category) {
-    result = result.filter((e) => e.category === params.category);
+    rows = rows.filter((item) => item.category === params.category);
   }
-
-  // Filter by rental type
   if (params.rentalType) {
-    result = result.filter((e) => e.rentalType === params.rentalType);
+    rows = rows.filter((item) => item.rentalType === params.rentalType);
   }
-
-  // Filter by price range
-  if (params.minPrice !== undefined) {
-    result = result.filter((e) => e.price >= params.minPrice);
+  if (params.minPrice !== undefined && params.minPrice !== '') {
+    rows = rows.filter((item) => item.price >= Number(params.minPrice));
   }
-  if (params.maxPrice !== undefined) {
-    result = result.filter((e) => e.price <= params.maxPrice);
+  if (params.maxPrice !== undefined && params.maxPrice !== '') {
+    rows = rows.filter((item) => item.price <= Number(params.maxPrice));
   }
-
-  // Filter by availability
   if (params.availability === 'available') {
-    result = result.filter((e) => e.quantity > 0);
+    rows = rows.filter((item) => item.quantity > 0);
   } else if (params.availability === 'unavailable') {
-    result = result.filter((e) => e.quantity === 0);
+    rows = rows.filter((item) => item.quantity === 0);
   }
 
-  // Sort
   if (params.sort === 'price_asc') {
-    result.sort((a, b) => a.price - b.price);
+    rows.sort((a, b) => a.price - b.price);
   } else if (params.sort === 'price_desc') {
-    result.sort((a, b) => b.price - a.price);
+    rows.sort((a, b) => b.price - a.price);
   } else {
-    // newest default
-    result.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+    rows.sort(byNewest);
   }
 
-  // Pagination
-  const page = Math.max(1, parseInt(params.page) || 1);
-  const limit = Math.min(24, Math.max(1, parseInt(params.limit) || 9));
-  const total = result.length;
-  const pages = Math.ceil(total / limit);
-  const offset = (page - 1) * limit;
-  const items = result.slice(offset, offset + limit);
-
-  return { items, total, page, pages };
+  return paginate(rows, params);
 }
 
-export async function getEquipment(id) {
+async function getFeatured() {
   await delay();
-  const equipmentItem = equipment.find((e) => e.id === id);
-  if (!equipmentItem) return null;
-  return { ...equipmentItem };
-}
-
-export async function getFeatured() {
-  await delay();
-  return equipment
-    .filter((e) => e.status === 'approved')
-    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+  const items = store.equipment
+    .filter((item) => item.status === 'approved')
+    .sort(byNewest)
     .slice(0, 6);
+  return { data: items };
 }
 
-export async function getCategories() {
+async function getCategories() {
   await delay();
-  const counts = {};
-  equipment.forEach((e) => {
-    if (e.status === 'approved') {
-      counts[e.category] = (counts[e.category] || 0) + 1;
-    }
-  });
-  return counts;
+  return { data: seedCategories.map((entry) => ({ ...entry })) };
 }
 
-export async function getStats() {
+async function getEquipment(id) {
   await delay();
-  return { ...stats };
+  return { data: { ...findEquipment(id) } };
 }
 
-export async function getFavorites() {
+async function getStats() {
   await delay();
-  return equipment.filter((e) => favorites.has(e.id));
+  return { data: { ...seedStats } };
 }
 
-export async function getFavoriteIds() {
+async function listFavorites(params = {}) {
   await delay();
-  return [...favorites];
+  const ids = store.favorites
+    .filter((favorite) => favorite.userId === viewer.id)
+    .map((favorite) => favorite.equipmentId);
+  const rows = store.equipment.filter((item) => ids.includes(item.id));
+  return paginate(rows, params);
 }
 
-export async function toggleFavorite(equipmentId) {
+async function getFavoriteIds() {
   await delay();
-  if (favorites.has(equipmentId)) {
-    favorites.delete(equipmentId);
-  } else {
-    favorites.add(equipmentId);
+  const ids = store.favorites
+    .filter((favorite) => favorite.userId === viewer.id)
+    .map((favorite) => favorite.equipmentId);
+  return { data: ids };
+}
+
+async function addFavorite(id) {
+  await delay();
+  findEquipment(id);
+  const exists = store.favorites.some(
+    (favorite) => favorite.userId === viewer.id && favorite.equipmentId === id
+  );
+  if (!exists) {
+    store.favorites.push({
+      userId: viewer.id,
+      equipmentId: id,
+      createdAt: new Date().toISOString(),
+    });
   }
-  return favorites.has(equipmentId);
+  return { data: { equipmentId: id, favorited: true } };
 }
 
-export async function createBooking(data) {
+async function removeFavorite(id) {
   await delay();
-  const equipmentItem = equipment.find((e) => e.id === data.equipmentId);
-  if (!equipmentItem) throw new Error('Equipment not found');
+  store.favorites = store.favorites.filter(
+    (favorite) =>
+      !(favorite.userId === viewer.id && favorite.equipmentId === id)
+  );
+  return { data: { equipmentId: id, favorited: false } };
+}
+
+async function createBooking(body = {}) {
+  await delay();
+  const item = findEquipment(body.equipmentId);
+  const quantity = Number(body.quantity);
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    fail(400, 'Quantity must be a whole number of at least 1');
+  }
+  if (quantity > item.quantity) {
+    fail(409, 'Requested quantity exceeds the available units');
+  }
+  if (!body.startDate || !body.endDate) {
+    fail(400, 'Start and end dates are required');
+  }
+  if (Date.parse(body.endDate) < Date.parse(body.startDate)) {
+    fail(400, 'End date must not be before the start date');
+  }
+
+  const { days, units, totalAmount } = quoteBooking({
+    startDate: body.startDate,
+    endDate: body.endDate,
+    rentalType: item.rentalType,
+    price: item.price,
+    quantity,
+  });
+
+  const now = new Date().toISOString();
   const booking = {
-    id: 'booking-' + Date.now(),
-    ...data,
+    id: nextId('bk'),
+    equipmentId: item.id,
+    equipment: {
+      name: item.name,
+      image: item.image,
+      category: item.category,
+      rentalType: item.rentalType,
+      price: item.price,
+    },
+    owner: { id: item.owner.id, name: item.owner.name, email: item.owner.email },
+    customer: {
+      id: viewer.id,
+      name: viewer.name,
+      email: viewer.email,
+      image: viewer.image,
+    },
+    startDate: body.startDate,
+    endDate: body.endDate,
+    quantity,
+    days,
+    units,
+    totalAmount,
+    phone: body.phone || '',
+    address: body.address || '',
+    notes: body.notes || '',
     status: 'pending',
     paymentStatus: 'unpaid',
-    holdExpiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-    createdAt: new Date().toISOString(),
+    holdExpiresAt: new Date(Date.now() + HOLD_MINUTES * 60 * 1000).toISOString(),
+    checkoutSessionId: null,
+    transactionId: null,
+    createdAt: now,
+    updatedAt: now,
   };
-  bookings.push(booking);
-  return booking;
+
+  store.bookings.unshift(booking);
+  return { data: booking };
 }
 
-export async function getUser() {
+async function myBookings(params = {}) {
   await delay();
-  return null; // No user logged in by default in mock
+  const rows = store.bookings
+    .filter((booking) => booking.customer.id === viewer.id)
+    .sort(byNewest);
+  return paginate(rows, params);
 }
 
-export async function updateMe(data) {
+async function ownerBookings(params = {}) {
   await delay();
-  return { ...data };
+  const rows = store.bookings
+    .filter((booking) => booking.owner.id === ownerUser.id)
+    .sort(byNewest);
+  return paginate(rows, params);
 }
 
-export async function createEquipment(data) {
+async function adminBookings(params = {}) {
   await delay();
-  const equipmentItem = {
-    id: 'equip-' + Date.now(),
-    ...data,
-    status: 'pending',
-    createdAt: new Date().toISOString(),
-  };
-  equipment.push(equipmentItem);
-  return equipmentItem;
+  let rows = store.bookings.slice().sort(byNewest);
+  if (params.status) {
+    rows = rows.filter((booking) => booking.status === params.status);
+  }
+  return paginate(rows, params);
 }
 
-export async function updateEquipment(id, data) {
+async function updateBookingStatus(id, status) {
   await delay();
-  const idx = equipment.findIndex((e) => e.id === id);
-  if (idx === -1) throw new Error('Equipment not found');
-  equipment[idx] = { ...equipment[idx], ...data };
-  return equipment[idx];
-}
-
-export async function deleteEquipment(id) {
-  await delay();
-  const idx = equipment.findIndex((e) => e.id === id);
-  if (idx === -1) throw new Error('Equipment not found');
-  equipment.splice(idx, 1);
-}
-
-export async function getMyEquipment() {
-  await delay();
-  return equipment.filter((e) => e.owner.id === 'o1');
-}
-
-export async function getMyEquipmentRentals() {
-  await delay();
-  return bookings.filter((b) => b.owner.id === 'o1');
-}
-
-export async function getMyRentals() {
-  await delay();
-  return bookings.filter((b) => b.customer.id === 'user-1');
-}
-
-export async function getAllEquipment() {
-  await delay();
-  return equipment;
-}
-
-export async function updateEquipmentStatus(id, status) {
-  await delay();
-  const equipmentItem = equipment.find((e) => e.id === id);
-  if (!equipmentItem) throw new Error('Equipment not found');
-  equipmentItem.status = status;
-  return equipmentItem;
-}
-
-export async function getAllUsers() {
-  await delay();
-  return [
-    { id: 'u1', name: 'Admin User', email: 'admin@example.com', role: 'admin', createdAt: '2026-01-01' },
-    { id: 'u2', name: 'Owner User', email: 'owner@example.com', role: 'owner', createdAt: '2026-01-02' },
-    { id: 'u3', name: 'Customer User', email: 'customer@example.com', role: 'customer', createdAt: '2026-01-03' },
-  ];
-}
-
-export async function updateUserRole(id, role) {
-  await delay();
-  return { id, role };
-}
-
-export async function deleteUser(id) {
-  await delay();
-}
-
-export async function getAdminBookings() {
-  await delay();
-  return bookings;
-}
-
-export async function getOwnerBookings() {
-  await delay();
-  return bookings.filter((b) => b.owner.id === 'o1');
-}
-
-export async function updateBookingStatus(id, status) {
-  await delay();
-  const booking = bookings.find((b) => b.id === id);
-  if (!booking) throw new Error('Booking not found');
+  const booking = findBooking(id);
+  if (!['confirmed', 'completed', 'cancelled'].includes(status)) {
+    fail(400, 'Status must be confirmed, completed or cancelled');
+  }
   booking.status = status;
-  return booking;
+  booking.updatedAt = new Date().toISOString();
+  return { data: { ...booking } };
 }
 
-export async function getAnalytics(admin = false) {
+async function myEquipment(params = {}) {
+  await delay();
+  const rows = store.equipment
+    .filter((item) => item.owner.id === ownerUser.id)
+    .sort(byNewest);
+  return paginate(rows, params);
+}
+
+const EQUIPMENT_FIELDS = [
+  'name',
+  'description',
+  'category',
+  'location',
+  'price',
+  'rentalType',
+  'quantity',
+  'condition',
+  'brand',
+  'model',
+  'image',
+  'terms',
+];
+
+async function createEquipment(body = {}) {
+  await delay();
+  const now = new Date().toISOString();
+  const item = { id: nextId('eq') };
+  for (const field of EQUIPMENT_FIELDS) {
+    if (body[field] !== undefined) item[field] = body[field];
+  }
+  item.status = 'pending';
+  item.owner = {
+    id: ownerUser.id,
+    name: ownerUser.name,
+    email: ownerUser.email,
+    image: ownerUser.image,
+  };
+  item.createdAt = now;
+  item.updatedAt = now;
+
+  store.equipment.push(item);
+  return { data: { ...item } };
+}
+
+async function updateEquipment(id, body = {}) {
+  await delay();
+  const item = findEquipment(id);
+  for (const field of EQUIPMENT_FIELDS) {
+    if (body[field] !== undefined) item[field] = body[field];
+  }
+  // An owner edit sends the listing back for review.
+  item.status = 'pending';
+  item.updatedAt = new Date().toISOString();
+  return { data: { ...item } };
+}
+
+async function deleteEquipment(id) {
+  await delay();
+  findEquipment(id);
+  const hasUpcomingPaidBooking = store.bookings.some(
+    (booking) =>
+      booking.equipmentId === id &&
+      booking.paymentStatus === 'paid' &&
+      ['pending', 'confirmed'].includes(booking.status)
+  );
+  if (hasUpcomingPaidBooking) {
+    fail(409, 'This equipment has upcoming paid bookings');
+  }
+  store.equipment = store.equipment.filter((item) => item.id !== id);
+  return { data: { id } };
+}
+
+async function adminEquipment(params = {}) {
+  await delay();
+  let rows = store.equipment.slice().sort(byNewest);
+  if (params.status) {
+    rows = rows.filter((item) => item.status === params.status);
+  }
+  return paginate(rows, params);
+}
+
+async function updateEquipmentStatus(id, status) {
+  await delay();
+  const item = findEquipment(id);
+  if (!['approved', 'rejected'].includes(status)) {
+    fail(400, 'Status must be approved or rejected');
+  }
+  item.status = status;
+  item.updatedAt = new Date().toISOString();
+  return { data: { ...item } };
+}
+
+async function adminUsers(params = {}) {
+  await delay();
+  let rows = store.users.slice();
+  const search =
+    typeof params.search === 'string' ? params.search.trim().slice(0, 60) : '';
+  if (search) {
+    const pattern = new RegExp(escapeRegex(search), 'i');
+    rows = rows.filter(
+      (user) => pattern.test(user.name) || pattern.test(user.email)
+    );
+  }
+  rows.sort(byNewest);
+  return paginate(rows, params);
+}
+
+async function updateRole(id, role) {
+  await delay();
+  const user = findUser(id);
+  if (!['customer', 'owner', 'admin'].includes(role)) {
+    fail(400, 'Role must be customer, owner or admin');
+  }
+  if (user.id === viewer.id) {
+    fail(400, 'You cannot change your own role');
+  }
+  user.role = role;
+  return { data: { ...user } };
+}
+
+async function deleteUser(id) {
+  await delay();
+  const user = findUser(id);
+  if (user.id === viewer.id) {
+    fail(400, 'You cannot delete your own account');
+  }
+  store.users = store.users.filter((row) => row.id !== id);
+  store.favorites = store.favorites.filter(
+    (favorite) => favorite.userId !== id
+  );
+  return { data: { id } };
+}
+
+async function adminAnalytics() {
   await delay();
   return {
-    totalUsers: 42,
-    totalEquipment: equipment.length,
-    totalBookings: bookings.length,
-    pendingApprovals: equipment.filter((e) => e.status === 'pending').length,
-    completedRentals: bookings.filter((b) => b.status === 'completed').length,
-    totalRevenue: 1250000,
-    monthly: [
-      { month: 'Jun', bookings: 120, revenue: 120000 },
-      { month: 'Jul', bookings: 140, revenue: 140000 },
-      { month: 'Aug', bookings: 110, revenue: 110000 },
-      { month: 'Sep', bookings: 150, revenue: 150000 },
-      { month: 'Oct', bookings: 170, revenue: 170000 },
-      { month: 'Nov', bookings: 190, revenue: 190000 },
-    ],
+    data: {
+      totalUsers: 2318,
+      totalEquipment: 1286,
+      totalBookings: 9904,
+      pendingApprovals: 7,
+      completedRentals: 9612,
+      totalRevenue: 12400000,
+      monthly: [
+        { month: '2026-06', bookings: 42, revenue: 1640000 },
+        { month: '2026-07', bookings: 58, revenue: 1920000 },
+        { month: '2026-08', bookings: 51, revenue: 1780000 },
+        { month: '2026-09', bookings: 74, revenue: 2160000 },
+        { month: '2026-10', bookings: 89, revenue: 2530000 },
+        { month: '2026-11', bookings: 112, revenue: 2370000 },
+      ],
+    },
   };
 }
+
+async function ownerAnalytics() {
+  await delay();
+  return {
+    data: {
+      listed: 14,
+      approved: 11,
+      pending: 2,
+      rejected: 1,
+      completedRentals: 62,
+      totalEarnings: 1690000,
+      thisMonth: 412000,
+      statusMix: [
+        { status: 'completed', count: 62, percent: 62 },
+        { status: 'confirmed', count: 24, percent: 24 },
+        { status: 'pending', count: 14, percent: 14 },
+      ],
+      monthly: [
+        { month: '2026-06', earnings: 182000 },
+        { month: '2026-07', earnings: 240000 },
+        { month: '2026-08', earnings: 205000 },
+        { month: '2026-09', earnings: 298000 },
+        { month: '2026-10', earnings: 356000 },
+        { month: '2026-11', earnings: 412000 },
+      ],
+    },
+  };
+}
+
+async function getMe() {
+  await delay();
+  return { data: { ...viewer } };
+}
+
+const PROFILE_FIELDS = ['name', 'image', 'phone', 'address'];
+
+async function updateMe(body = {}) {
+  await delay();
+  for (const field of PROFILE_FIELDS) {
+    if (body[field] !== undefined) viewer[field] = body[field];
+  }
+  return { data: { ...viewer } };
+}
+
+export const mockSource = {
+  listEquipment,
+  getFeatured,
+  getCategories,
+  getEquipment,
+  getStats,
+  listFavorites,
+  getFavoriteIds,
+  addFavorite,
+  removeFavorite,
+  createBooking,
+  myBookings,
+  ownerBookings,
+  adminBookings,
+  updateBookingStatus,
+  myEquipment,
+  createEquipment,
+  updateEquipment,
+  deleteEquipment,
+  adminEquipment,
+  updateEquipmentStatus,
+  adminUsers,
+  updateRole,
+  deleteUser,
+  adminAnalytics,
+  ownerAnalytics,
+  getMe,
+  updateMe,
+};
