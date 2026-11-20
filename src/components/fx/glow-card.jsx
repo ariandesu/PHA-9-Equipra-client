@@ -24,7 +24,7 @@ export default function GlowCard({ className, children, ...props }) {
       <span
         aria-hidden="true"
         className={cn(
-          "fx-glow-ring fx-ring-mask pointer-events-none absolute inset-0 -z-10 rounded-[22px] p-px",
+          "fx-glow-ring fx-ring-mask pointer-events-none absolute inset-0 -z-10 rounded-[22px] p-px opacity-0 transition-opacity duration-300 group-hover/glow:opacity-100 group-focus-within/glow:opacity-100",
           !reduced && "fx-spin-on-hover",
         )}
       />

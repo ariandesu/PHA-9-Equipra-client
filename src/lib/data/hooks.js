@@ -58,10 +58,11 @@ export function useFavorites(params = {}) {
   });
 }
 
-export function useFavoriteIds() {
+export function useFavoriteIds({ enabled = true } = {}) {
   return useQuery({
     queryKey: ['favorite-ids'],
     queryFn: () => source.getFavoriteIds(),
+    enabled,
     staleTime: FIVE_MINUTES,
   });
 }

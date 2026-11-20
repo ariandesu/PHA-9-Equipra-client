@@ -23,6 +23,10 @@
   animation: fx-ang 4s linear infinite;
 }
 
+[data-slot="glow-card"]:focus-within .fx-glow-ring {
+  opacity: 1;
+}
+
 /* 03 §4 GlowCard: conic-gradient border spin. */
 .fx-glow-ring {
   background: conic-gradient(

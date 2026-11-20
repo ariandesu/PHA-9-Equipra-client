@@ -33,7 +33,7 @@ export default function EquipmentCard({ item }) {
   const user = session?.user;
   const isCustomer = !!user && user.role === "customer";
 
-  const favoriteIds = useFavoriteIds();
+  const favoriteIds = useFavoriteIds({ enabled: isCustomer });
   const isFavorite =
     isCustomer && (favoriteIds.data?.data ?? []).includes(item.id);
   const toggleFavorite = useToggleFavorite();
@@ -73,7 +73,7 @@ export default function EquipmentCard({ item }) {
     return (
       <Link
         href={`/login?redirect=${encodeURIComponent(detailHref)}`}
-        aria-label="Add to favorites"
+        aria-label="Log in to save favorites"
         className={HEART_CLASS}
       >
         <Heart aria-hidden="true" className="size-4" />
