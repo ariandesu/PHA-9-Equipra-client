@@ -400,9 +400,9 @@ export const users = [
     createdAt: '2026-11-19T08:00:00.000Z',
   },
   {
-    id: 'u-owner',
-    name: 'Karim Heavy Machinery',
-    email: 'owner@karimhm.com',
+    id: owners.karim.id,
+    name: owners.karim.name,
+    email: owners.karim.email,
     image: owners.karim.image,
     role: 'owner',
     phone: '+8801712000000',

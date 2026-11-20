@@ -43,6 +43,20 @@ function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+const PHONE_PATTERN = /^(?:\+?880|0)1[3-9]\d{8}$/;
+
+function utcDay(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString().slice(0, 10);
+}
+
+function normalisePhone(value) {
+  if (typeof value !== 'string') return null;
+  const digits = value.replace(/[\s-]/g, '');
+  if (!PHONE_PATTERN.test(digits)) return null;
+  return `+880${digits.slice(-10)}`;
+}
+
 function paginate(rows, params = {}) {
   const page = Math.max(1, Number.parseInt(params.page, 10) || 1);
   const limit = Math.min(
@@ -206,11 +220,26 @@ async function createBooking(body = {}) {
   if (quantity > item.quantity) {
     fail(409, 'Requested quantity exceeds the available units');
   }
-  if (!body.startDate || !body.endDate) {
+
+  const startDay = utcDay(body.startDate);
+  const endDay = utcDay(body.endDate);
+  if (!startDay || !endDay) {
     fail(400, 'Start and end dates are required');
   }
-  if (Date.parse(body.endDate) < Date.parse(body.startDate)) {
+  if (startDay < new Date().toISOString().slice(0, 10)) {
+    fail(400, 'Start date must not be in the past');
+  }
+  if (endDay < startDay) {
     fail(400, 'End date must not be before the start date');
+  }
+
+  const phone = normalisePhone(body.phone);
+  if (!phone) {
+    fail(400, 'A valid phone number is required');
+  }
+  const address = typeof body.address === 'string' ? body.address.trim() : '';
+  if (!address) {
+    fail(400, 'A delivery address is required');
   }
 
   const { days, units, totalAmount } = quoteBooking({
@@ -245,8 +274,8 @@ async function createBooking(body = {}) {
     days,
     units,
     totalAmount,
-    phone: body.phone || '',
-    address: body.address || '',
+    phone,
+    address,
     notes: body.notes || '',
     status: 'pending',
     paymentStatus: 'unpaid',
