@@ -1,15 +1,7 @@
 import { requireRole } from "@/lib/require-role";
+import OwnerEquipmentTable from "@/components/dashboard/owner-equipment-table";
 
 export default async function OwnerMyEquipmentPage() {
   await requireRole(["owner"]);
-
-  return (
-    <div className="flex flex-col gap-4 text-left">
-      <div className="flex flex-col gap-1">
-        <p className="font-mono text-xs uppercase tracking-wider text-muted">DASHBOARD / MY EQUIPMENT</p>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">My equipment</h1>
-      </div>
-      <p className="text-sm text-muted">Owner equipment table lands in task F-20.</p>
-    </div>
-  );
+  return <OwnerEquipmentTable />;
 }
