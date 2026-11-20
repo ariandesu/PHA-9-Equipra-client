@@ -14,7 +14,6 @@ const CATEGORIES_DATA = [
     label: "Construction",
     category: "Construction Equipment",
     sub: "excavators, loaders",
-    defaultCount: 312,
     image: "https://images.unsplash.com/photo-1747004066130-c6531b74d353?w=1200&q=75&auto=format&fit=crop",
     alt: "Construction equipment excavator",
   },
@@ -23,7 +22,6 @@ const CATEGORIES_DATA = [
     label: "Photography",
     category: "Photography Equipment",
     sub: "cinema rigs, lenses",
-    defaultCount: 248,
     image: "https://images.unsplash.com/photo-1757845701047-69080f6b1139?w=1200&q=75&auto=format&fit=crop",
     alt: "Cinema photography cage rig",
   },
@@ -32,7 +30,6 @@ const CATEGORIES_DATA = [
     label: "Vehicles & Transport",
     category: "Vehicles & Transportation",
     sub: "vans, trucks",
-    defaultCount: 196,
     image: "https://images.unsplash.com/photo-1737513915304-a298b4fd5865?w=1200&q=75&auto=format&fit=crop",
     position: "60% 88%",
     alt: "Cargo transport van",
@@ -42,7 +39,6 @@ const CATEGORIES_DATA = [
     label: "Agriculture",
     category: "Agriculture Equipment",
     sub: "tractors, harvesters",
-    defaultCount: 154,
     image: "https://images.unsplash.com/photo-1761839257961-4dce65b72d99?w=1200&q=75&auto=format&fit=crop",
     alt: "Agriculture harvest tractor",
   },
@@ -51,7 +47,6 @@ const CATEGORIES_DATA = [
     label: "Electronics & Power",
     category: "Electronics",
     sub: "drones, generators",
-    defaultCount: 221,
     image: "https://images.unsplash.com/photo-1579829065292-f19b49bc2b98?w=1200&q=75&auto=format&fit=crop",
     alt: "Electronics aerial drone",
   },
@@ -60,7 +55,6 @@ const CATEGORIES_DATA = [
     label: "Event Equipment",
     category: "Event Equipment",
     sub: "sound, stage, lights",
-    defaultCount: 109,
     image: "https://images.unsplash.com/photo-1563680401337-b77b5e0be9f7?w=1200&q=75&auto=format&fit=crop",
     alt: "Event equipment line array speakers",
   },
@@ -69,7 +63,7 @@ const CATEGORIES_DATA = [
 export default function FocusCards() {
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const reduced = useReducedMotion();
-  const { data: categoriesRes } = useCategories();
+  const { data: categoriesRes, isPending, isError } = useCategories();
 
   const countMap = {};
   if (Array.isArray(categoriesRes?.data)) {
@@ -146,7 +140,20 @@ export default function FocusCards() {
                     {cat.label}
                   </h3>
                   <p className="text-xs sm:text-sm text-[#D4D4D4]">
-                    <span className="font-semibold text-white">{count}</span> listings · {cat.sub}
+                    {isError ? (
+                      cat.sub
+                    ) : isPending || countMap[cat.category] === undefined ? (
+                      <>
+                        <span className="font-semibold text-white">—</span> listings · {cat.sub}
+                      </>
+                    ) : (
+                      <>
+                        <span className="font-semibold text-white">
+                          {countMap[cat.category]}
+                        </span>{" "}
+                        listings · {cat.sub}
+                      </>
+                    )}
                   </p>
                 </div>
               </Link>

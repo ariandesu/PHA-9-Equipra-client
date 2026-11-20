@@ -26,86 +26,89 @@ const COLUMNS = [
   [PHOTO_URLS[3], PHOTO_URLS[4], PHOTO_URLS[5]],
   [PHOTO_URLS[6], PHOTO_URLS[7], PHOTO_URLS[8]],
   [PHOTO_URLS[9], PHOTO_URLS[10], PHOTO_URLS[11]],
+  [PHOTO_URLS[0], PHOTO_URLS[4], PHOTO_URLS[8]],
 ];
 
 export default function Marquee3D() {
   const reduced = useReducedMotion();
 
   return (
-    <section className="relative w-full overflow-hidden bg-background py-20 sm:py-28 text-center">
-      {/* 3D Tilted photo canvas container */}
-      <div className="relative mx-auto h-[480px] sm:h-[580px] w-full max-w-full overflow-hidden [perspective:1400px]">
-        {/* Background tilted grid */}
+    <section className="relative w-full py-16 sm:py-24">
+      <div className="mx-auto max-w-[1100px] px-4">
+        {/* Bordered rounded-[22px] panel matching design 01 */}
         <div
-          aria-hidden={reduced ? undefined : "true"}
-          className={`fx-marquee-3d absolute -inset-x-20 -top-32 flex justify-center gap-4 sm:gap-6 opacity-40 dark:opacity-30 ${
-            reduced
-              ? ""
-              : "[transform:rotateX(55deg)_rotateZ(-45deg)]"
-          }`}
+          data-slot="marquee-panel"
+          className="group/marquee relative h-[460px] sm:h-[640px] w-full overflow-hidden rounded-[22px] border border-border bg-[#0B0B0B] text-center [perspective:1400px]"
         >
-          {COLUMNS.map((col, colIdx) => {
-            const isUp = colIdx % 2 === 0;
-            const animClass = reduced ? "" : isUp ? "fx-col-up" : "fx-col-down";
+          {/* Tilted photo wall filling the panel with center aligned */}
+          <div
+            aria-hidden={reduced ? undefined : "true"}
+            className="pointer-events-none absolute left-1/2 top-1/2 flex gap-4 sm:gap-6 opacity-90 sm:opacity-95 [transform:translate(-50%,-50%)_rotateX(55deg)_rotateZ(-45deg)]"
+          >
+            {COLUMNS.map((col, colIdx) => {
+              const isUp = colIdx % 2 === 0;
+              const animClass = reduced ? "" : isUp ? "fx-col-up" : "fx-col-down";
 
-            return (
-              <div key={colIdx} className="flex flex-col gap-4 sm:gap-6">
-                <div className={`flex flex-col gap-4 sm:gap-6 ${animClass}`}>
-                  {[...col, ...col].map((item, itemIdx) => {
-                    const isDup = itemIdx >= col.length;
-                    return (
-                      <div
-                        key={`${item.key}-${itemIdx}`}
-                        aria-hidden={isDup ? "true" : undefined}
-                        className="relative h-44 w-32 sm:h-64 sm:w-48 overflow-hidden rounded-[18px] border border-border bg-surface shrink-0 shadow-lg"
-                      >
-                        <Image
-                          fill
-                          src={item.url}
-                          alt={item.alt}
-                          sizes="(max-width: 640px) 128px, 192px"
-                          className="object-cover"
-                          style={
-                            item.position ? { objectPosition: item.position } : undefined
-                          }
-                        />
-                      </div>
-                    );
-                  })}
+              return (
+                <div key={colIdx} className="flex flex-col gap-4 sm:gap-6">
+                  <div className={`flex flex-col gap-4 sm:gap-6 ${animClass}`}>
+                    {[...col, ...col].map((item, itemIdx) => {
+                      const isDup = itemIdx >= col.length;
+                      return (
+                        <div
+                          key={`${item.key}-${colIdx}-${itemIdx}`}
+                          aria-hidden={isDup ? "true" : undefined}
+                          className="relative h-44 w-32 sm:h-72 sm:w-52 overflow-hidden rounded-[16px] sm:rounded-[18px] border border-white/10 bg-surface shrink-0 shadow-2xl"
+                        >
+                          <Image
+                            fill
+                            src={item.url}
+                            alt={item.alt}
+                            loading="eager"
+                            sizes="(max-width: 640px) 128px, 208px"
+                            className="object-cover"
+                            style={
+                              item.position ? { objectPosition: item.position } : undefined
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        {/* Radial dark gradient vignette over the marquee */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,var(--background)_30%,transparent_100%)] dark:bg-[radial-gradient(circle_at_center,#0A0A0A_30%,transparent_100%)] opacity-95"
-        />
+          {/* Soft radial scrim over the center so text is legible and photos stay visible */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 fx-marquee-scrim"
+          />
 
-        {/* Centered Heading Content */}
-        <div className="relative z-10 mx-auto flex h-full max-w-[800px] flex-col items-center justify-center px-4">
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57] flex items-center gap-1.5 mb-3">
-            <span aria-hidden="true">●</span> THE WHOLE YARD
-          </p>
-          <h2 className="text-4xl sm:text-5xl lg:text-[60px] font-bold tracking-tight text-foreground leading-[1.05]">
-            1,240+ machines.
-            <br />
-            <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
-              One marketplace.
-            </span>
-          </h2>
-          <p className="mt-4 max-w-xl text-base sm:text-lg text-muted">
-            Construction, film, transport, farming, power and events — every listing reviewed by an admin before it goes live.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button variant="action" asChild>
-              <Link href="/equipment">Explore all equipment</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/register">List your machine</Link>
-            </Button>
+          {/* Centered Heading Content */}
+          <div className="relative z-10 mx-auto flex h-full max-w-[800px] flex-col items-center justify-center px-4 sm:px-6">
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57] flex items-center gap-1.5 mb-2 sm:mb-3">
+              <span aria-hidden="true">●</span> THE WHOLE YARD
+            </p>
+            <h2 className="text-3xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-foreground leading-[1.05]">
+              1,240+ machines.
+              <br />
+              <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
+                One marketplace.
+              </span>
+            </h2>
+            <p className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted">
+              Construction, film, transport, farming, power and events — every listing reviewed by an admin before it goes live.
+            </p>
+            <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Button variant="action" asChild>
+                <Link href="/equipment">Explore all equipment</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/register">List your machine</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

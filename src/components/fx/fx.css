@@ -135,9 +135,31 @@
   animation: fx-marquee-down 24s linear infinite;
 }
 
-.fx-marquee-3d:hover .fx-col-up,
-.fx-marquee-3d:hover .fx-col-down {
+/* Hovering the marquee panel pauses the columns */
+[data-slot="marquee-panel"]:hover .fx-col-up,
+[data-slot="marquee-panel"]:hover .fx-col-down,
+.group\/marquee:hover .fx-col-up,
+.group\/marquee:hover .fx-col-down {
   animation-play-state: paused;
+}
+
+/* 03 §4 Marquee3D: soft radial scrim (~60-70% alpha at center, fading to transparent by ~60%) */
+.fx-marquee-scrim {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(10, 10, 10, 0.68) 0%,
+    rgba(10, 10, 10, 0.45) 35%,
+    transparent 60%
+  );
+}
+
+:root:not(.dark) .fx-marquee-scrim {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(255, 255, 255, 0.48) 35%,
+    transparent 60%
+  );
 }
 
 
