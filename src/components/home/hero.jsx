@@ -46,10 +46,10 @@ export default function Hero() {
         {/* Badge pill */}
         <Link
           href={`/equipment?category=${encodeURIComponent("Agriculture Equipment")}`}
-          className="group inline-flex items-center"
+          className="group inline-flex items-center rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
         >
           <MovingBorder>
-            <div className="flex h-[34px] items-center gap-2.5 rounded-full border border-border bg-[#111111] px-2.5 pr-4 text-xs font-medium text-[#D4D4D4] transition-colors group-hover:bg-raised">
+            <div className="flex h-[34px] items-center gap-2.5 rounded-full border border-border bg-surface px-2.5 pr-4 text-xs font-medium text-foreground transition-colors group-hover:bg-raised">
               <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary-foreground">
                 NEW
               </span>
@@ -63,10 +63,18 @@ export default function Hero() {
         </Link>
 
         {/* H1 heading */}
-        <h1 className="bg-gradient-to-b from-foreground to-muted bg-clip-text text-5xl font-bold tracking-[-0.055em] text-transparent sm:text-7xl lg:text-[84px] lg:leading-[1.02]">
-          The rental yard for
-          <br />
-          <FlipWords words={FLIP_WORDS} />
+        <h1 className="text-5xl font-bold tracking-[-0.055em] sm:text-7xl lg:text-[84px] lg:leading-[1.02]">
+          <span className="sr-only">
+            The rental yard for excavators, cinema cameras, cargo vans, tractors, generators and PA systems
+          </span>
+          <span
+            aria-hidden="true"
+            className="inline-block bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent"
+          >
+            The rental yard for
+            <br />
+            <FlipWords words={FLIP_WORDS} />
+          </span>
         </h1>
 
         {/* Sub-copy with TextGenerate + Highlight */}
@@ -86,7 +94,7 @@ export default function Hero() {
             <Link
               key={chip.category}
               href={`/equipment?category=${encodeURIComponent(chip.category)}`}
-              className="rounded-full border border-border bg-[#111111] px-4 py-1.5 text-xs text-[#D4D4D4] transition-colors hover:border-border-strong hover:bg-raised hover:text-foreground"
+              className="rounded-full border border-border bg-surface px-4 py-1.5 text-xs text-muted transition-colors hover:border-border-strong hover:bg-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
             >
               {chip.label}
             </Link>

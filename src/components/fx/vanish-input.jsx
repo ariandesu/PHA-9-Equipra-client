@@ -58,7 +58,7 @@ export default function VanishInput({
       role="search"
       onSubmit={handleSubmit}
       className={cn(
-        "relative flex h-[58px] sm:h-[62px] w-full max-w-[640px] items-center rounded-full border border-border bg-[#111111] px-3 sm:px-4 shadow-sm transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15",
+        "relative flex h-[58px] sm:h-[62px] w-full max-w-[640px] items-center rounded-full border border-border bg-surface px-3 sm:px-4 shadow-sm transition-all focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/15",
         className,
       )}
     >
