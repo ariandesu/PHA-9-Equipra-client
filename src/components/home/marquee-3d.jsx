@@ -50,25 +50,25 @@ export default function Marquee3D() {
               const delay = (colIdx * 3.7) % duration;
 
               return (
-                <div
-                  key={colIdx}
-                  className="flex flex-col"
-                  style={{ animationDelay: `-${delay}s`, animationDuration: `${duration}s` }}
-                >
+                <div key={colIdx} className="flex flex-col">
                   <div
-                    className={`flex flex-col gap-4 sm:gap-6 ${animClass}`}
-                    style={{ willChange: "transform" }}
+                    className={`flex flex-col ${animClass}`}
+                    style={{
+                      animationDelay: reduced ? undefined : `-${delay}s`,
+                      animationDuration: reduced ? undefined : `${duration}s`,
+                      willChange: reduced ? undefined : "transform",
+                    }}
                   >
-                    {[0, 1].map((copy) => (
+                    {[0, 1, 2].map((copy) => (
                       <div
                         key={copy}
-                        aria-hidden={copy === 1 ? "true" : undefined}
+                        aria-hidden={copy === 0 ? undefined : "true"}
                         className="flex flex-col gap-4 sm:gap-6 pb-4 sm:pb-6"
                       >
                         {col.map((item, itemIdx) => (
                           <div
                             key={`${item.key}-${colIdx}-${itemIdx}-c${copy}`}
-                            aria-hidden={copy === 1 ? "true" : undefined}
+                            aria-hidden={copy === 0 ? undefined : "true"}
                             className="relative h-44 w-32 sm:h-72 sm:w-52 overflow-hidden rounded-[16px] sm:rounded-[18px] border border-white/10 bg-surface shrink-0 shadow-2xl"
                           >
                             <Image

@@ -119,19 +119,19 @@
   transition: filter 0.25s ease, opacity 0.25s ease;
 }
 
-/* 03 §4 Marquee3D: columns translateY loop alternating directions */
+/* 03 §4 Marquee3D: columns translateY loop alternating directions (three-copy exact loop) */
 @keyframes fx-marquee-up {
   from {
     transform: translateY(0);
   }
   to {
-    transform: translateY(-50%);
+    transform: translateY(-33.3333%);
   }
 }
 
 @keyframes fx-marquee-down {
   from {
-    transform: translateY(-50%);
+    transform: translateY(-33.3333%);
   }
   to {
     transform: translateY(0);
