@@ -78,6 +78,7 @@ export default function Navbar() {
 
   // Active route: match exact "/" or "/equipment" (ignores hash/fragment)
   const activeHref = links.find((l) => l.href === pathname)?.href ?? null;
+  const pillHref = hovered ?? activeHref;
 
   return (
     <header className="sticky top-4 z-50 mx-auto w-full max-w-[1100px] px-4">
@@ -96,6 +97,7 @@ export default function Navbar() {
         >
           {links.map((link) => {
             const isActive = link.href === activeHref;
+            const isPillHere = pillHref === link.href;
             return (
               <li key={link.href} className="relative">
                 <Link
@@ -103,9 +105,11 @@ export default function Navbar() {
                   onMouseEnter={() => setHovered(link.href)}
                   onFocus={() => setHovered(link.href)}
                   onBlur={() => setHovered(null)}
-                  className="relative inline-flex items-center rounded-full px-4 py-2 text-sm text-muted transition-colors hover:text-foreground focus-visible:ring-4 focus-visible:ring-primary/15"
+                  className={`relative inline-flex items-center rounded-full px-4 py-2 text-sm text-muted transition-colors hover:text-foreground focus-visible:ring-4 focus-visible:ring-primary/15 ${
+                    reduced ? (isActive ? "bg-raised" : "hover:bg-raised") : ""
+                  }`}
                 >
-                  {!reduced && (
+                  {!reduced && isPillHere && (
                     <motion.span
                       layoutId="nav-hover-pill"
                       className="absolute inset-0 rounded-full bg-raised"
@@ -114,7 +118,7 @@ export default function Navbar() {
                     />
                   )}
                   <span
-                    className={`relative ${isActive && !hovered ? "text-foreground" : ""}`}
+                    className={`relative ${pillHref === link.href ? "text-foreground" : ""}`}
                   >
                     {link.label}
                   </span>
