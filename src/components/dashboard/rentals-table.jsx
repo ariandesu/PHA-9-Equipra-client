@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { formatBDT, formatDate } from "@/lib/money";
 import { Badge } from "@/components/ui/badge";
 import Pagination from "@/components/catalog/pagination";
 import LoadError from "@/components/dashboard/load-error";
-import { useMyBookings } from "@/lib/data/hooks";
+import { useCreateCheckout, useMyBookings } from "@/lib/data/hooks";
 
 const STATUS_VARIANTS = {
   confirmed: "info",
@@ -17,11 +18,41 @@ const STATUS_VARIANTS = {
 
 export default function RentalsTable() {
   const [page, setPage] = useState(1);
+  const [payingId, setPayingId] = useState(null);
   const { data: bookingsRes, isPending, isError, refetch } = useMyBookings({ page, limit: 5 });
+  const createCheckout = useCreateCheckout();
+
+  // Snapshot "now" once per mount for hold-expiry checks.
+  const [now] = useState(() => Date.now());
 
   const items = bookingsRes?.items ?? [];
   const total = bookingsRes?.total ?? 0;
   const pages = bookingsRes?.pages ?? 1;
+
+  // A hold is live only while its expiry sits in the future.
+  const isHoldLive = (b) =>
+    b.paymentStatus === "unpaid" &&
+    b.status === "pending" &&
+    b.holdExpiresAt != null &&
+    new Date(b.holdExpiresAt).getTime() > now;
+
+  async function handlePayNow(bookingId) {
+    if (payingId) return;
+    setPayingId(bookingId);
+    try {
+      const checkout = await createCheckout.mutateAsync(bookingId);
+      const url = checkout?.url;
+      if (url) {
+        window.location.assign(url);
+      } else {
+        toast.error("No checkout URL returned. Please try again.");
+      }
+    } catch (error) {
+      toast.error(error?.message || "Could not start the payment session.");
+    } finally {
+      setPayingId(null);
+    }
+  }
 
   // Compute KPI totals
   const activeCount = items.filter((b) => b.status === "confirmed" || b.status === "pending").length;
@@ -118,14 +149,14 @@ export default function RentalsTable() {
                       </Badge>
                     </td>
                     <td className="py-3.5 px-3 whitespace-nowrap">
-                      {b.paymentStatus === "unpaid" ? (
+                      {isHoldLive(b) ? (
                         <button
                           type="button"
-                          disabled
-                          title="Payment gateway in demo mode"
-                          className="rounded-full border border-warning/40 bg-warning/10 px-3 py-1 font-mono text-xs text-warning opacity-70 cursor-not-allowed"
+                          disabled={payingId === b.id}
+                          onClick={() => handlePayNow(b.id)}
+                          className="rounded-full border border-warning/40 bg-warning/10 px-3 py-1 font-mono text-xs text-warning transition-opacity hover:bg-warning/20 disabled:cursor-wait disabled:opacity-60"
                         >
-                          Pay now (demo)
+                          {payingId === b.id ? "Starting…" : "Pay now"}
                         </button>
                       ) : (
                         <span className="font-mono text-xs text-muted">—</span>
