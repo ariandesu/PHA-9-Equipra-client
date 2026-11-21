@@ -48,7 +48,7 @@ function CatalogContent() {
     limit: 9,
   };
 
-  const { data: listRes, isPending } = useEquipmentList(queryParams);
+  const { data: listRes, isPending, isError, refetch } = useEquipmentList(queryParams);
   const { data: catRes } = useCategories();
 
   const countMap = {};
@@ -79,7 +79,12 @@ function CatalogContent() {
 
         <div className="relative z-10 flex max-w-2xl flex-col items-center gap-3">
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57] flex items-center gap-1.5">
-            <span aria-hidden="true">●</span> CATALOG · {total} APPROVED LISTINGS
+            <span aria-hidden="true">●</span>
+            {isPending ? (
+              "CATALOG · LOADING LISTINGS"
+            ) : (
+              `CATALOG · ${total} APPROVED LISTINGS`
+            )}
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
             All equipment
@@ -129,32 +134,58 @@ function CatalogContent() {
         />
 
         <div className="flex flex-1 flex-col w-full min-w-0">
-          <ActiveFilters
-            itemsCount={items.length}
-            total={total}
-            category={paramCategory}
-            rentalType={paramRentalType}
-            minPrice={paramMinPrice}
-            maxPrice={paramMaxPrice}
-            availability={paramAvail}
-            sort={paramSort}
-            page={page}
-            onRemove={(k) => updateUrl({ [k]: "", page: 1 })}
-          />
-
           {isPending ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="flex flex-col rounded-[22px] border border-border bg-surface overflow-hidden h-[400px] animate-pulse">
-                  <div className="aspect-[4/3] w-full bg-raised" />
-                  <div className="p-4 flex flex-col gap-3 flex-1">
-                    <div className="h-4 w-20 rounded bg-raised" />
-                    <div className="h-6 w-3/4 rounded bg-raised" />
-                    <div className="mt-auto h-8 w-24 rounded bg-raised" />
+            <>
+              <ActiveFilters
+                itemsCount={0}
+                total={0}
+                category={paramCategory}
+                rentalType={paramRentalType}
+                minPrice={paramMinPrice}
+                maxPrice={paramMaxPrice}
+                availability={paramAvail}
+                sort={paramSort}
+                page={page}
+                onRemove={(k) => updateUrl({ [k]: "", page: 1 })}
+                loading
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="flex flex-col rounded-[22px] border border-border bg-surface overflow-hidden h-[400px] animate-pulse">
+                    <div className="aspect-[4/3] w-full bg-raised" />
+                    <div className="p-4 flex flex-col gap-3 flex-1">
+                      <div className="h-4 w-20 rounded bg-raised" />
+                      <div className="h-6 w-3/4 rounded bg-raised" />
+                      <div className="mt-auto h-8 w-24 rounded bg-raised" />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
+          ) : isError ? (
+            <>
+              <ActiveFilters
+                itemsCount={0}
+                total={0}
+                category={paramCategory}
+                rentalType={paramRentalType}
+                minPrice={paramMinPrice}
+                maxPrice={paramMaxPrice}
+                availability={paramAvail}
+                sort={paramSort}
+                page={page}
+                onRemove={(k) => updateUrl({ [k]: "", page: 1 })}
+              />
+              <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-16 text-center">
+                <h3 className="text-lg font-bold text-foreground">Couldn&apos;t load equipment</h3>
+                <p className="mt-1 text-sm text-muted max-w-sm">
+                  The request failed. Check your connection and try again.
+                </p>
+                <Button variant="action" size="sm" onClick={() => refetch()} className="mt-4">
+                  Try again
+                </Button>
+              </div>
+            </>
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-16 text-center">
               <h3 className="text-lg font-bold text-foreground">No equipment found</h3>
@@ -166,11 +197,25 @@ function CatalogContent() {
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {items.map((item) => (
-                <EquipmentCard key={item.id} item={item} />
-              ))}
-            </div>
+            <>
+              <ActiveFilters
+                itemsCount={items.length}
+                total={total}
+                category={paramCategory}
+                rentalType={paramRentalType}
+                minPrice={paramMinPrice}
+                maxPrice={paramMaxPrice}
+                availability={paramAvail}
+                sort={paramSort}
+                page={page}
+                onRemove={(k) => updateUrl({ [k]: "", page: 1 })}
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {items.map((item) => (
+                  <EquipmentCard key={item.id} item={item} />
+                ))}
+              </div>
+            </>
           )}
 
           <Pagination page={page} pages={pages} onPageChange={(p) => updateUrl({ page: p })} />

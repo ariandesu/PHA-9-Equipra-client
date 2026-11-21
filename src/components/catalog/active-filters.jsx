@@ -13,13 +13,20 @@ export default function ActiveFilters({
   sort,
   page,
   onRemove,
+  loading = false,
 }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4 mb-6 text-xs text-muted">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-medium text-foreground">
-          Showing {itemsCount > 0 ? `1–${itemsCount}` : 0} of {total}
-        </span>
+        {loading ? (
+          <span className="font-medium text-foreground animate-pulse">
+            <span className="inline-block w-24 h-4 bg-raised rounded" aria-hidden="true" />
+          </span>
+        ) : (
+          <span className="font-medium text-foreground">
+            Showing {itemsCount > 0 ? `1–${itemsCount}` : 0} of {total}
+          </span>
+        )}
 
         {category && (
           <span className="flex items-center gap-1 rounded-full border border-border bg-raised px-2.5 py-0.5 text-foreground">

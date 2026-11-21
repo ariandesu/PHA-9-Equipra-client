@@ -21,7 +21,7 @@ const FEATURED_TABS = [
 export default function Featured() {
   const [activeTab, setActiveTab] = useState("all");
   const reduced = useReducedMotion();
-  const { data: featuredData, isPending } = useFeatured();
+  const { data: featuredData, isPending, isError, refetch } = useFeatured();
 
   const allItems = featuredData?.data ?? [];
   const selectedTab = FEATURED_TABS.find((t) => t.id === activeTab);
@@ -99,6 +99,16 @@ export default function Featured() {
                   </div>
                 </div>
               ))}
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-16 text-center">
+              <h3 className="text-lg font-bold text-foreground">Couldn&apos;t load featured equipment</h3>
+              <p className="mt-1 text-sm text-muted max-w-sm">
+                The request failed. Check your connection and try again.
+              </p>
+              <Button variant="action" size="sm" onClick={() => refetch()} className="mt-4">
+                Try again
+              </Button>
             </div>
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-12 text-center">
