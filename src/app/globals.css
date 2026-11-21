@@ -181,3 +181,14 @@ body {
     transform: none !important;
   }
 }
+
+.spin-hide::-webkit-inner-spin-button,
+.spin-hide::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.spin-hide {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

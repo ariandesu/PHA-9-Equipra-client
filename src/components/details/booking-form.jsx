@@ -1,5 +1,7 @@
 "use client";
 
+import QuantityInput from "@/components/details/quantity-input";
+
 export default function BookingForm({
   item,
   startDate,
@@ -50,26 +52,8 @@ export default function BookingForm({
       </div>
 
       <div className="flex items-center justify-between border-y border-border py-3">
-        <span className="text-xs font-medium text-muted">Quantity</span>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            disabled={quantity <= 1}
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="flex size-7 items-center justify-center rounded-md border border-border bg-raised text-foreground disabled:opacity-40"
-          >
-            −
-          </button>
-          <span className="font-mono text-sm font-semibold text-foreground w-6 text-center">{quantity}</span>
-          <button
-            type="button"
-            disabled={quantity >= item.quantity}
-            onClick={() => setQuantity((q) => Math.min(item.quantity, q + 1))}
-            className="flex size-7 items-center justify-center rounded-md border border-border bg-raised text-foreground disabled:opacity-40"
-          >
-            +
-          </button>
-        </div>
+        <label htmlFor="booking-quantity" className="text-xs font-medium text-muted">Quantity</label>
+        <QuantityInput id="booking-quantity" value={quantity} min={1} max={item.quantity} onChange={setQuantity} />
       </div>
 
       <div>
