@@ -1,13 +1,11 @@
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getAuth } from "@/lib/auth";
+import { getServerSession } from "@/lib/get-session";
 import DashboardSidebar from "@/components/dashboard/dashboard-sidebar";
 
 // 02 §1 & §3: dashboard layout is a server component that guards the session
 // and supplies the role-aware sidebar without inheriting the site navbar/footer.
 export default async function DashboardLayout({ children }) {
-  const auth = await getAuth();
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
 
   if (!session?.user) {
     redirect("/login?redirect=/dashboard");
