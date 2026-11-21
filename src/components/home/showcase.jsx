@@ -16,7 +16,7 @@ const SHOWCASE_ITEM = {
 };
 
 const HERO_PHOTO =
-  "https://images.unsplash.com/photo-1621922688758-359fc864071e?w=1200&q=75&auto=format&fit=crop";
+  "https://i.ibb.co/KzKqV11J/equipra-dozer.jpg";
 
 export default function Showcase() {
   return (
