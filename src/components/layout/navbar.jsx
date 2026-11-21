@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import Logo from "@/components/layout/logo";
@@ -69,10 +70,14 @@ function AuthActions({ session, className = "" }) {
 export default function Navbar() {
   const reduced = useReducedMotion();
   const session = authClient.useSession();
+  const pathname = usePathname();
   const [hovered, setHovered] = useState(null);
   const [open, setOpen] = useState(false);
 
   const user = session.data?.user;
+
+  // Active route: match exact "/" or "/equipment" (ignores hash/fragment)
+  const activeHref = links.find((l) => l.href === pathname)?.href ?? null;
 
   return (
     <header className="sticky top-4 z-50 mx-auto w-full max-w-[1100px] px-4">
@@ -85,28 +90,38 @@ export default function Navbar() {
           <span>Equipra</span>
         </Link>
 
-        <ul className="hidden items-center gap-1 lg:flex">
-          {links.map((link) => (
-            <li key={link.href} className="relative">
-              <Link
-                href={link.href}
-                onMouseEnter={() => setHovered(link.href)}
-                onMouseLeave={() => setHovered(null)}
-                onFocus={() => setHovered(link.href)}
-                onBlur={() => setHovered(null)}
-                className="relative rounded-full px-4 py-2 text-sm text-muted transition-colors hover:text-foreground focus-visible:ring-4 focus-visible:ring-primary/15"
-              >
-                {hovered === link.href && !reduced && (
-                  <motion.span
-                    layoutId="nav-hover-pill"
-                    className="absolute inset-0 rounded-full bg-raised"
-                    aria-hidden="true"
-                  />
-                )}
-                <span className="relative">{link.label}</span>
-              </Link>
-            </li>
-          ))}
+        <ul
+          className="hidden items-center gap-1 lg:flex"
+          onMouseLeave={() => setHovered(null)}
+        >
+          {links.map((link) => {
+            const isActive = link.href === activeHref;
+            return (
+              <li key={link.href} className="relative">
+                <Link
+                  href={link.href}
+                  onMouseEnter={() => setHovered(link.href)}
+                  onFocus={() => setHovered(link.href)}
+                  onBlur={() => setHovered(null)}
+                  className="relative inline-flex items-center rounded-full px-4 py-2 text-sm text-muted transition-colors hover:text-foreground focus-visible:ring-4 focus-visible:ring-primary/15"
+                >
+                  {!reduced && (
+                    <motion.span
+                      layoutId="nav-hover-pill"
+                      className="absolute inset-0 rounded-full bg-raised"
+                      aria-hidden="true"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.35 }}
+                    />
+                  )}
+                  <span
+                    className={`relative ${isActive && !hovered ? "text-foreground" : ""}`}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="flex items-center gap-2">
