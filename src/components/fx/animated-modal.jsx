@@ -20,7 +20,7 @@ export default function AnimatedModal({
       <DialogContent
         showCloseButton={false}
         className={cn(
-          "max-w-4xl p-0 overflow-hidden border-border bg-surface rounded-[24px] shadow-2xl [perspective:1200px]",
+          "max-w-[calc(100%-2rem)] sm:max-w-4xl max-h-[calc(100dvh-2rem)] overflow-y-auto p-0 border-border bg-surface rounded-[24px] shadow-2xl [perspective:1200px]",
           className,
         )}
       >

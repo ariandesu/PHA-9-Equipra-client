@@ -11,24 +11,24 @@ export default function BookingSummary({ item, quote, quantity, onSubmit }) {
 
       <div className="relative z-10 flex flex-col gap-3">
         <p className="font-mono text-xs uppercase tracking-wider text-muted">SUMMARY</p>
-        <div className="flex justify-between text-xs text-muted">
+        <div className="flex justify-between gap-3 text-xs text-muted">
           <span>Rate</span>
           <span className="font-mono text-foreground">{formatBDT(item.price)} / {item.rentalType}</span>
         </div>
-        <div className="flex justify-between text-xs text-muted">
+        <div className="flex justify-between gap-3 text-xs text-muted">
           <span>Duration</span>
           <span className="font-medium text-foreground">{quote.days} days ({quote.units} {item.rentalType})</span>
         </div>
-        <div className="flex justify-between text-xs text-muted">
+        <div className="flex justify-between gap-3 text-xs text-muted">
           <span>Quantity</span>
           <span className="font-medium text-foreground">× {quantity}</span>
         </div>
-        <div className="flex justify-between text-xs text-muted">
+        <div className="flex justify-between gap-3 text-xs text-muted">
           <span>Delivery</span>
           <span className="text-foreground">Included</span>
         </div>
 
-        <div className="flex items-baseline justify-between border-t border-border pt-4 mt-2">
+        <div className="flex items-baseline justify-between gap-3 border-t border-border pt-4 mt-2">
           <span className="text-sm font-semibold text-foreground">Total</span>
           <span className="font-mono text-2xl font-bold text-accent">{formatBDT(quote.totalAmount)}</span>
         </div>
