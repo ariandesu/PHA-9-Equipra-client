@@ -8,7 +8,7 @@ TanStack Query. Every screen follows the design export in `design-export/`.
 
 - **Live site:** https://equipra-client.vercel.app
 - **Live API:** https://equipra-server.vercel.app
-- **Server repo:** https://github.com/ariandesu/Assignment-9-server
+- **Server repo:** https://github.com/ariandesu/PHA-9-Equipra-server
 
 ## Features
 
