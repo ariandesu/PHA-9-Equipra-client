@@ -34,21 +34,21 @@ Made by `npm run seed` (passwords come from `SEED_ADMIN_PASSWORD` / `SEED_USER_P
 
 Light:
 
-![Home](docs/screenshots/01-home-desktop-1440.png)
-![All equipment](docs/screenshots/04-all-equipment.png)
-![Equipment details](docs/screenshots/05-equipment-details.png)
-![My rentals](docs/screenshots/09-customer-my-rentals.png)
-![Owner overview](docs/screenshots/12-owner-overview-analytics.png)
-![Admin overview](docs/screenshots/15-admin-overview.png)
+![Landing](docs/screenshots/landing.png)
+![Catalog](docs/screenshots/catalog.png)
+![Item details](docs/screenshots/item-details.png)
+![Customer rentals](docs/screenshots/customer-rentals.png)
+![Owner dashboard](docs/screenshots/owner-dashboard.png)
+![Admin dashboard](docs/screenshots/admin-dashboard.png)
 
 Dark:
 
-![Home dark](docs/screenshots/01-home-desktop-1440-dark.png)
-![All equipment dark](docs/screenshots/04-all-equipment-dark.png)
-![Equipment details dark](docs/screenshots/05-equipment-details-dark.png)
-![My rentals dark](docs/screenshots/09-customer-my-rentals-dark.png)
-![Owner overview dark](docs/screenshots/12-owner-overview-analytics-dark.png)
-![Admin overview dark](docs/screenshots/15-admin-overview-dark.png)
+![Landing dark](docs/screenshots/landing-dark.png)
+![Catalog dark](docs/screenshots/catalog-dark.png)
+![Item details dark](docs/screenshots/item-details-dark.png)
+![Customer rentals dark](docs/screenshots/customer-rentals-dark.png)
+![Owner dashboard dark](docs/screenshots/owner-dashboard-dark.png)
+![Admin dashboard dark](docs/screenshots/admin-dashboard-dark.png)
 
 ## Tech used
 
@@ -73,7 +73,19 @@ Dark:
 
 Keys only here — real values stay out of git; see `.env.example`.
 
-`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_DATA_SOURCE`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `MONGODB_URI`, `DB_NAME`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `JWT_SECRET`, `JWT_ISSUER`, `JWT_AUDIENCE`, `NEXT_PUBLIC_IMGBB_KEY`, `SEED_ADMIN_PASSWORD`, `SEED_USER_PASSWORD`.
+| Variable | Used for |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | Where the app talks to the API (`…/api`) |
+| `NEXT_PUBLIC_DATA_SOURCE` | `mock` for built-in demo rows, `api` for the live server |
+| `BETTER_AUTH_URL` | This app's own address |
+| `BETTER_AUTH_SECRET` | Signs the BetterAuth session |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google login credentials |
+| `MONGODB_URI` | Atlas connection string (auth sessions + seed writes) |
+| `DB_NAME` | Database name (`equipra_dev` local, `equipra` live) |
+| `JWT_SECRET` | Signs the bridge tokens — must equal the server's |
+| `JWT_ISSUER` / `JWT_AUDIENCE` | Expected token issuer and audience |
+| `NEXT_PUBLIC_IMGBB_KEY` | Image uploads for new listings |
+| `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` | Passwords stamped onto the demo accounts |
 
 Duplicate `.env.example` as `.env.local` and fill it in.
 
