@@ -232,11 +232,12 @@ async function main() {
       // Payments use the session id as the unique key, so the seed derives a
       // deterministic pseudo-session from the booking identity.
       const sessionId = `seed_${equipmentDoc._id}_${row.id}`;
+      const bookingDoc = await db.collection('bookings').findOne(filter, { projection: { _id: 1 } });
       await db.collection('payments').updateOne(
         { sessionId },
         {
+          $set: { bookingId: bookingDoc._id },
           $setOnInsert: {
-            bookingId: equipmentDoc._id,
             sessionId,
             transactionId: row.transactionId,
             amount: row.totalAmount * 100,
