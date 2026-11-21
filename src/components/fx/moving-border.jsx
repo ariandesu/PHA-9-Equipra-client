@@ -23,7 +23,7 @@ export default function MovingBorder({ className, children, ...props }) {
           !reduced && "fx-spin",
         )}
       />
-      <span className="relative inline-flex">{children}</span>
+      <span className="relative inline-flex grow">{children}</span>
     </span>
   );
 }
