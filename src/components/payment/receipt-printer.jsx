@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import POSTerminal, { SLOT, TERMINAL_ASPECT, TERMINAL_WIDTH } from "@/components/payment/pos-terminal";
 import ReceiptPaper from "@/components/payment/receipt-paper";
-import SuccessBurst from "@/components/payment/success-burst";
+import { BurstConfetti, BurstRings } from "@/components/payment/success-burst";
 import { usePrinterScale } from "@/components/payment/use-printer-scale";
 import { formatBDT } from "@/lib/money";
 
@@ -86,7 +86,16 @@ export default function ReceiptPrinter({
             aria-hidden="true"
             style={{ zIndex: 5 }}
           >
-            <SuccessBurst screenY={screenY} slotY={burstY} />
+            <BurstConfetti slotY={burstY} />
+          </div>
+        )}
+        {isConfirmed && (
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+            style={{ zIndex: 20 }}
+          >
+            <BurstRings screenY={screenY} />
           </div>
         )}
       </div>

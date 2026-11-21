@@ -6,6 +6,50 @@ import { motion, useReducedMotion } from "motion/react";
 const COLORS = ["#FF6A2B", "#C2410C", "#16A34A", "#FACC15"];
 const COUNT = 18;
 
+function useFired() {
+  const [fired, setFired] = useState(false);
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    if (!firedRef.current) {
+      firedRef.current = true;
+      setFired(true);
+    }
+  }, []);
+
+  return fired;
+}
+
+export function BurstRings({ screenY }) {
+  const reduced = useReducedMotion();
+  const fired = useFired();
+  const [finished, setFinished] = useState(0);
+  const done = finished >= 2;
+
+  if (reduced || !fired || done) return null;
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      {[0, 1].map((ring) => (
+        <div
+          key={ring}
+          className="absolute left-1/2"
+          style={{ top: screenY, translate: "-50% -50%" }}
+        >
+          <motion.span
+            className="block rounded-full border-2 border-[var(--accent)]"
+            style={{ width: 90, height: 90 }}
+            initial={{ scale: 0.9, opacity: 0.6 }}
+            animate={{ scale: 3.2, opacity: 0 }}
+            transition={{ duration: 0.9, delay: ring * 0.15, ease: "easeOut" }}
+            onAnimationComplete={() => setFinished((n) => n + 1)}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // Deterministic layout (no Math.random during render): 6x10px rounded
 // rectangles alternate with 6px dots, colours cycling through the set.
 function buildPieces() {
@@ -23,41 +67,19 @@ function buildPieces() {
   });
 }
 
-export default function SuccessBurst({ screenY, slotY }) {
+export function BurstConfetti({ slotY }) {
   const reduced = useReducedMotion();
   const [pieces] = useState(buildPieces);
-  const [fired, setFired] = useState(false);
-  const [done, setDone] = useState(false);
-  const firedRef = useRef(false);
-
-  useEffect(() => {
-    if (!firedRef.current) {
-      firedRef.current = true;
-      setFired(true);
-    }
-  }, []);
+  const fired = useFired();
+  const [finished, setFinished] = useState(0);
+  const done = finished >= COUNT;
 
   if (reduced || !fired || done) return null;
 
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-      {[0, 1].map((ring) => (
-        <div
-          key={ring}
-          className="absolute left-1/2"
-          style={{ top: screenY, translate: "-50% -50%" }}
-        >
-          <motion.span
-            className="block rounded-full border-2 border-[var(--accent)]"
-            style={{ width: 90, height: 90 }}
-            initial={{ scale: 0.6, opacity: 0.5 }}
-            animate={{ scale: 2.4, opacity: 0 }}
-            transition={{ duration: 0.9, delay: ring * 0.15, ease: "easeOut" }}
-          />
-        </div>
-      ))}
       <div className="absolute left-1/2 h-0 w-0" style={{ top: slotY }}>
-        {pieces.map((p, i) => (
+        {pieces.map((p) => (
           <motion.span
             key={p.key}
             className={p.dot ? "absolute rounded-full" : "absolute rounded-[2px]"}
@@ -81,7 +103,7 @@ export default function SuccessBurst({ screenY, slotY }) {
               times: [0, 0.45, 1],
               ease: ["easeOut", "easeIn"],
             }}
-            onAnimationComplete={i === COUNT - 1 ? () => setDone(true) : undefined}
+            onAnimationComplete={() => setFinished((n) => n + 1)}
           />
         ))}
       </div>
