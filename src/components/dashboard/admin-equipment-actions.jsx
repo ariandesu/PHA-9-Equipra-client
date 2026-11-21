@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Check, X, Trash2, ExternalLink } from "lucide-react";
+import { Check, X, Trash2, ExternalLink, Pencil } from "lucide-react";
 
 export default function AdminEquipmentActions({ item, onStatus, onDelete }) {
   return (
@@ -24,6 +24,13 @@ export default function AdminEquipmentActions({ item, onStatus, onDelete }) {
       >
         <X className="size-3.5" aria-hidden="true" />
       </button>
+      <Link
+        href={`/dashboard/admin/equipment/${item.id}/edit`}
+        aria-label={`Edit ${item.name}`}
+        className="flex size-8 items-center justify-center rounded-[8px] border border-border text-muted hover:text-foreground"
+      >
+        <Pencil className="size-3.5" aria-hidden="true" />
+      </Link>
       <Link
         href={`/equipment/${item.id}`}
         aria-label={`View ${item.name}`}

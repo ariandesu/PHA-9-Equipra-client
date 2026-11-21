@@ -5,7 +5,10 @@ import { Loader2 } from "lucide-react";
 import EquipmentForm from "@/components/dashboard/equipment-form";
 import { useEquipment } from "@/lib/data/hooks";
 
-export default function OwnerEditEquipmentForm({ equipmentId }) {
+export default function OwnerEditEquipmentForm({
+  equipmentId,
+  returnTo = "/dashboard/owner/equipment",
+}) {
   const { data: itemRes, isPending, isError } = useEquipment(equipmentId);
   const item = itemRes?.data;
 
@@ -22,5 +25,12 @@ export default function OwnerEditEquipmentForm({ equipmentId }) {
     );
   }
 
-  return <EquipmentForm initialData={item} isEdit={true} equipmentId={equipmentId} />;
+  return (
+    <EquipmentForm
+      initialData={item}
+      isEdit={true}
+      equipmentId={equipmentId}
+      returnTo={returnTo}
+    />
+  );
 }

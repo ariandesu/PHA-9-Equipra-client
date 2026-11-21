@@ -33,7 +33,12 @@ const schema = z.object({
   terms: z.string().trim().min(5, "Rental terms are required"),
 });
 
-export default function EquipmentForm({ initialData = null, isEdit = false, equipmentId = null }) {
+export default function EquipmentForm({
+  initialData = null,
+  isEdit = false,
+  equipmentId = null,
+  returnTo = "/dashboard/owner/equipment",
+}) {
   const router = useRouter();
   const createEquip = useCreateEquipment();
   const updateEquip = useUpdateEquipment();
@@ -83,7 +88,7 @@ export default function EquipmentForm({ initialData = null, isEdit = false, equi
         await createEquip.mutateAsync(data);
         toast.success("Equipment submitted! Status is Pending approval.");
       }
-      router.push("/dashboard/owner/equipment");
+      router.push(returnTo);
     } catch (err) {
       toast.error(err.message || "Operation failed");
     }
@@ -197,7 +202,7 @@ export default function EquipmentForm({ initialData = null, isEdit = false, equi
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
-          <Button variant="outline" asChild type="button"><Link href="/dashboard/owner/equipment">Cancel</Link></Button>
+          <Button variant="outline" asChild type="button"><Link href={returnTo}>Cancel</Link></Button>
           <Button variant="action" type="submit" disabled={isSubmitting || isUploading}>
             {isSubmitting ? "Submitting..." : isEdit ? "Save changes" : "Submit for approval"}
           </Button>
