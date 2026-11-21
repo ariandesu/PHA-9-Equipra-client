@@ -107,3 +107,38 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  [data-receipt-paper],
+  [data-receipt-paper] * {
+    visibility: visible !important;
+  }
+
+  [data-receipt-paper] {
+    position: fixed !important;
+    top: 24px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    box-shadow: none !important;
+    filter: none !important;
+    height: auto !important;
+    opacity: 1 !important;
+  }
+
+  [data-receipt-paper] > div {
+    transform: none !important;
+  }
+}
