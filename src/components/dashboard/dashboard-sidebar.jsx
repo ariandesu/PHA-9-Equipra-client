@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Menu,
   ArrowLeft,
+  Search,
   LayoutDashboard,
   PlusCircle,
   Package,
@@ -24,6 +25,7 @@ import { cn } from "@/lib/utils";
 
 const NAV_BY_ROLE = {
   customer: [
+    { href: "/equipment", label: "Browse equipment", icon: Search },
     { href: "/dashboard/rentals", label: "My rentals", icon: CalendarCheck },
     { href: "/dashboard/favorites", label: "Favorites", icon: Heart },
     { href: "/dashboard/profile", label: "Profile", icon: User },
@@ -84,7 +86,7 @@ export default function DashboardSidebar({ user }) {
 
   const role = user?.role || "customer";
   const navItems = NAV_BY_ROLE[role] || NAV_BY_ROLE.customer;
-  const backLink = role === "customer" ? { href: "/equipment", label: "Browse equipment" } : { href: "/", label: "Back to site" };
+  const backLink = { href: "/", label: "Back to site" };
 
   return (
     <>
