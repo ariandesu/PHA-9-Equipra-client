@@ -4,28 +4,32 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { formatBDT, formatDate } from "@/lib/money";
 
-// 16 serrated triangles along the bottom edge of the thermal paper.
+// 16 serrated triangles along the TOP edge: the paper tears off as it leaves the
+// machine, so the ragged edge is the end that came out last.
 const ZIGZAG_CLIP = (() => {
   const teeth = 16;
   const step = 100 / teeth;
-  const points = ["0% 0%", "100% 0%", "100% calc(100% - 7px)"];
-  for (let i = teeth - 1; i >= 0; i -= 1) {
-    const peak = (i * step + step / 2).toFixed(3);
+  const points = ["0% 100%", "0% 7px"];
+  for (let i = 0; i < teeth; i += 1) {
     const valley = (i * step).toFixed(3);
-    points.push(`${peak}% 100%`, `${valley}% calc(100% - 7px)`);
+    const peak = (i * step + step / 2).toFixed(3);
+    points.push(`${valley}% 7px`, `${peak}% 0%`);
   }
+  points.push("100% 7px", "100% 100%");
   return `polygon(${points.join(", ")})`;
 })();
 
+// Paper starts fully hidden inside the machine and rises in 8 thermal steps with
+// a 1px horizontal jitter, pausing briefly between each step.
 const FEED_Y = [
-  "-100%",
-  "-87.5%", "-87.5%",
-  "-75%", "-75%",
-  "-62.5%", "-62.5%",
-  "-50%", "-50%",
-  "-37.5%", "-37.5%",
-  "-25%", "-25%",
-  "-12.5%", "-12.5%",
+  "100%",
+  "87.5%", "87.5%",
+  "75%", "75%",
+  "62.5%", "62.5%",
+  "50%", "50%",
+  "37.5%", "37.5%",
+  "25%", "25%",
+  "12.5%", "12.5%",
   "0%",
 ];
 const FEED_X = [0, -1, 0, 1, 0, -1, 0, 1, 0, -1, 0, 1, 0, -1, 0, 0];
@@ -154,17 +158,16 @@ export default function ReceiptPaper({ booking, sessionId, isDemo, onPrinted }) 
   return (
     <motion.div
       data-receipt-paper
-      animate={settled && !reduced ? { rotate: -1.5, y: 4 } : { rotate: 0, y: 0 }}
+      animate={settled && !reduced ? { rotate: -2, y: -4 } : { rotate: 0, y: 0 }}
       transition={{ type: "spring", stiffness: 220, damping: 16 }}
-      className="w-[240px] drop-shadow-[0_2px_6px_rgba(0,0,0,0.12)] dark:drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
+      style={{ transformOrigin: "50% 100%" }}
+      className="w-[150px] drop-shadow-[0_2px_6px_rgba(0,0,0,0.12)] dark:drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
     >
       <motion.div
-        initial={reduced ? false : { y: "-100%", x: 0 }}
-        animate={reduced ? { y: "0%", x: 0 } : { y: FEED_Y, x: FEED_X }}
+        initial={reduced ? false : { x: 0, y: "100%" }}
+        animate={reduced ? { x: 0, y: "0%" } : { x: FEED_X, y: FEED_Y }}
         transition={
-          reduced
-            ? { duration: 0 }
-            : { duration: 1.6, times: FEED_TIMES, ease: "linear" }
+          reduced ? { duration: 0 } : { duration: 1.6, times: FEED_TIMES, ease: "linear" }
         }
         onAnimationComplete={() => {
           if (!reduced && !settled) {
@@ -173,7 +176,7 @@ export default function ReceiptPaper({ booking, sessionId, isDemo, onPrinted }) 
           }
         }}
         style={{ clipPath: ZIGZAG_CLIP }}
-        className="w-full bg-[#FAFAFA] px-4 pt-4 pb-6 text-left font-mono text-[11px] leading-relaxed text-[#0A0A0A]"
+        className="w-full bg-[#FAFAFA] px-4 pb-6 pt-5 text-left font-mono text-[11px] leading-relaxed text-[#0A0A0A]"
       >
         <ul className="flex flex-col gap-1" aria-label="Payment receipt">
           {lines.map((line, index) => (
@@ -182,9 +185,7 @@ export default function ReceiptPaper({ booking, sessionId, isDemo, onPrinted }) 
               initial={reduced ? false : { opacity: 0, filter: "blur(2px)" }}
               animate={{ opacity: 1, filter: "blur(0px)" }}
               transition={
-                reduced
-                  ? { duration: 0 }
-                  : { duration: 0.18, delay: index * 0.12 }
+                reduced ? { duration: 0 } : { duration: 0.18, delay: index * 0.12 }
               }
             >
               {line.node}

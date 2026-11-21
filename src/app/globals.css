@@ -149,4 +149,8 @@ body {
   [data-receipt-paper] > div {
     transform: none !important;
   }
+
+  [data-receipt-clip] {
+    overflow: visible !important;
+  }
 }

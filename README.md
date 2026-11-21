@@ -118,3 +118,13 @@ page confirms the session with `POST /payments/confirm`. Until the server has
 `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` set, checkout returns
 `503 {"message":"Payments are not configured"}` and the booking modal reports that
 gracefully instead of failing.
+
+## Photo credits
+
+The payment terminal on the success receipt comes from Wikimedia Commons:
+
+- “FirstData FD150 Credit Card Terminal” by [TaurusEmerald](https://commons.wikimedia.org/wiki/File:FirstData_FD150_Credit_Card_Terminal.jpg),
+  licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Cropped,
+  background removed, and the moulded model number retouched; redistributed here
+  under the same licence.
+

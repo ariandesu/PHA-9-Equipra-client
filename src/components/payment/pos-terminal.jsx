@@ -1,20 +1,22 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-const KEYS = [
-  ["1", "2", "3"],
-  ["4", "5", "6"],
-  ["7", "8", "9"],
-  ["*", "0", "#"],
-];
+// Measured in the committed asset (public/images/pos-terminal.webp, 374x600):
+// the printer slot is the thin line at y≈21.2%, and the LCD occupies the box
+// between those percentages.
+export const TERMINAL_WIDTH = 220;
+export const TERMINAL_ASPECT = 600 / 374;
+export const SLOT = { left: 15.5, right: 91, y: 21.2 };
+export const SCREEN = { left: 26, top: 32.1, width: 54.9, height: 17.2 };
 
 const STATUS_CONFIG = {
-  idle: { text: "READY", tone: "text-muted" },
-  confirming: { text: "CONFIRMING…", tone: "text-foreground" },
-  confirmed: { text: "APPROVED ✓", tone: "text-success" },
-  error: { text: "DECLINED", tone: "text-danger" },
+  idle: { text: "READY", tone: "text-[#8a8a86]" },
+  confirming: { text: "CONFIRMING…", tone: "text-[#f5f5f5]" },
+  confirmed: { text: "APPROVED ✓", tone: "text-[#4ade80]" },
+  error: { text: "DECLINED", tone: "text-[#f87171]" },
 };
 
 export default function POSTerminal({ status = "idle" }) {
@@ -30,46 +32,51 @@ export default function POSTerminal({ status = "idle" }) {
           ? { duration: 0.14, repeat: Infinity, ease: "linear" }
           : { duration: 0.15 }
       }
-      className={cn(
-        "relative z-10 mx-auto flex w-[260px] flex-col items-center gap-3.5 rounded-[20px] border border-border",
-        "bg-raised dark:bg-[#161616] px-4 pt-4 pb-2.5 shadow-2xl"
-      )}
+      className="relative z-10"
+      style={{ width: TERMINAL_WIDTH }}
     >
-      {/* Screen strip — kept dark so LCD status colors stay crisp in both themes */}
-      <div className="dark flex h-11 w-full items-center justify-center rounded-[10px] border border-border bg-[#0A0A0A] px-3">
+      <Image
+        src="/images/pos-terminal.webp"
+        alt="Card payment terminal"
+        width={374}
+        height={600}
+        priority
+        sizes="220px"
+        className={cn(
+          "h-auto w-full select-none",
+          "drop-shadow-[0_10px_18px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_32px_rgba(0,0,0,0.65)]"
+        )}
+      />
+
+      {/* LCD status, positioned over the photographed screen */}
+      <div
+        className="pointer-events-none absolute flex items-center justify-center overflow-hidden rounded-[4px] bg-[#0A0A0A]"
+        style={{
+          left: `${SCREEN.left}%`,
+          top: `${SCREEN.top}%`,
+          width: `${SCREEN.width}%`,
+          height: `${SCREEN.height}%`,
+        }}
+        aria-hidden="true"
+      >
         <motion.span
           key={config.text}
           animate={
-            isConfirming && !reduced ? { opacity: [1, 0.45, 1] } : { opacity: 1 }
+            isConfirming && !reduced ? { opacity: [1, 0.4, 1] } : { opacity: 1 }
           }
           transition={
             isConfirming && !reduced
               ? { duration: 0.9, repeat: Infinity, ease: "easeInOut" }
               : { duration: 0.15 }
           }
-          className={cn("font-mono text-xs font-semibold tracking-[0.14em]", config.tone)}
+          className={cn(
+            "px-1 text-center font-mono text-[9px] font-semibold leading-tight tracking-[0.06em]",
+            config.tone
+          )}
         >
           {config.text}
         </motion.span>
       </div>
-
-      {/* 3x4 decorative keypad */}
-      <div className="grid w-full grid-cols-3 gap-1.5 px-2" aria-hidden="true">
-        {KEYS.flat().map((key) => (
-          <span
-            key={key}
-            className="flex h-5 items-center justify-center rounded-[5px] border border-border/80 bg-background/80 dark:bg-[#222222] font-mono text-[10px] text-muted"
-          >
-            {key}
-          </span>
-        ))}
-      </div>
-
-      {/* Paper slot along the bottom edge */}
-      <div
-        aria-hidden="true"
-        className="mt-0.5 h-2 w-[244px] max-w-full rounded-full bg-black/80 shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)]"
-      />
     </motion.div>
   );
 }
