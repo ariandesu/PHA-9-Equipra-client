@@ -66,7 +66,7 @@ export default function AuthShell({ children }) {
             </div>
           </div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent dark:via-background/70 dark:to-background/20" />
 
           <div className="relative flex h-full flex-col justify-end gap-4 p-10">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57]">

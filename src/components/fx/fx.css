@@ -82,6 +82,17 @@
   mask-image: radial-gradient(ellipse at center, #000 25%, transparent 85%);
 }
 
+/* Light-only overrides (dark mode unchanged) */
+:root:not(.dark) .fx-grid {
+  background-image:
+    linear-gradient(to right, #ececec 1px, transparent 1px),
+    linear-gradient(to bottom, #ececec 1px, transparent 1px);
+}
+
+:root:not(.dark) .fx-dots {
+  background-image: radial-gradient(#d9d9d9 1.2px, transparent 1.2px);
+}
+
 /* 03 §4 LogoCloud: infinite marquee (translateX -50%), hover: siblings blur(2px) */
 @keyframes fx-marquee {
   from {

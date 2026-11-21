@@ -60,8 +60,8 @@ function SidebarLinks({ items, pathname, onSelect }) {
               className={cn(
                 "relative flex items-center gap-3 rounded-[10px] px-3.5 py-2.5 text-xs sm:text-sm font-medium transition-all hover:translate-x-1",
                 isActive
-                  ? "bg-[#1F1F1F] text-foreground font-semibold"
-                  : "text-muted hover:bg-[#1A1A1A] hover:text-foreground",
+                  ? "bg-raised dark:bg-[#1F1F1F] text-foreground font-semibold"
+                  : "text-muted hover:bg-raised dark:hover:bg-[#1A1A1A] hover:text-foreground",
               )}
             >
               {isActive && (
@@ -91,7 +91,7 @@ export default function DashboardSidebar({ user }) {
   return (
     <>
       {/* Mobile Top Header */}
-      <header className="lg:hidden flex items-center justify-between border-b border-border bg-[#111111] px-4 py-3 w-full fixed top-0 left-0 z-40">
+      <header className="lg:hidden flex items-center justify-between border-b border-border bg-surface dark:bg-[#111111] px-4 py-3 w-full fixed top-0 left-0 z-40">
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <Logo />
           <span>Equipra</span>
@@ -110,7 +110,7 @@ export default function DashboardSidebar({ user }) {
                 <Menu className="size-4" />
               </button>
             </SheetTrigger>
-            <SheetContent side="left" className="bg-[#111111] border-border text-foreground w-64 p-4">
+            <SheetContent side="left" className="bg-surface dark:bg-[#111111] border-border text-foreground w-64 p-4">
               <SheetTitle className="px-3 pt-4 text-left font-mono text-xs text-muted uppercase">
                 {role} Dashboard
               </SheetTitle>
@@ -120,7 +120,7 @@ export default function DashboardSidebar({ user }) {
                   <Link
                     href={backLink.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs text-muted hover:bg-[#1A1A1A] hover:text-foreground"
+                    className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs text-muted hover:bg-raised dark:hover:bg-[#1A1A1A] hover:text-foreground"
                   >
                     <ArrowLeft className="size-3.5" />
                     <span>{backLink.label}</span>
@@ -133,7 +133,7 @@ export default function DashboardSidebar({ user }) {
       </header>
 
       {/* Desktop Sidebar (240px wide per 03 §5) */}
-      <aside className="hidden lg:flex flex-col justify-between w-60 shrink-0 bg-[#111111] p-5 border-r border-border min-h-screen text-left">
+      <aside className="hidden lg:flex flex-col justify-between w-60 shrink-0 bg-surface dark:bg-[#111111] p-5 border-r border-border min-h-screen text-left">
         <div>
           {/* Logo & Role Badge */}
           <div className="flex items-center justify-between gap-2 pb-6 border-b border-border/80">
@@ -162,7 +162,7 @@ export default function DashboardSidebar({ user }) {
             <span>{backLink.label}</span>
           </Link>
 
-          <div className="flex items-center gap-2.5 rounded-[12px] bg-[#161616] border border-border/60 p-2.5">
+          <div className="flex items-center gap-2.5 rounded-[12px] bg-raised dark:bg-[#161616] border border-border/60 p-2.5">
             <Avatar className="size-9 border border-border">
               {user.image && <AvatarImage src={user.image} alt="" />}
               <AvatarFallback className="bg-primary text-primary-foreground font-mono text-xs font-bold">
