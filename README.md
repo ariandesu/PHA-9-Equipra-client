@@ -1,77 +1,61 @@
-# Equipra — client
+# Equipra
 
-The storefront for **Equipra**, an equipment rental marketplace: owners list
-heavy gear, an admin approves it, customers browse, book and pay online.
+Equipra — equipment rental platform. Owners list heavy gear, an admin approves it, customers browse, book and pay with Stripe. The booking is confirmed only after successful payment.
 
-Built with Next.js (App Router), Tailwind CSS v4, shadcn/ui, BetterAuth and
-TanStack Query. Every screen follows the design export in `design-export/`.
-
-- **Live site:** https://equipra-client.vercel.app
-- **Live API:** https://equipra-server.vercel.app
-- **Server repo:** https://github.com/ariandesu/PHA-9-Equipra-server
-
-## Features
-
-- **Landing page** — animated hero, showcase, owner marquee, stats, featured
-  equipment with tabs, 3D photo wall, category focus cards, how-it-works timeline,
-  bento grid, reviews, FAQ, owner CTA and a full-width wordmark footer.
-- **Auth** — email/password and Google via BetterAuth, role chosen at signup
-  (customer or owner), password rules enforced inline and via toast.
-- **Catalog** — server-side search, filters, sorting and pagination, with every
-  filter reflected in the URL so a reload restores it.
-- **Details & booking** — gallery with zoom, spec grid, owner card, favorites, and a
-  booking modal with a live total matching the server formula that hands off to
-  Stripe Checkout.
-- **Dashboards** — role-aware sidebar for customers (rentals, favorites, profile),
-  owners (analytics, add/edit equipment, listings, rentals) and admins (platform
-  analytics, users, equipment moderation, all rentals).
-- **Extras** — ⌘K command search, dark/light theme with localStorage, reduced-motion
-  support throughout, route-level loading, error and not-found states.
-
-## Packages
-
-`next`, `react`, `react-dom`, `@tanstack/react-query`, `axios`, `better-auth`,
-`mongodb`, `motion`, `lucide-react`, `recharts`, `cmdk`, `react-hook-form`, `zod`,
-`@hookform/resolvers`, `sonner`, `next-themes`, `radix-ui`, `class-variance-authority`,
-`clsx`, `tailwind-merge`, `tw-animate-css`, `tailwindcss`.
-
-## Environment variables
-
-Names only — copy `.env.example` to `.env.local` and fill in the values.
-
-| Variable | Purpose |
-|---|---|
-| `NEXT_PUBLIC_API_URL` | Express API base URL (ends in `/api`) |
-| `NEXT_PUBLIC_DATA_SOURCE` | `mock` for in-memory demo data, `api` for the live server |
-| `BETTER_AUTH_URL` | This app's own URL |
-| `BETTER_AUTH_SECRET` | BetterAuth signing secret |
-| `MONGODB_URI` | Atlas connection string (BetterAuth + seed) |
-| `DB_NAME` | `equipra_dev` locally, `equipra` in production |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth credentials |
-| `JWT_SECRET` | Must match the server's value exactly |
-| `JWT_ISSUER` / `JWT_AUDIENCE` | Must match the server's values |
-| `NEXT_PUBLIC_IMGBB_KEY` | imgbb API key for image uploads |
-| `SEED_ADMIN_PASSWORD` / `Rent@123456` | Passwords used only by the seed script |
+- Live site: `https://equipra-client.vercel.app`
+- API: `https://equipra-server.vercel.app` ([PHA-9-Equipra-server repo](https://github.com/ariandesu/PHA-9-Equipra-server)) · [PHA-9-Equipra-client repo](https://github.com/ariandesu/PHA-9-Equipra-client)
 
 ## Demo accounts
 
-Created by `npm run seed`. These are **demo test credentials**, not real secrets;
-use these to log in on the live site.
-
 | Role | Email | Password |
-|---|---|---|
+| --- | --- | --- |
 | Admin | `admin@equipra.app` | `Admin@123456` |
 | Owner | `owner@karimhm.com` | `Rent@123456` |
 | Owner | `lensbox@bd.com` | `Rent@123456` |
 | Customer | `rafi@mail.com` | `Rent@123456` |
 | Customer | `tanvir@build.bd` | `Rent@123456` |
 
-The seed also creates the remaining owners and customers referenced by the demo
-bookings (`sadia.farm@mail.com`, `farhan@frame.bd`, `nusrat.j@mail.com`,
-`mehedi.h@mail.com`, `sabbir@infra.bd`, `sound@craft.bd`, `power@hub.com`,
-`drive@line.com`, `agro@rent.bd`, `utsab@events.bd`) with `SEED_USER_PASSWORD`.
+Created by `npm run seed` (passwords come from `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD`). These are **demo test credentials**, not real secrets.
 
-## Local run
+- Stripe test card: 4242 4242 4242 4242, any future expiry date, any CVC.
+- Demo data is shared — please don't delete other users' listings.
+
+## Key features
+
+**Everyone:** animated landing (hero, showcase, owner marquee, stats, featured equipment with tabs, 3D photo wall, category focus, how-it-works timeline, bento grid, reviews + FAQ, owner CTA), server-side catalog search/filters/sort/pagination with URL-restored filters, equipment details (gallery with zoom, spec grid, owner card), dark/light theme saved in localStorage, ⌘K command search, reduced-motion support, route-level loading, error and not-found states.
+
+**Customers:** email/password and Google signup (role chosen at signup), favorites with heart state, booking modal with live total matching the server formula, Stripe Checkout, success page, My Rentals, favorites list, profile editing.
+
+**Owners:** overview analytics (KPIs, monthly earnings, status mix), add equipment (imgbb upload or URL), my-equipment table (edits reset to pending, delete with confirm), rentals of own equipment.
+
+**Admins:** platform analytics, all-users management (role change with confirm, remove; cannot change/remove self), equipment moderation (approve/reject/update/delete), all-rentals with status changes.
+
+## Packages
+
+- `next` — App Router (route groups, server components, `src/proxy.js` guards).
+- `react` / `react-dom` — UI runtime.
+- `tailwindcss` + `tw-animate-css` + `@tailwindcss/turbopack` — design tokens, utilities, animations.
+- `next-themes` — light (default) / dark theme, saved in localStorage.
+- `radix-ui` + `class-variance-authority` + `clsx` + `tailwind-merge` — shadcn primitives (buttons, dialogs, forms, tables).
+- `better-auth` (+ `mongodb` adapter) — email/password + Google signup, sessions, roles.
+- `axios` — API client with JWT interceptor.
+- `@tanstack/react-query` — server state behind data hooks.
+- `react-hook-form` + `@hookform/resolvers` + `zod` — forms + validation (incl. BD phone, password rule).
+- `motion` — entrance/hover animation (reduced-motion aware).
+- `recharts` — owner/admin analytics charts.
+- `cmdk` — ⌘K command menu.
+- `sonner` — toasts.
+- `lucide-react` — icons.
+- `@number-flow/react` — animated stat numbers.
+- `jsonwebtoken` — dev-only token helper (tests); the real JWT comes from the server bridge.
+
+## Env vars (names only — values never committed; see `.env.example`)
+
+`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_DATA_SOURCE`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `MONGODB_URI`, `DB_NAME`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `JWT_SECRET`, `JWT_ISSUER`, `JWT_AUDIENCE`, `NEXT_PUBLIC_IMGBB_KEY`, `SEED_ADMIN_PASSWORD`, `SEED_USER_PASSWORD`.
+
+Copy `.env.example` to `.env.local` and fill in the values.
+
+## Run locally + seed
 
 ```bash
 npm install
@@ -84,47 +68,21 @@ cd ../equipra-server && npm run dev     # http://localhost:5000
 npm run dev                             # http://localhost:3000
 ```
 
-Point the client at the API with `NEXT_PUBLIC_DATA_SOURCE=api` and
-`NEXT_PUBLIC_API_URL=http://localhost:5000/api`; leave the source as `mock` to work
-entirely on in-memory demo data.
-
-## Seed
-
 ```bash
+npm run lint
+npm run build
+npm test        # node --test
 npm run seed -- --db equipra_dev   # local development database
 npm run seed -- --db equipra       # production database
 ```
 
-Only those two names are accepted; anything else refuses before connecting. The
-seed is idempotent — re-running upserts rather than duplicating — and creates the
-demo users, the 13 demo equipment rows (row 11 unavailable, row 12 rejected, row 13
-pending), sample bookings with payments, and favorites.
+Point the client at the API with `NEXT_PUBLIC_DATA_SOURCE=api` and `NEXT_PUBLIC_API_URL=http://localhost:5000/api`; leave the source as `mock` to work entirely on in-memory demo data.
 
-## Scripts
+Only `equipra_dev` and `equipra` are accepted as seed DB names; anything else refuses before connecting. The seed is idempotent — re-running upserts rather than duplicating — and creates the demo users, the 13 demo equipment rows (row 11 unavailable, row 12 rejected, row 13 pending), sample bookings with payments, and favorites.
 
-| Script | Purpose |
-|---|---|
-| `npm run dev` | Next dev server on `:3000` |
-| `npm run build` | production build |
-| `npm start` | serve the production build |
-| `npm run lint` | eslint |
-| `npm test` | pricing/format tests (node test runner) |
-| `npm run seed` | demo data seed (see above) |
+## Booking → payment → confirmation → completion
 
-## Payments
-
-Bookings reserve units for 30 minutes and redirect to Stripe Checkout. The success
-page confirms the session with `POST /payments/confirm`. Until the server has
-`STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` set, checkout returns
-`503 {"message":"Payments are not configured"}` and the booking modal reports that
-gracefully instead of failing.
-
-## Photo credits
-
-The payment terminal on the success page is drawn in code (no photo). It
-replaced a cropped Wikimedia Commons photo — “FirstData FD150 Credit Card
-Terminal” by
-[TaurusEmerald](https://commons.wikimedia.org/wiki/File:FirstData_FD150_Credit_Card_Terminal.jpg),
-licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) —
-which is no longer shipped.
-
+1. "Continue to Stripe payment" creates a reservation (`pending` + `unpaid`, 30-minute hold) and a Stripe Checkout Session.
+2. The booking is confirmed only after successful payment: Stripe returns to the success page, which calls `/payments/confirm` (idempotent — safe on reload). The Stripe webhook (`/payments/webhook`, signature-verified) confirms it too.
+3. Until the server has `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` set, checkout returns `503 {"message":"Payments are not configured"}` and the booking modal reports that gracefully instead of failing.
+4. After the end date passes, paid + confirmed bookings flip to `completed`; expired unpaid holds become `cancelled` (hourly housekeeping + daily serverless cron).
