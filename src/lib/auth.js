@@ -42,6 +42,12 @@ function createAuth() {
     secret,
     // Filtered so an unset BETTER_AUTH_URL does not become a trusted [undefined].
     trustedOrigins: [baseURL].filter(Boolean),
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 5 * 60,
+      },
+    },
     emailAndPassword: {
       enabled: true,
       autoSignIn: true,
