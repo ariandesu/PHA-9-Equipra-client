@@ -101,7 +101,7 @@ export default function RegisterPage() {
               <Input
                 id="name"
                 autoComplete="name"
-                placeholder="Rafi Chowdhury"
+                placeholder="Nabil Rahman"
                 aria-invalid={Boolean(errors.name)}
                 {...register("name")}
               />
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="rafi@mail.com"
+                placeholder="nabil@equipra-demo.test"
                 aria-invalid={Boolean(errors.email)}
                 {...register("email")}
               />

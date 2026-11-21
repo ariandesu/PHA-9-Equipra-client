@@ -70,18 +70,17 @@ export default function AuthShell({ children }) {
 
           <div className="relative flex h-full flex-col justify-end gap-4 p-10">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57]">
-              Admin-approved listings
+              Listings cleared by admins
             </p>
             <p className="max-w-sm bg-gradient-to-b from-foreground to-muted bg-clip-text text-4xl font-bold leading-tight tracking-[-0.045em] text-transparent">
-              One account. Rent gear or list your own.
+              One login. Hire kit or list yours.
             </p>
             <figure className="mt-4 rounded-[22px] border border-border/60 bg-background/70 p-5 backdrop-blur">
               <blockquote className="text-sm leading-relaxed text-foreground">
-                &ldquo;Listed two generators on a Friday. Both were booked by
-                Monday.&rdquo;
+                &ldquo;Listed my tiller on a Friday. It stayed booked through the month.&rdquo;
               </blockquote>
               <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-subtle">
-                Rakib U. &middot; Owner &middot; Narayanganj
+                Tania S. &middot; Owner &middot; Mymensingh
               </figcaption>
             </figure>
           </div>

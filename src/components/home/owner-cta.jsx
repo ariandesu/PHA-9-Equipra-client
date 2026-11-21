@@ -17,9 +17,9 @@ export default function OwnerCTA() {
           </p>
 
           <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-[-0.045em] text-foreground leading-[1.08]">
-            Idle machines don’t pay the bills.{" "}
+            Machines sitting idle earn nothing.{" "}
             <span className="relative inline-block bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
-              Listings do.
+              Hired out, they pay.
               <svg
                 viewBox="0 0 200 12"
                 fill="none"
@@ -38,7 +38,7 @@ export default function OwnerCTA() {
           </h2>
 
           <p className="mt-4 max-w-lg text-sm sm:text-base text-muted leading-relaxed">
-            List in minutes, get approved, and track every booking and monthly earning from your owner dashboard.
+            List in minutes, get cleared, and follow every hire plus monthly payout from the owners’ console.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -47,12 +47,12 @@ export default function OwnerCTA() {
                 href="/register"
                 className="inline-flex min-h-11 items-center justify-center rounded-full bg-foreground px-6 sm:px-8 text-sm font-semibold text-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
               >
-                List your equipment
+                List a machine
               </Link>
             </MovingBorder>
 
             <Button variant="outline" size="lg" asChild>
-              <Link href="/dashboard">See owner dashboard</Link>
+              <Link href="/dashboard">Owner dashboard</Link>
             </Button>
           </div>
         </div>

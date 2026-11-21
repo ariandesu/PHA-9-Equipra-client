@@ -13,50 +13,50 @@ const CATEGORIES_DATA = [
     num: "01",
     label: "Construction",
     category: "Construction Equipment",
-    sub: "excavators, loaders",
+    sub: "dozers, diggers",
     image: "https://images.unsplash.com/photo-1747004066130-c6531b74d353?w=1200&q=75&auto=format&fit=crop",
-    alt: "Construction equipment excavator",
+    alt: "Construction bulldozer on a work site",
   },
   {
     num: "02",
     label: "Photography",
     category: "Photography Equipment",
-    sub: "cinema rigs, lenses",
+    sub: "video kits, lights",
     image: "https://images.unsplash.com/photo-1757845701047-69080f6b1139?w=1200&q=75&auto=format&fit=crop",
-    alt: "Cinema photography cage rig",
+    alt: "Video kit with LED panels on a shoot",
   },
   {
     num: "03",
     label: "Vehicles & Transport",
     category: "Vehicles & Transportation",
-    sub: "vans, trucks",
+    sub: "trucks, vans",
     image: "https://images.unsplash.com/photo-1737513915304-a298b4fd5865?w=1200&q=75&auto=format&fit=crop",
     position: "60% 88%",
-    alt: "Cargo transport van",
+    alt: "Covered mini truck parked by trees",
   },
   {
     num: "04",
     label: "Agriculture",
     category: "Agriculture Equipment",
-    sub: "tractors, harvesters",
+    sub: "tillers, trailers",
     image: "https://images.unsplash.com/photo-1761839257961-4dce65b72d99?w=1200&q=75&auto=format&fit=crop",
-    alt: "Agriculture harvest tractor",
+    alt: "Power tiller working a green field",
   },
   {
     num: "05",
     label: "Electronics & Power",
     category: "Electronics",
-    sub: "drones, generators",
+    sub: "cameras, gensets",
     image: "https://images.unsplash.com/photo-1579829065292-f19b49bc2b98?w=1200&q=75&auto=format&fit=crop",
-    alt: "Electronics aerial drone",
+    alt: "Action camera ready for a ride",
   },
   {
     num: "06",
     label: "Event Equipment",
     category: "Event Equipment",
-    sub: "sound, stage, lights",
+    sub: "sound, stage lights",
     image: "https://images.unsplash.com/photo-1563680401337-b77b5e0be9f7?w=1200&q=75&auto=format&fit=crop",
-    alt: "Event equipment line array speakers",
+    alt: "Column speakers at a live gathering",
   },
 ];
 
@@ -81,7 +81,7 @@ export default function FocusCards() {
             <span aria-hidden="true">●</span> POPULAR CATEGORIES
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-            Six aisles. Everything from cranes to cameras.
+            Six departments. Zero phone tag.
           </h2>
         </div>
 

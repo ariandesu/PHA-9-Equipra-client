@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 // Semantic HTML: <form role="search"> with <label>.
 export default function VanishInput({
   placeholders = [
-    "Excavator near Gazipur…",
-    "Cinema camera in Gulshan…",
-    "Cargo van in Chattogram…",
-    "Generator in Comilla…",
+    "Dozer near Khulna…",
+    "Video kit in Mirpur…",
+    "Truck in Jashore…",
+    "Genset in Keraniganj…",
   ],
   onSubmit,
   className = "",

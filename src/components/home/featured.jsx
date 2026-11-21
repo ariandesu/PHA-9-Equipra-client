@@ -40,10 +40,10 @@ export default function Featured() {
               <span aria-hidden="true">●</span> FEATURED EQUIPMENT
             </p>
             <h2 className="text-3xl sm:text-4xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-              Hand-picked. Admin-approved. Ready to roll.
+              Hand-picked gear, all cleared to roll.
             </h2>
             <p className="text-sm sm:text-base text-muted">
-              Six approved listings, fresh from the database. Log in to see full specs, owner details and live availability.
+              Six approved listings, fresh from the database. Sign in for full specs, owner details and live date checks.
             </p>
           </div>
 

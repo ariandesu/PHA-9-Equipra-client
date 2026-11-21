@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 import "@/components/fx/fx.css";
 
 const AVATAR_ACCENTS = {
-  TA: "bg-[#FF6A2B] text-white border-transparent",
-  FK: "bg-[#0284C7] dark:bg-[#38BDF8] text-white dark:text-black border-transparent",
-  MH: "bg-[#FF6A2B] text-white border-transparent",
+  SR: "bg-[#FF6A2B] text-white border-transparent",
+  PD: "bg-[#0284C7] dark:bg-[#38BDF8] text-white dark:text-black border-transparent",
+  RU: "bg-[#FF6A2B] text-white border-transparent",
 };
 
 function ReviewCard({ review }) {
@@ -82,7 +82,7 @@ export default function Reviews() {
           <span aria-hidden="true">●</span> CUSTOMER REVIEWS
         </p>
         <h2 className="text-3xl sm:text-5xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-          Rented, used, returned — and rated 4.8.
+          Hauled, filmed, powered — rated 4.9.
         </h2>
       </div>
 

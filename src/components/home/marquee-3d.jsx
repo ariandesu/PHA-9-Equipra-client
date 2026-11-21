@@ -8,18 +8,18 @@ import { useStats } from "@/lib/data/hooks";
 import "@/components/fx/fx.css";
 
 const PHOTO_URLS = [
-  { key: "hero", url: "https://images.unsplash.com/photo-1778066994998-97f74a5bf901?w=1200&q=75&auto=format&fit=crop", alt: "Site excavator operating on construction terrain" },
-  { key: "excavator", url: "https://images.unsplash.com/photo-1747004066130-c6531b74d353?w=1200&q=75&auto=format&fit=crop", alt: "Hydraulic excavator 20T on construction site" },
-  { key: "demo", url: "https://images.unsplash.com/photo-1758965285803-1cdd3371563b?w=1200&q=75&auto=format&fit=crop", alt: "Demolition excavator 13T with hydraulic breaker" },
-  { key: "cinema", url: "https://images.unsplash.com/photo-1775559052522-2f7a4abbce8e?w=1200&q=75&auto=format&fit=crop", alt: "Cinema camera shoulder rig with monitor" },
-  { key: "rig", url: "https://images.unsplash.com/photo-1757845701047-69080f6b1139?w=1200&q=75&auto=format&fit=crop", alt: "Sony FX3 cinema cage kit with lenses" },
-  { key: "studio", url: "https://images.unsplash.com/photo-1759417501276-a309088f1521?w=1200&q=75&auto=format&fit=crop", alt: "Studio cinema camera with prime lens" },
-  { key: "van", url: "https://images.unsplash.com/photo-1737513915304-a298b4fd5865?w=1200&q=75&auto=format&fit=crop", alt: "Ford cargo van 1.5T parked by trees", position: "60% 88%" },
-  { key: "tractor", url: "https://images.unsplash.com/photo-1761839257961-4dce65b72d99?w=1200&q=75&auto=format&fit=crop", alt: "Farm tractor working in agricultural field" },
-  { key: "drone", url: "https://images.unsplash.com/photo-1579829065292-f19b49bc2b98?w=1200&q=75&auto=format&fit=crop", alt: "DJI Mavic mini drone ready for flight" },
-  { key: "generator", url: "https://images.unsplash.com/photo-1759692071712-adc78a8516c8?w=1200&q=75&auto=format&fit=crop", alt: "Atlas Copco 60kVA mobile generator unit" },
-  { key: "speaker", url: "https://images.unsplash.com/photo-1563680401337-b77b5e0be9f7?w=1200&q=75&auto=format&fit=crop", alt: "Line array PA speaker system hanging for live sound" },
-  { key: "stage", url: "https://images.unsplash.com/photo-1677497533660-adca109c2f71?w=1200&q=75&auto=format&fit=crop", alt: "Stage truss structure with moving head lighting" },
+  { key: "hero", url: "https://images.unsplash.com/photo-1778066994998-97f74a5bf901?w=1200&q=75&auto=format&fit=crop", alt: "Dozer grading a work site" },
+  { key: "dozer", url: "https://images.unsplash.com/photo-1747004066130-c6531b74d353?w=1200&q=75&auto=format&fit=crop", alt: "Bulldozer parked at golden hour" },
+  { key: "digger", url: "https://images.unsplash.com/photo-1758965285803-1cdd3371563b?w=1200&q=75&auto=format&fit=crop", alt: "Mini excavator digging a trench" },
+  { key: "video", url: "https://images.unsplash.com/photo-1775559052522-2f7a4abbce8e?w=1200&q=75&auto=format&fit=crop", alt: "Video kit with gimbal on a shoot" },
+  { key: "lights", url: "https://images.unsplash.com/photo-1757845701047-69080f6b1139?w=1200&q=75&auto=format&fit=crop", alt: "LED panels lighting a small set" },
+  { key: "film", url: "https://images.unsplash.com/photo-1759417501276-a309088f1521?w=1200&q=75&auto=format&fit=crop", alt: "Vintage film camera on a table" },
+  { key: "truck", url: "https://images.unsplash.com/photo-1737513915304-a298b4fd5865?w=1200&q=75&auto=format&fit=crop", alt: "Covered mini truck on the road", position: "60% 88%" },
+  { key: "tiller", url: "https://images.unsplash.com/photo-1761839257961-4dce65b72d99?w=1200&q=75&auto=format&fit=crop", alt: "Power tiller crossing a green field" },
+  { key: "action", url: "https://images.unsplash.com/photo-1579829065292-f19b49bc2b98?w=1200&q=75&auto=format&fit=crop", alt: "Action camera mounted for a ride" },
+  { key: "genset", url: "https://images.unsplash.com/photo-1759692071712-adc78a8516c8?w=1200&q=75&auto=format&fit=crop", alt: "Diesel genset outside a site office" },
+  { key: "pa", url: "https://images.unsplash.com/photo-1563680401337-b77b5e0be9f7?w=1200&q=75&auto=format&fit=crop", alt: "Column speakers at a courtyard event" },
+  { key: "pars", url: "https://images.unsplash.com/photo-1677497533660-adca109c2f71?w=1200&q=75&auto=format&fit=crop", alt: "Par can lights washing a stage" },
 ];
 
 // 9 columns, 6 unique photos each, no photo repeats consecutively in a column.
@@ -104,21 +104,21 @@ export default function Marquee3D() {
           {/* Centered Heading Content */}
           <div className="relative z-10 mx-auto flex h-full max-w-[800px] flex-col items-center justify-center px-4 sm:px-6">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57] flex items-center gap-1.5 mb-2 sm:mb-3">
-              <span aria-hidden="true">●</span> THE WHOLE YARD
+              <span aria-hidden="true">●</span> THE FULL FLEET
             </p>
             <h2 className="text-3xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-foreground leading-[1.05]">
               {typeof listings === "number" ? `${listings.toLocaleString("en-IN")} machines.` : "Every machine."}
               <br />
               <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
-                One marketplace.
+                One counter.
               </span>
             </h2>
             <p className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-base text-muted">
-              Construction, film, transport, farming, power and events — every listing reviewed by an admin before it goes live.
+              Earthmovers, lenses, trucks, tillers, power and event gear — every listing passes an admin check before it can be hired.
             </p>
             <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button variant="action" asChild>
-                <Link href="/equipment">Explore all equipment</Link>
+                <Link href="/equipment">Browse the yard</Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href="/register">List your machine</Link>

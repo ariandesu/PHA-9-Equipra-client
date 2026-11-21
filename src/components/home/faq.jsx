@@ -3,39 +3,39 @@ import { cn } from "@/lib/utils";
 const FAQ_ITEMS = [
   {
     num: "01",
-    question: "How is the total calculated?",
+    question: "How is my total worked out?",
     answer:
-      "Rate × billable periods × quantity — per day, per started week or per started 30 days. Shown live before you pay.",
+      "Rate × billing blocks × quantity — by day, by started week, or by each started 30-day block, all shown live before you pay.",
   },
   {
     num: "02",
-    question: "Is my payment secure?",
+    question: "Is checkout safe?",
     answer:
-      "Payments run through Stripe Checkout. Equipra never stores card details; the transaction ID is saved when Stripe confirms.",
+      "Stripe Checkout moves the money. Equipra never sees or stores card numbers; the transaction ID is kept once Stripe confirms.",
   },
   {
     num: "03",
-    question: "How do owners get approved?",
+    question: "Who checks new listings?",
     answer:
-      "Owners submit photos, specs and terms. Listings stay Pending until an admin approves them.",
+      "Owners send photos, specs and terms. Nothing goes live until an admin has looked it over — new rows wait as Pending.",
   },
   {
     num: "04",
-    question: "What if it’s already booked?",
+    question: "What if my dates are taken?",
     answer:
-      "Availability is checked against paid bookings for your exact dates before checkout.",
+      "Your exact dates are matched against confirmed bookings for the same gear before any payment page opens.",
   },
   {
     num: "05",
-    question: "Can I save equipment for later?",
+    question: "Can I shortlist gear?",
     answer:
-      "Yes — tap the heart on any listing. Favorites live in your customer dashboard.",
+      "Yes — tap the heart on any listing. Shortlists sit in your customer dashboard.",
   },
   {
     num: "06",
-    question: "What happens when it ends?",
+    question: "What happens at the end?",
     answer:
-      "A scheduled job marks the booking Completed after the end date for both you and the owner.",
+      "A scheduled job flips the hire to Completed past the end date, for you and the owner alike.",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function FAQ() {
             <span aria-hidden="true">●</span> FAQ
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-            Questions before you rent?
+            Common questions, answered.
           </h2>
         </div>
 

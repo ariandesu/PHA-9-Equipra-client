@@ -51,7 +51,7 @@ export default function EquipmentForm({
       name: initialData?.name || "",
       description: initialData?.description || "",
       category: initialData?.category || "Construction Equipment",
-      location: initialData?.location || "Gazipur, Dhaka",
+      location: initialData?.location || "Shipyard Road, Khulna",
       price: initialData?.price || 18500,
       rentalType: initialData?.rentalType || "daily",
       quantity: initialData?.quantity || 1,
@@ -139,7 +139,7 @@ export default function EquipmentForm({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">Equipment name</label>
-            <input type="text" placeholder="e.g. Hydraulic Excavator 20T" {...register("name")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
+            <input type="text" placeholder="e.g. Crawler Bulldozer 15T" {...register("name")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
             {errors.name && <p className="text-xs text-danger mt-1">{errors.name.message}</p>}
           </div>
           <div>
@@ -153,7 +153,7 @@ export default function EquipmentForm({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">Location</label>
-            <input type="text" placeholder="Gazipur, Dhaka" {...register("location")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
+            <input type="text" placeholder="Shipyard Road, Khulna" {...register("location")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
             {errors.location && <p className="text-xs text-danger mt-1">{errors.location.message}</p>}
           </div>
           <div>
@@ -179,12 +179,12 @@ export default function EquipmentForm({
           </div>
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">Brand</label>
-            <input type="text" placeholder="Caterpillar" {...register("brand")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
+            <input type="text" placeholder="Shantui" {...register("brand")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
             {errors.brand && <p className="text-xs text-danger mt-1">{errors.brand.message}</p>}
           </div>
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">Model / Condition</label>
-            <input type="text" placeholder="320 GC" {...register("model")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
+            <input type="text" placeholder="SD16" {...register("model")} className="w-full rounded-[10px] border border-border bg-raised px-3.5 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary" />
             {errors.model && <p className="text-xs text-danger mt-1">{errors.model.message}</p>}
           </div>
         </div>

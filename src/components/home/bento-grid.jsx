@@ -7,18 +7,18 @@ import { formatBDT } from "@/lib/money";
 import "@/components/fx/fx.css";
 
 const OWNERS_STACK = [
-  { id: 1, name: "Karim Heavy Machinery", initials: "KH", bg: "#FF6A2B", text: "#FFFFFF" },
-  { id: 2, name: "LensBox BD", initials: "LB", bg: "#1F1F1F", text: "#FFFFFF" },
-  { id: 3, name: "Utsab Events", initials: "UE", bg: "#0284C7", text: "#FFFFFF" },
-  { id: 4, name: "PowerHub Comilla", initials: "PH", bg: "#FFFFFF", text: "#0A0A0A" },
-  { id: 5, name: "AgroRent Rajshahi", initials: "AR", bg: "#2A2A2A", text: "#FFFFFF" },
+  { id: 1, name: "Riverbank Plant", initials: "RP", bg: "#FF6A2B", text: "#FFFFFF" },
+  { id: 2, name: "FrameCraft Studio", initials: "FS", bg: "#1F1F1F", text: "#FFFFFF" },
+  { id: 3, name: "StageLine Events", initials: "SE", bg: "#0284C7", text: "#FFFFFF" },
+  { id: 4, name: "VoltEdge Power", initials: "VP", bg: "#FFFFFF", text: "#0A0A0A" },
+  { id: 5, name: "GreenField Agro", initials: "GA", bg: "#2A2A2A", text: "#FFFFFF" },
 ];
 
 const TRANSACTIONS = [
-  { item: "Excavator 20T · 3 days", txId: "pi_3QxF…8kLm", amount: 55500 },
-  { item: "Camera rig · 2 days", txId: "pi_3QwA…2pQz", amount: 12400 },
-  { item: "Cargo van · 1 week", txId: "pi_3QvT…9sRt", amount: 32000 },
-  { item: "PA system · 1 day", txId: "pi_3QuK…4mNb", amount: 12000 },
+  { item: "Bulldozer 15T · 3 days", txId: "pi_3QxF…8kLm", amount: 59250 },
+  { item: "Video kit · 4 days", txId: "pi_3QwA…2pQz", amount: 21600 },
+  { item: "Mini truck · 1 week", txId: "pi_3QvT…9sRt", amount: 27500 },
+  { item: "PA pair · 1 day", txId: "pi_3QuK…4mNb", amount: 7400 },
 ];
 
 const PERIOD_ROWS = [
@@ -45,9 +45,9 @@ export default function BentoGrid() {
             <span aria-hidden="true">●</span> WHY CHOOSE EQUIPRA
           </p>
           <h2 className="text-3xl sm:text-5xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-            Owning heavy gear is expensive.
+            Owning every machine is expensive.
             <br />
-            Renting it shouldn’t be stressful.
+            Hiring ours is simple.
           </h2>
         </div>
 
@@ -56,9 +56,9 @@ export default function BentoGrid() {
           {/* Tile 1: Affordable rates (4 cols) */}
           <div className="lg:col-span-4 flex flex-col justify-between rounded-[22px] border border-border bg-surface p-6 sm:p-7 shadow-sm">
             <div>
-              <h3 className="text-xl font-bold tracking-tight text-foreground">Affordable rates</h3>
+              <h3 className="text-xl font-bold tracking-tight text-foreground">Fair rates</h3>
               <p className="mt-1 text-sm text-muted max-w-md">
-                Pay daily, weekly or monthly — a fraction of the purchase price, with no hidden fees.
+                Pay by the day, week or month — a slice of the purchase price, with no hidden fees.
               </p>
             </div>
             <div className="relative mt-6 flex h-48 sm:h-56 items-end justify-around rounded-xl border border-border/60 bg-raised/30 p-2 sm:p-4 pb-3 overflow-hidden">
@@ -89,8 +89,8 @@ export default function BentoGrid() {
           {/* Tile 2: Verified owners (2 cols) */}
           <div className="lg:col-span-2 flex flex-col justify-between rounded-[22px] border border-border bg-surface p-6 sm:p-7 shadow-sm">
             <div>
-              <h3 className="text-xl font-bold tracking-tight text-foreground">Verified owners</h3>
-              <p className="mt-1 text-sm text-muted">Every listing is reviewed and approved by an admin first.</p>
+              <h3 className="text-xl font-bold tracking-tight text-foreground">Checked owners</h3>
+              <p className="mt-1 text-sm text-muted">Every listing is looked over and cleared by an admin first.</p>
             </div>
             <div className="my-8 flex flex-col items-center justify-center">
               <AnimatedTooltip items={OWNERS_STACK} />
@@ -104,8 +104,8 @@ export default function BentoGrid() {
           {/* Tile 3: Flexible periods (2 cols) */}
           <div className="lg:col-span-2 flex flex-col rounded-[22px] border border-border bg-surface p-6 sm:p-7 shadow-sm">
             <div>
-              <h3 className="text-xl font-bold tracking-tight text-foreground">Flexible periods</h3>
-              <p className="mt-1 text-sm text-muted">A weekend shoot or a six-month site.</p>
+              <h3 className="text-xl font-bold tracking-tight text-foreground">Your schedule</h3>
+              <p className="mt-1 text-sm text-muted">A two-day shoot or a half-year site.</p>
             </div>
             <div className="mt-5 flex flex-col gap-3">
               {PERIOD_ROWS.map((period) => (
@@ -130,9 +130,9 @@ export default function BentoGrid() {
           {/* Tile 4: Secure payments (4 cols) */}
           <div className="lg:col-span-4 flex flex-col justify-between rounded-[22px] border border-border bg-surface p-6 sm:p-7 shadow-sm">
             <div>
-              <h3 className="text-xl font-bold tracking-tight text-foreground">Secure payments</h3>
+              <h3 className="text-xl font-bold tracking-tight text-foreground">Safe checkout</h3>
               <p className="mt-1 text-sm text-muted max-w-xl">
-                Stripe handles card data. Every payment status and transaction ID is recorded in your dashboard automatically.
+                Stripe moves the money. Every status and transaction ID lands in your dashboard on its own.
               </p>
             </div>
             <div className="relative mt-6 overflow-hidden rounded-xl border border-border/80 bg-raised/40 p-3 h-44">

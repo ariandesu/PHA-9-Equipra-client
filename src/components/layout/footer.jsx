@@ -68,8 +68,8 @@ export default function Footer() {
             <span>Equipra</span>
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-muted">
-            A transparent rental marketplace connecting equipment owners with the
-            people who need their gear.
+            A straight-talking hire yard where owners list machines and
+            renters put them to work.
           </p>
           <ul className="flex items-center gap-2 pt-2">
             {socials.map((social) => (

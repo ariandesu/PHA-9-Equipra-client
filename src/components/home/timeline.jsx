@@ -12,19 +12,19 @@ function StepOne() {
       <div className="flex items-center justify-between rounded-lg border border-border bg-surface px-3 py-1.5 text-xs">
         <span className="flex items-center gap-1.5 font-mono text-[11px] text-foreground">
           <Search className="size-3.5 text-muted" aria-hidden="true" />
-          excavator · Gazipur
+          dozer · Khulna
         </span>
         <span className="font-mono text-[10px] text-muted uppercase">3 RESULTS</span>
       </div>
       <div className="grid grid-cols-3 gap-2">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-surface">
-          <Image fill src="https://images.unsplash.com/photo-1747004066130-c6531b74d353?w=600&q=75&auto=format&fit=crop" alt="Excavator" className="object-cover" />
+          <Image fill src="https://images.unsplash.com/photo-1747004066130-c6531b74d353?w=600&q=75&auto=format&fit=crop" alt="Bulldozer" className="object-cover" />
         </div>
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-surface">
-          <Image fill src="https://images.unsplash.com/photo-1758965285803-1cdd3371563b?w=600&q=75&auto=format&fit=crop" alt="Demolition excavator" className="object-cover" />
+          <Image fill src="https://images.unsplash.com/photo-1758965285803-1cdd3371563b?w=600&q=75&auto=format&fit=crop" alt="Mini excavator" className="object-cover" />
         </div>
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-surface">
-          <Image fill src="https://images.unsplash.com/photo-1778066994998-97f74a5bf901?w=600&q=75&auto=format&fit=crop" alt="Site excavator" className="object-cover" />
+          <Image fill src="https://images.unsplash.com/photo-1778066994998-97f74a5bf901?w=600&q=75&auto=format&fit=crop" alt="Dozer on site" className="object-cover" />
         </div>
       </div>
       <div className="flex flex-wrap gap-1.5 pt-1 text-[11px]">
@@ -58,7 +58,7 @@ function StepTwo() {
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between text-muted">
             <span>Rate</span>
-            <span className="font-mono text-foreground font-medium">৳18,500 / day</span>
+            <span className="font-mono text-foreground font-medium">৳19,750 / day</span>
           </div>
           <div className="flex justify-between text-muted">
             <span>Duration</span>
@@ -70,12 +70,12 @@ function StepTwo() {
           </div>
           <div className="flex justify-between border-t border-border pt-2">
             <span className="font-medium text-foreground">Total</span>
-            <span className="font-mono text-base font-bold text-primary">৳55,500</span>
+            <span className="font-mono text-base font-bold text-primary">৳59,250</span>
           </div>
         </div>
         <p className="flex items-center gap-1 text-[11px] text-success pt-2">
           <Check className="size-3.5" aria-hidden="true" />
-          <span>2 of 2 units available</span>
+          <span>2 of 2 units open</span>
         </p>
       </div>
     </div>
@@ -93,10 +93,10 @@ function StepThree() {
         <div className="py-3 font-mono text-sm tracking-widest text-muted">•••• •••• •••• 4242</div>
         <div className="flex items-baseline justify-between border-t border-border dark:border-white/10 pt-2.5 text-xs">
           <span className="text-muted">Total due</span>
-          <span className="font-mono text-base font-bold text-foreground dark:text-white">৳55,500</span>
+          <span className="font-mono text-base font-bold text-foreground dark:text-white">৳59,250</span>
         </div>
         <div className="mt-3 flex w-full items-center justify-center rounded-full bg-foreground text-background py-2 text-xs font-bold transition-opacity hover:opacity-90">
-          Pay ৳55,500
+          Pay ৳59,250
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@ function StepFour() {
       <Image
         fill
         src="https://images.unsplash.com/photo-1737513915304-a298b4fd5865?w=1200&q=75&auto=format&fit=crop"
-        alt="Cargo van delivery"
+        alt="Mini truck on delivery"
         className="object-cover"
         style={{ objectPosition: "60% 88%" }}
       />
@@ -117,10 +117,10 @@ function StepFour() {
       <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center gap-2">
         <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[11px] text-white backdrop-blur">
           <span className="size-2 rounded-full bg-success animate-pulse" />
-          Out for delivery · Uttara, 9:30 am
+          On the way · Keraniganj, 9:30 am
         </span>
         <span className="rounded-full border border-white/20 bg-black/60 px-3 py-1 font-mono text-[11px] text-[#D4D4D4] backdrop-blur">
-          Auto-completes after 23 Nov
+          Auto-completes after 7 Dec
         </span>
       </div>
     </div>
@@ -128,10 +128,10 @@ function StepFour() {
 }
 
 const STEPS = [
-  { num: "01", title: "Browse & compare", description: "Search by name or location, then filter by category, rental type, price range and availability — all on the server.", card: <StepOne /> },
-  { num: "02", title: "Pick your dates", description: "Choose start and end dates and quantity. The total is calculated and availability checked before you pay.", card: <StepTwo /> },
-  { num: "03", title: "Pay with Stripe", description: "Secure Stripe Checkout confirms the booking and records the transaction in the payments collection.", card: <StepThree /> },
-  { num: "04", title: "Use & return", description: "Gear arrives at your address. When the end date passes, a scheduled job marks the rental completed.", card: <StepFour /> },
+  { num: "01", title: "Find it", description: "Search by name or area, then narrow by category, hire type, price band and open dates — all filtered on the server.", card: <StepOne /> },
+  { num: "02", title: "Lock the dates", description: "Pick start and end dates plus quantity. Totals are worked out and open dates confirmed before any payment page opens.", card: <StepTwo /> },
+  { num: "03", title: "Pay securely", description: "Stripe Checkout confirms the hire and stores the transaction against the booking.", card: <StepThree /> },
+  { num: "04", title: "Get to work", description: "The gear reaches your address. Once the end date passes, a scheduled job marks the hire finished.", card: <StepFour /> },
 ];
 
 export default function Timeline() {
@@ -148,10 +148,10 @@ export default function Timeline() {
             <span aria-hidden="true">●</span> HOW IT WORKS
           </p>
           <h2 className="text-3xl sm:text-4xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-            From search to site in four steps.
+            From first click to site gate in four moves.
           </h2>
           <p className="text-sm sm:text-base text-muted">
-            Availability checks, pricing and payment all happen before the gear leaves the yard.
+            Dates, totals and open slots are all settled before any money moves.
           </p>
         </div>
 

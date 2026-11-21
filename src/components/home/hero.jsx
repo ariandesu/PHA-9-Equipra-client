@@ -11,28 +11,28 @@ import Highlight from "@/components/fx/highlight";
 import VanishInput from "@/components/fx/vanish-input";
 
 const FLIP_WORDS = [
-  "excavators",
-  "cinema cameras",
-  "cargo vans",
-  "tractors",
-  "generators",
-  "PA systems",
+  "every deadline",
+  "every site",
+  "every shoot",
+  "every harvest",
+  "every event",
+  "every budget",
 ];
 
 const SEARCH_PLACEHOLDERS = [
-  "Excavator near Gazipur…",
-  "Cinema camera in Gulshan…",
-  "Cargo van in Chattogram…",
-  "Generator in Comilla…",
+  "Dozer near Khulna…",
+  "Video kit in Mirpur…",
+  "Truck in Jashore…",
+  "Genset in Keraniganj…",
 ];
 
 // Exact 02 §4 category strings mapped from the 01 SVG chips.
 const CATEGORY_CHIPS = [
-  { label: "Excavators", category: "Construction Equipment" },
-  { label: "Cinema cameras", category: "Photography Equipment" },
-  { label: "Cargo vans", category: "Vehicles & Transportation" },
-  { label: "Tractors", category: "Agriculture Equipment" },
-  { label: "Generators", category: "Electronics" },
+  { label: "Bulldozers", category: "Construction Equipment" },
+  { label: "Video kits", category: "Photography Equipment" },
+  { label: "Trucks", category: "Vehicles & Transportation" },
+  { label: "Tillers", category: "Agriculture Equipment" },
+  { label: "Gensets", category: "Electronics" },
   { label: "PA systems", category: "Event Equipment" },
 ];
 
@@ -53,7 +53,7 @@ export default function Hero() {
               <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary-foreground">
                 NEW
               </span>
-              <span>Monthly tractor rentals for harvest season</span>
+              <span>Monthly tiller slots for aman season</span>
               <ArrowRight
                 aria-hidden="true"
                 className="size-3.5 transition-transform group-hover:translate-x-0.5"
@@ -65,13 +65,13 @@ export default function Hero() {
         {/* H1 heading */}
         <h1 className="text-5xl font-bold tracking-[-0.055em] sm:text-7xl lg:text-[84px] lg:leading-[1.02]">
           <span className="sr-only">
-            The rental yard for excavators, cinema cameras, cargo vans, tractors, generators and PA systems
+            Work-ready machines from verified owners — booked by the day, week or month
           </span>
           <span
             aria-hidden="true"
             className="inline-block bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent"
           >
-            The rental yard for
+            The right machine for
             <br />
             <FlipWords words={FLIP_WORDS} />
           </span>
@@ -79,8 +79,8 @@ export default function Hero() {
 
         {/* Sub-copy with TextGenerate + Highlight */}
         <p className="max-w-2xl text-base sm:text-[19px] leading-relaxed text-muted">
-          <TextGenerate words="Excavators, cinema cameras, cargo vans and stage sound from verified owners — booked by the day, week or month." />{" "}
-          <Highlight>Paid securely with Stripe.</Highlight>
+          <TextGenerate words="Dozer days, shoot days and harvest days — hired from checked owners by the day, week or month." />{" "}
+          <Highlight>Checked out with Stripe.</Highlight>
         </p>
 
         {/* VanishInput search */}

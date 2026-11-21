@@ -5,12 +5,12 @@ import { Shield, Sparkles, Wrench, Camera, Truck, Award } from "lucide-react";
 import "@/components/fx/fx.css";
 
 const OWNERS = [
-  { name: "Karim Heavy Machinery", icon: Wrench },
-  { name: "LensBox BD", icon: Camera },
-  { name: "Utsab Events", icon: Sparkles },
-  { name: "PowerHub Comilla", icon: Shield },
-  { name: "Rahim Traders", icon: Truck },
-  { name: "AgroRent Rajshahi", icon: Award },
+  { name: "Riverbank Plant", icon: Wrench },
+  { name: "FrameCraft Studio", icon: Camera },
+  { name: "StageLine Events", icon: Sparkles },
+  { name: "VoltEdge Power", icon: Shield },
+  { name: "Sheba Transport", icon: Truck },
+  { name: "GreenField Agro", icon: Award },
 ];
 
 export default function LogoCloud() {
