@@ -6,7 +6,7 @@ heavy gear, an admin approves it, customers browse, book and pay online.
 Built with Next.js (App Router), Tailwind CSS v4, shadcn/ui, BetterAuth and
 TanStack Query. Every screen follows the design export in `design-export/`.
 
-- **Live client:** _pending deployment (task C-30)_
+- **Live site:** https://equipra-client.vercel.app
 - **Live API:** https://equipra-server.vercel.app
 - **Server repo:** https://github.com/ariandesu/Assignment-9-server
 
