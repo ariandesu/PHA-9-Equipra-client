@@ -1,13 +1,19 @@
 import { toNextJsHandler } from "better-auth/next-js";
-import { getAuth } from "@/lib/auth";
+import { getAuth, resetAuth } from "@/lib/auth";
+import { isMongoConnectionError } from "@/lib/auth-cache";
 
-// Resolved per request so the BetterAuth instance — and its database
-// connection — is only built when the route is actually hit, not at build time.
-let cachedHandler = null;
+// Built once per BetterAuth instance. Keying by instance means a reset (failed
+// connect, closed topology) builds a new handler on the next request instead of
+// serving a handler bound to a dead client.
+const handlers = new WeakMap();
 
-function handler() {
-  if (!cachedHandler) cachedHandler = toNextJsHandler(getAuth());
-  return cachedHandler;
+function handlerFor(auth) {
+  let handler = handlers.get(auth);
+  if (!handler) {
+    handler = toNextJsHandler(auth);
+    handlers.set(auth, handler);
+  }
+  return handler;
 }
 
 // A misconfigured deployment (missing secret or URI) must not answer with a
@@ -16,12 +22,20 @@ function handler() {
 function respond(method) {
   return async (request) => {
     try {
-      return await handler()[method](request);
+      const auth = await getAuth();
+      const response = await handlerFor(auth)[method](request);
+
+      // BetterAuth turned a database failure into a 500: drop the cached client
+      // so the next request reconnects instead of reusing a closed topology.
+      if (response && response.status >= 500) resetAuth();
+      return response;
     } catch (error) {
       // Nothing in this block may throw: a throw here would surface as the same
       // bodyless 500 this handler exists to prevent.
       const path = request?.url ?? "<unknown url>";
       console.error(`[auth] ${method} ${path} failed:`, error?.stack ?? error?.message);
+
+      if (isMongoConnectionError(error)) resetAuth();
 
       const isConfigError = /is not set/.test(error?.message ?? "");
 

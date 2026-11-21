@@ -1,12 +1,21 @@
 import { headers } from 'next/headers';
-import { getAuth } from '@/lib/auth';
+import { getAuth, resetAuth } from '@/lib/auth';
+import { isMongoConnectionError } from '@/lib/auth-cache';
 import { sign, decode } from 'jsonwebtoken';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const authInstance = await getAuth();
-  const session = await authInstance.api.getSession({ headers: await headers() });
+  let session;
+  try {
+    const authInstance = await getAuth();
+    session = await authInstance.api.getSession({ headers: await headers() });
+  } catch (error) {
+    // Drop a closed/failed topology so the next request reconnects, and answer
+    // 503 rather than letting a database failure look like a plain 401.
+    if (isMongoConnectionError(error)) resetAuth();
+    return Response.json({ message: 'Authentication request failed' }, { status: 503 });
+  }
 
   // Anonymous visitors always get 401, even if signing isn't configured.
   if (!session || !session.user) {

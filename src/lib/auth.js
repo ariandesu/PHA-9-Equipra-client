@@ -7,11 +7,12 @@ import {
   resolveRole,
   validatePassword,
 } from "@/lib/auth-rules";
+import { createAuthCache } from "@/lib/auth-cache";
 
 // Built lazily on first request. Eager construction at module scope made the
 // production build fail whenever MONGODB_URI was absent, which would also break
 // every preview deployment. Build time must not depend on runtime secrets.
-let cached = null;
+const cache = createAuthCache(async () => createAuth());
 
 function createAuth() {
   const uri = process.env.MONGODB_URI;
@@ -29,14 +30,20 @@ function createAuth() {
     );
   }
 
-  const client = new MongoClient(uri);
+  // A failed auto-connect closes the topology for good, so the connect is done
+  // explicitly in getAuth() and these limits keep that failure fast (8s) instead
+  // of the default 30s server-selection timeout.
+  const client = new MongoClient(uri, {
+    serverSelectionTimeoutMS: 8000,
+    maxIdleTimeMS: 60000,
+  });
   const db = client.db(process.env.DB_NAME || "equipra");
   const baseURL = process.env.BETTER_AUTH_URL;
 
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
   const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
-  return betterAuth({
+  const auth = betterAuth({
     database: mongodbAdapter(db, { client }),
     baseURL,
     secret,
@@ -95,9 +102,16 @@ function createAuth() {
       },
     },
   });
+
+  return { auth, client };
 }
 
+// Async and promise-memoised: the client is connected before any request work,
+// and a failed connect clears the cache so the next request builds a fresh one.
 export function getAuth() {
-  if (!cached) cached = createAuth();
-  return cached;
+  return cache.get();
+}
+
+export function resetAuth() {
+  cache.reset();
 }
