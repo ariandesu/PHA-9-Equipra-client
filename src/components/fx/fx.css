@@ -140,10 +140,12 @@
 
 .fx-col-up {
   animation: fx-marquee-up 24s linear infinite;
+  will-change: transform;
 }
 
 .fx-col-down {
   animation: fx-marquee-down 24s linear infinite;
+  will-change: transform;
 }
 
 /* Hovering the marquee panel pauses the columns */

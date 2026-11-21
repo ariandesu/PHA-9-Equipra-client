@@ -21,13 +21,11 @@ const PHOTO_URLS = [
   { key: "stage", url: "https://images.unsplash.com/photo-1677497533660-adca109c2f71?w=1200&q=75&auto=format&fit=crop", alt: "Stage truss structure with moving head lighting" },
 ];
 
-const COLUMNS = [
-  [PHOTO_URLS[0], PHOTO_URLS[1], PHOTO_URLS[2]],
-  [PHOTO_URLS[3], PHOTO_URLS[4], PHOTO_URLS[5]],
-  [PHOTO_URLS[6], PHOTO_URLS[7], PHOTO_URLS[8]],
-  [PHOTO_URLS[9], PHOTO_URLS[10], PHOTO_URLS[11]],
-  [PHOTO_URLS[0], PHOTO_URLS[4], PHOTO_URLS[8]],
-];
+// 9 columns, 6 unique photos each, no photo repeats consecutively in a column.
+// Rotation scheme: (c * 5 + i * 2) % 12 ensures neighbouring columns are offset.
+const COLUMNS = Array.from({ length: 9 }, (_, c) =>
+  Array.from({ length: 6 }, (_, i) => PHOTO_URLS[(c * 5 + i * 2) % PHOTO_URLS.length])
+);
 
 export default function Marquee3D() {
   const reduced = useReducedMotion();
@@ -38,7 +36,7 @@ export default function Marquee3D() {
         {/* Bordered rounded-[22px] panel matching design 01 */}
         <div
           data-slot="marquee-panel"
-          className="dark group/marquee relative h-[460px] sm:h-[640px] w-full overflow-hidden rounded-[22px] border border-border bg-[#0B0B0B] text-center [perspective:1400px]"
+          className="dark group/marquee relative h-[460px] sm:h-[640px] w-full overflow-hidden rounded-[22px] border border-border bg-[radial-gradient(ellipse_at_center,#161616,#0B0B0B)] text-center [perspective:1400px]"
         >
           {/* Tilted photo wall filling the panel with center aligned */}
           <div
@@ -48,32 +46,46 @@ export default function Marquee3D() {
             {COLUMNS.map((col, colIdx) => {
               const isUp = colIdx % 2 === 0;
               const animClass = reduced ? "" : isUp ? "fx-col-up" : "fx-col-down";
+              const duration = colIdx % 2 === 0 ? 28 : 34;
+              const delay = (colIdx * 3.7) % duration;
 
               return (
-                <div key={colIdx} className="flex flex-col gap-4 sm:gap-6">
-                  <div className={`flex flex-col gap-4 sm:gap-6 ${animClass}`}>
-                    {[...col, ...col].map((item, itemIdx) => {
-                      const isDup = itemIdx >= col.length;
-                      return (
-                        <div
-                          key={`${item.key}-${colIdx}-${itemIdx}`}
-                          aria-hidden={isDup ? "true" : undefined}
-                          className="relative h-44 w-32 sm:h-72 sm:w-52 overflow-hidden rounded-[16px] sm:rounded-[18px] border border-white/10 bg-surface shrink-0 shadow-2xl"
-                        >
-                          <Image
-                            fill
-                            src={item.url}
-                            alt={item.alt}
-                            loading="eager"
-                            sizes="(max-width: 640px) 128px, 208px"
-                            className="object-cover"
-                            style={
-                              item.position ? { objectPosition: item.position } : undefined
-                            }
-                          />
-                        </div>
-                      );
-                    })}
+                <div
+                  key={colIdx}
+                  className="flex flex-col"
+                  style={{ animationDelay: `-${delay}s`, animationDuration: `${duration}s` }}
+                >
+                  <div
+                    className={`flex flex-col gap-4 sm:gap-6 ${animClass}`}
+                    style={{ willChange: "transform" }}
+                  >
+                    {[0, 1].map((copy) => (
+                      <div
+                        key={copy}
+                        aria-hidden={copy === 1 ? "true" : undefined}
+                        className="flex flex-col gap-4 sm:gap-6 pb-4 sm:pb-6"
+                      >
+                        {col.map((item, itemIdx) => (
+                          <div
+                            key={`${item.key}-${colIdx}-${itemIdx}-c${copy}`}
+                            aria-hidden={copy === 1 ? "true" : undefined}
+                            className="relative h-44 w-32 sm:h-72 sm:w-52 overflow-hidden rounded-[16px] sm:rounded-[18px] border border-white/10 bg-surface shrink-0 shadow-2xl"
+                          >
+                            <Image
+                              fill
+                              src={item.url}
+                              alt={item.alt}
+                              loading={copy === 0 ? "eager" : "lazy"}
+                              sizes="(max-width: 640px) 128px, 208px"
+                              className="object-cover"
+                              style={
+                                item.position ? { objectPosition: item.position } : undefined
+                              }
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 </div>
               );
