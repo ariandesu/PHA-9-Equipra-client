@@ -5,10 +5,11 @@ import Image from "next/image";
 import { Trash2, ExternalLink } from "lucide-react";
 import { formatBDT } from "@/lib/money";
 import { Button } from "@/components/ui/button";
+import LoadError from "@/components/dashboard/load-error";
 import { useFavorites, useToggleFavorite } from "@/lib/data/hooks";
 
 export default function FavoritesTable() {
-  const { data: favsRes, isPending } = useFavorites();
+  const { data: favsRes, isPending, isError, refetch } = useFavorites();
   const toggleFavorite = useToggleFavorite();
 
   const items = favsRes?.items ?? (Array.isArray(favsRes) ? favsRes : []);
@@ -47,6 +48,12 @@ export default function FavoritesTable() {
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-muted">
                     Loading saved favorites...
+                  </td>
+                </tr>
+              ) : isError ? (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center">
+                    <LoadError title="Couldn&apos;t load favorites" onRetry={refetch} />
                   </td>
                 </tr>
               ) : items.length === 0 ? (

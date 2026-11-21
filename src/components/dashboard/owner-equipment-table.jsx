@@ -9,6 +9,7 @@ import { formatBDT } from "@/lib/money";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import LoadError from "@/components/dashboard/load-error";
 import { useMyEquipment, useDeleteEquipment } from "@/lib/data/hooks";
 
 const STATUS_VARIANTS = {
@@ -18,7 +19,7 @@ const STATUS_VARIANTS = {
 };
 
 export default function OwnerEquipmentTable() {
-  const { data: equipRes, isPending } = useMyEquipment();
+  const { data: equipRes, isPending, isError, refetch } = useMyEquipment();
   const deleteEquip = useDeleteEquipment();
 
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -81,6 +82,12 @@ export default function OwnerEquipmentTable() {
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-muted">
                     Loading equipment listings...
+                  </td>
+                </tr>
+              ) : isError ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center">
+                    <LoadError title="Couldn&apos;t load equipment" onRetry={refetch} />
                   </td>
                 </tr>
               ) : items.length === 0 ? (

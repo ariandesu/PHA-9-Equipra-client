@@ -14,6 +14,7 @@ import {
   Cell,
 } from "recharts";
 import GlowCard from "@/components/fx/glow-card";
+import LoadError from "@/components/dashboard/load-error";
 import { Button } from "@/components/ui/button";
 import { useOwnerAnalytics } from "@/lib/data/hooks";
 import { formatBDT } from "@/lib/money";
@@ -27,7 +28,7 @@ const DONUT_COLORS = {
 };
 
 export default function OwnerOverview({ userName = "Karim" }) {
-  const { data: analyticsRes, isPending } = useOwnerAnalytics();
+  const { data: analyticsRes, isPending, isError, refetch } = useOwnerAnalytics();
   const data = analyticsRes?.data ?? {};
 
   const monthlyData = (data.monthly ?? []).map((m) => {
@@ -40,6 +41,14 @@ export default function OwnerOverview({ userName = "Karim" }) {
 
   const statusMix = data.statusMix ?? [];
   const latestEarnings = data.monthly?.[data.monthly.length - 1]?.earnings ?? 0;
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-16 text-center">
+        <LoadError title="Couldn&apos;t load analytics" onRetry={refetch} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8 w-full text-left pb-12">

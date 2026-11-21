@@ -13,6 +13,7 @@ import {
   Cell,
 } from "recharts";
 import GlowCard from "@/components/fx/glow-card";
+import LoadError from "@/components/dashboard/load-error";
 import { useAdminAnalytics } from "@/lib/data/hooks";
 import { formatBDT } from "@/lib/money";
 
@@ -33,7 +34,7 @@ function monthLabel(value) {
 
 export default function AdminOverview() {
   const reduced = useReducedMotion();
-  const { data: analyticsRes, isPending } = useAdminAnalytics();
+  const { data: analyticsRes, isPending, isError, refetch } = useAdminAnalytics();
   const data = analyticsRes?.data ?? {};
 
   const monthly = (data.monthly ?? []).map((row) => ({
@@ -50,6 +51,14 @@ export default function AdminOverview() {
     { label: "Completed rentals", value: (data.completedRentals ?? 0).toLocaleString("en-IN") },
     { label: "Total revenue", value: formatBDT(data.totalRevenue ?? 0), accent: true },
   ];
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-16 text-center">
+        <LoadError title="Couldn&apos;t load analytics" onRetry={refetch} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8 w-full text-left pb-12">

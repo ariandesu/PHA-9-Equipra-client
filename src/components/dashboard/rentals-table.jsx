@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatBDT, formatDate } from "@/lib/money";
 import { Badge } from "@/components/ui/badge";
 import Pagination from "@/components/catalog/pagination";
+import LoadError from "@/components/dashboard/load-error";
 import { useMyBookings } from "@/lib/data/hooks";
 
 const STATUS_VARIANTS = {
@@ -16,7 +17,7 @@ const STATUS_VARIANTS = {
 
 export default function RentalsTable() {
   const [page, setPage] = useState(1);
-  const { data: bookingsRes, isPending } = useMyBookings({ page, limit: 5 });
+  const { data: bookingsRes, isPending, isError, refetch } = useMyBookings({ page, limit: 5 });
 
   const items = bookingsRes?.items ?? [];
   const total = bookingsRes?.total ?? 0;
@@ -72,6 +73,12 @@ export default function RentalsTable() {
                 <tr>
                   <td colSpan={8} className="py-8 text-center text-muted">
                     Loading your rentals...
+                  </td>
+                </tr>
+              ) : isError ? (
+                <tr>
+                  <td colSpan={8} className="py-8 text-center">
+                    <LoadError title="Couldn&apos;t load rentals" onRetry={refetch} />
                   </td>
                 </tr>
               ) : items.length === 0 ? (

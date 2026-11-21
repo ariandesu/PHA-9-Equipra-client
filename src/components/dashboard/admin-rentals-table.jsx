@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import LoadError from "@/components/dashboard/load-error";
 import { formatBDT, formatDate } from "@/lib/money";
 import { useAdminBookings, useUpdateBookingStatus } from "@/lib/data/hooks";
 
@@ -27,7 +28,7 @@ export default function AdminRentalsTable() {
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
 
-  const { data: bookingsRes, isPending } = useAdminBookings({
+  const { data: bookingsRes, isPending, isError, refetch } = useAdminBookings({
     status: status || undefined,
     page,
     limit: 10,
@@ -102,6 +103,12 @@ export default function AdminRentalsTable() {
               {isPending ? (
                 <tr>
                   <td colSpan={7} className="py-8 text-center text-muted">Loading rentals…</td>
+                </tr>
+              ) : isError ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center">
+                    <LoadError title="Couldn&apos;t load rentals" onRetry={refetch} />
+                  </td>
                 </tr>
               ) : items.length === 0 ? (
                 <tr>

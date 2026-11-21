@@ -14,6 +14,7 @@ export default function ActiveFilters({
   page,
   onRemove,
   loading = false,
+  error = false,
 }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4 mb-6 text-xs text-muted">
@@ -22,9 +23,13 @@ export default function ActiveFilters({
           <span className="font-medium text-foreground animate-pulse">
             <span className="inline-block w-24 h-4 bg-raised rounded" aria-hidden="true" />
           </span>
+        ) : error ? (
+          <span className="font-medium text-foreground">
+            Showing &mdash; of &mdash;
+          </span>
         ) : (
           <span className="font-medium text-foreground">
-            Showing {itemsCount > 0 ? `1–${itemsCount}` : 0} of {total}
+            Showing {itemsCount > 0 ? `1&ndash;${itemsCount}` : 0} of {total}
           </span>
         )}
 

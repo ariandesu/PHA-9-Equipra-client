@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import AdminUserRow from "@/components/dashboard/admin-user-row";
 import ConfirmDialog from "@/components/dashboard/confirm-dialog";
+import LoadError from "@/components/dashboard/load-error";
 import { useAdminUsers, useUpdateRole, useDeleteUser } from "@/lib/data/hooks";
 
 export default function AdminUsersTable() {
@@ -21,7 +22,7 @@ export default function AdminUsersTable() {
   const session = authClient.useSession();
   const myId = session.data?.user?.id;
 
-  const { data: usersRes, isPending } = useAdminUsers({ search: applied, page, limit: 10 });
+  const { data: usersRes, isPending, isError, refetch } = useAdminUsers({ search: applied, page, limit: 10 });
   const updateRole = useUpdateRole();
   const deleteUser = useDeleteUser();
 
@@ -111,6 +112,12 @@ export default function AdminUsersTable() {
                   <td colSpan={5} className="py-8 text-center text-muted">
                     <Loader2 className="size-4 animate-spin inline mr-2" aria-hidden="true" />
                     Loading users…
+                  </td>
+                </tr>
+              ) : isError ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center">
+                    <LoadError title="Couldn&apos;t load users" onRetry={refetch} />
                   </td>
                 </tr>
               ) : items.length === 0 ? (
