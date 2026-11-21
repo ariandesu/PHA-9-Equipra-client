@@ -86,12 +86,12 @@ export default function POSTerminal({ status = "idle", scale = 1, amount = null 
               style={{ backgroundColor: config.bg }}
               className="flex h-full w-full flex-col items-center justify-center gap-[0.5em] rounded-[0.6em] px-[1em] py-[0.8em] text-center transition-colors duration-300 motion-reduce:transition-none"
             >
-              <div className="flex w-full items-center justify-between font-mono text-[0.9em] leading-none text-[rgba(255,255,255,0.8)]">
+              <div className="flex w-full items-center justify-between font-mono text-[0.9em] leading-none text-[rgba(255,255,255,0.92)]">
                 <span>EQUIPRA PAY</span>
                 <span className="flex gap-[0.3em]" aria-hidden="true">
-                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.8)]" />
-                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.8)]" />
-                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.8)]" />
+                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.92)]" />
+                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.92)]" />
+                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.92)]" />
                 </span>
               </div>
               {amount != null && (

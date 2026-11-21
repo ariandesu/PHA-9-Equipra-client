@@ -88,16 +88,16 @@ function buildLines(booking, sessionId, isDemo, printedAt) {
   }
 
   const rows = [
-    { key: "brand", node: <span className="block text-center text-[13px] font-bold tracking-[0.18em] text-[#0A0A0A]">EQUIPRA</span> },
-    { key: "sub", node: <span className="block text-center text-[10px] tracking-[0.14em] text-[#525252]">RENTAL RECEIPT</span> },
-    { key: "div1", node: <span aria-hidden="true" className="block overflow-hidden whitespace-nowrap text-center text-[#A3A3A3]">----------------------------</span> },
+    { key: "brand", node: <span className="block text-center text-[15px] font-bold tracking-[0.18em] text-[#0A0A0A]">EQUIPRA</span> },
+    { key: "sub", node: <span className="block text-center text-[11px] tracking-[0.14em] text-[#525252]">RENTAL RECEIPT</span> },
+    { key: "div1", node: <span aria-hidden="true" className="block overflow-hidden whitespace-nowrap text-center text-[#A3A3A3]">----------------------</span> },
     ...detailRows,
   ];
 
   if (detailRows.length > 0) {
     rows.push({
       key: "div2",
-      node: <span aria-hidden="true" className="block overflow-hidden whitespace-nowrap text-center text-[#A3A3A3]">----------------------------</span>,
+      node: <span aria-hidden="true" className="block overflow-hidden whitespace-nowrap text-center text-[#A3A3A3]">----------------------</span>,
     });
   }
 
@@ -105,7 +105,7 @@ function buildLines(booking, sessionId, isDemo, printedAt) {
     rows.push({
       key: "total",
       node: (
-        <div className="flex items-baseline justify-between gap-2 text-[13px] font-bold text-[#0A0A0A]">
+        <div className="flex items-baseline justify-between gap-2 text-[14px] font-bold text-[#0A0A0A]">
           <span>TOTAL PAID</span>
           <span>{formatBDT(total)}</span>
         </div>
@@ -176,7 +176,7 @@ export default function ReceiptPaper({ booking, sessionId, isDemo, onPrinted }) 
           }
         }}
         style={{ clipPath: ZIGZAG_CLIP }}
-        className="w-full bg-[#FAFAFA] px-4 pb-6 pt-5 text-left font-mono text-[11px] leading-relaxed text-[#0A0A0A]"
+        className="w-full bg-[#FAFAFA] px-4 pb-6 pt-5 text-left font-mono text-[12px] leading-[1.55] text-[#0A0A0A]"
       >
         <ul className="flex flex-col gap-1" aria-label="Payment receipt">
           {lines.map((line, index) => (
