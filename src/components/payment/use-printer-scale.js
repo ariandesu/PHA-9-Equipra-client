@@ -7,8 +7,8 @@ const MAX_SCALE = 0.8;
 const FALLBACK_SCALE = 0.7;
 
 function computeScale() {
-  const byHeight = (window.innerHeight * 0.5) / 650;
-  const byWidth = (window.innerWidth - 96) / 220;
+  const byHeight = (window.innerHeight * 0.5) / 740;
+  const byWidth = (window.innerWidth - 96) / 250;
   return Math.min(MAX_SCALE, Math.max(MIN_SCALE, Math.min(byHeight, byWidth)));
 }
 

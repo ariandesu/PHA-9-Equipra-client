@@ -1,29 +1,52 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
+import { Check, Nfc, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Measured in the committed asset (public/images/pos-terminal.webp, 374x600):
-// the printer slot is the thin line at y≈21.2%, and the LCD occupies the box
-// between those percentages.
-export const TERMINAL_WIDTH = 220;
-export const TERMINAL_ASPECT = 600 / 374;
-export const SLOT = { left: 15.5, right: 91, y: 21.2 };
-export const SCREEN = { left: 26, top: 32.1, width: 54.9, height: 17.2 };
+// Drawn touchscreen device, 25em wide on a 10px base (250px at scale 1). Every
+// inner dimension uses em, so the whole device scales with the `scale` prop.
+// Cap 6.2em + body 33.9em + border 0.2em = 40.3em tall; the paper slot lip sits
+// 5.9em below the outer top edge.
+export const TERMINAL_WIDTH = 250;
+export const TERMINAL_ASPECT = 40.3 / 25;
+export const SLOT = { left: 6.4, right: 93.6, y: 14.6 };
+export const SCREEN = { left: 10, top: 20.6, width: 80, height: 42.2 };
 
 const STATUS_CONFIG = {
-  idle: { text: "READY", tone: "text-[#8a8a86]" },
-  confirming: { text: "CONFIRMING…", tone: "text-[#f5f5f5]" },
-  confirmed: { text: "APPROVED ✓", tone: "text-[#4ade80]" },
-  error: { text: "DECLINED", tone: "text-[#f87171]" },
+  idle: { bg: "#C2410C", label: "Processing…", pill: "Please wait", visual: "spinner" },
+  confirming: { bg: "#C2410C", label: "Processing…", pill: "Printing receipt…", visual: "spinner" },
+  confirmed: { bg: "#15803D", label: "Approved", pill: "Done", visual: "check" },
+  error: { bg: "#B91C1C", label: "Declined", pill: "Try again", visual: "x" },
 };
 
-export default function POSTerminal({ status = "idle", scale = 1 }) {
+function ScreenVisual({ visual, bg, reduced, label }) {
+  if (visual === "spinner") {
+    return (
+      <div
+        aria-hidden="true"
+        className="h-[2.8em] w-[2.8em] animate-spin rounded-full border-[0.3em] border-[rgba(255,255,255,0.25)] border-t-white motion-reduce:animate-none"
+      />
+    );
+  }
+  const Icon = visual === "check" ? Check : X;
+  return (
+    <motion.span
+      key={label}
+      initial={reduced ? false : { scale: 0.4, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 400, damping: 18 }}
+      className="flex h-[2.8em] w-[2.8em] items-center justify-center rounded-full bg-white"
+    >
+      <Icon className="h-[1.6em] w-[1.6em]" strokeWidth={3} style={{ color: bg }} />
+    </motion.span>
+  );
+}
+
+export default function POSTerminal({ status = "idle", scale = 1, amount = null }) {
   const reduced = useReducedMotion();
   const isConfirming = status === "confirming";
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.idle;
-  const width = TERMINAL_WIDTH * scale;
 
   return (
     <motion.div
@@ -33,51 +56,69 @@ export default function POSTerminal({ status = "idle", scale = 1 }) {
           ? { duration: 0.14, repeat: Infinity, ease: "linear" }
           : { duration: 0.15 }
       }
-      className="relative z-10"
-      style={{ width: width }}
+      className="pos-device relative z-10"
+      style={{ width: TERMINAL_WIDTH * scale, fontSize: 10 * scale }}
     >
-      <Image
-        src="/images/pos-terminal.webp"
-        alt="Card payment terminal"
-        width={374}
-        height={600}
-        priority
-        sizes={`${Math.round(width)}px`}
-        className={cn(
-          "h-auto w-full select-none",
-          "drop-shadow-[0_10px_18px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_32px_rgba(0,0,0,0.65)]"
-        )}
-      />
-
-      {/* LCD status, positioned over the photographed screen */}
       <div
-        className="pointer-events-none absolute flex items-center justify-center overflow-hidden rounded-[4px] bg-[#0A0A0A]"
-        style={{
-          left: `${SCREEN.left}%`,
-          top: `${SCREEN.top}%`,
-          width: `${SCREEN.width}%`,
-          height: `${SCREEN.height}%`,
-        }}
-        aria-hidden="true"
+        className={cn(
+          "overflow-hidden rounded-[1.6em] border-[0.1em] border-[var(--pos-border)]",
+          "bg-[var(--pos-body)] transition-colors duration-300 motion-reduce:transition-none"
+        )}
+        style={{ boxShadow: "var(--pos-shadow)" }}
       >
-        <motion.span
-          key={config.text}
-          animate={
-            isConfirming && !reduced ? { opacity: [1, 0.4, 1] } : { opacity: 1 }
-          }
-          transition={
-            isConfirming && !reduced
-              ? { duration: 0.9, repeat: Infinity, ease: "easeInOut" }
-              : { duration: 0.15 }
-          }
-          className={cn(
-            "px-1 text-center font-mono font-semibold leading-tight tracking-[0.06em]",
-            config.tone
-          )}
-          style={{ fontSize: Math.max(7, 9 * scale) }}
-        >
-          {config.text}
-        </motion.span>
+        {/* Printer cap */}
+        <div className="relative h-[6.2em] bg-[var(--accent)]">
+          <div aria-hidden="true" className="absolute left-1/2 top-[0.8em] h-[0.8em] w-[4em] -translate-x-1/2 rounded-full bg-[#C2410C]" />
+          <div aria-hidden="true" className="absolute inset-x-0 top-[4.9em] mx-auto h-[0.7em] w-[87.2%] rounded-[0.35em] bg-[#1A0A02]" />
+          <div aria-hidden="true" className="absolute inset-x-0 top-[5.6em] mx-auto h-[0.2em] w-[87.2%] rounded-full bg-[#FFB08A]" />
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[0.1em] bg-[#C2410C]" />
+        </div>
+
+        {/* Body */}
+        <div className="relative flex h-[33.9em] flex-col bg-[var(--pos-body)] px-[2.5em] pb-[1.8em] pt-[2em] transition-colors duration-300 motion-reduce:transition-none">
+          <div aria-hidden="true" className="absolute left-[0.4em] top-[14em] h-[4.5em] w-[0.8em] rounded-full bg-[var(--accent)]" />
+          <div aria-hidden="true" className="absolute right-[0.4em] top-[14em] h-[4.5em] w-[0.8em] rounded-full bg-[var(--accent)]" />
+
+          {/* Screen */}
+          <div className="h-[17em] shrink-0 rounded-[1em] bg-[#0A0A0A] p-[0.6em]">
+            <div
+              aria-hidden="true"
+              style={{ backgroundColor: config.bg }}
+              className="flex h-full w-full flex-col items-center justify-center gap-[0.5em] rounded-[0.6em] px-[1em] py-[0.8em] text-center transition-colors duration-300 motion-reduce:transition-none"
+            >
+              <div className="flex w-full items-center justify-between font-mono text-[0.9em] leading-none text-[rgba(255,255,255,0.8)]">
+                <span>EQUIPRA PAY</span>
+                <span className="flex gap-[0.3em]" aria-hidden="true">
+                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.8)]" />
+                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.8)]" />
+                  <span className="h-[0.4em] w-[0.4em] rounded-full bg-[rgba(255,255,255,0.8)]" />
+                </span>
+              </div>
+              {amount != null && (
+                <div className="font-mono text-[2.4em] font-bold leading-none text-white">{amount}</div>
+              )}
+              <div className="text-[1.3em] font-semibold leading-tight text-white">{config.label}</div>
+              <ScreenVisual visual={config.visual} bg={config.bg} reduced={reduced} label={config.label} />
+              <div className="rounded-full bg-[rgba(255,255,255,0.18)] px-[1.4em] py-[0.5em] text-[1em] font-medium leading-tight text-white">
+                {config.pill}
+              </div>
+            </div>
+          </div>
+
+          {/* Tap zone */}
+          <div className="flex flex-1 flex-col items-center justify-center gap-[1em]">
+            <Nfc aria-hidden="true" className="h-[2.6em] w-[2.6em] text-[var(--pos-nfc)]" />
+            <div
+              aria-hidden="true"
+              className="mx-auto h-[3.6em] w-[5.4em] rounded-[0.6em] border-[0.15em] border-[var(--pos-chip-hi)] bg-[var(--pos-chip)] p-[0.5em] transition-colors duration-300 motion-reduce:transition-none"
+            >
+              <div className="relative h-full w-full">
+                <div className="absolute inset-x-0 top-1/2 h-[0.15em] -translate-y-1/2 bg-[var(--pos-chip-hi)]" />
+                <div className="absolute inset-y-0 left-1/2 w-[0.15em] -translate-x-1/2 bg-[var(--pos-chip-hi)]" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

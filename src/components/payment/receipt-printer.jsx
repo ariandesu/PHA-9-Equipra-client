@@ -42,11 +42,11 @@ export default function ReceiptPrinter({
   const clipHeight = Math.max(scaledPaper, terminalHeight);
 
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="pos-device flex w-full flex-col items-center">
       <div className="relative flex flex-col items-center" style={{ width: terminalWidth }}>
         <div aria-hidden="true" style={{ height: reserved, width: "100%" }} />
 
-        <POSTerminal status={status} scale={scale} />
+        <POSTerminal status={status} scale={scale} amount={total != null ? formatBDT(total) : null} />
 
         {isConfirmed && (
           <div

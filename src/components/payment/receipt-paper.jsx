@@ -161,7 +161,7 @@ export default function ReceiptPaper({ booking, sessionId, isDemo, onPrinted }) 
       animate={settled && !reduced ? { rotate: -2, y: -4 } : { rotate: 0, y: 0 }}
       transition={{ type: "spring", stiffness: 220, damping: 16 }}
       style={{ transformOrigin: "50% 100%" }}
-      className="w-[150px] drop-shadow-[0_2px_6px_rgba(0,0,0,0.12)] dark:drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
+      className="w-[198px] border-x border-t border-[var(--pos-paper-edge)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.12)] dark:drop-shadow-[0_14px_24px_rgba(0,0,0,0.45)]"
     >
       <motion.div
         initial={reduced ? false : { x: 0, y: "100%" }}

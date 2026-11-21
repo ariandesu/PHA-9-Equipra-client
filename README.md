@@ -121,10 +121,10 @@ gracefully instead of failing.
 
 ## Photo credits
 
-The payment terminal on the success receipt comes from Wikimedia Commons:
-
-- “FirstData FD150 Credit Card Terminal” by [TaurusEmerald](https://commons.wikimedia.org/wiki/File:FirstData_FD150_Credit_Card_Terminal.jpg),
-  licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Cropped,
-  background removed, and the moulded model number retouched; redistributed here
-  under the same licence.
+The payment terminal on the success page is drawn in code (no photo). It
+replaced a cropped Wikimedia Commons photo — “FirstData FD150 Credit Card
+Terminal” by
+[TaurusEmerald](https://commons.wikimedia.org/wiki/File:FirstData_FD150_Credit_Card_Terminal.jpg),
+licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) —
+which is no longer shipped.
 

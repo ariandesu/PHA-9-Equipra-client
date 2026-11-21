@@ -99,6 +99,28 @@ body {
   --radius-md: var(--radius-input);
 }
 
+/* POS terminal device variables (component-scoped, not design tokens).
+   Light set lives on the class; the dark set under .dark .pos-device. */
+.pos-device {
+  --pos-body: #FFFFFF;
+  --pos-border: #D4D4D8;
+  --pos-chip: #D4D4D8;
+  --pos-chip-hi: #FFFFFF;
+  --pos-nfc: #A1A1AA;
+  --pos-shadow: 0 16px 32px rgba(194, 65, 12, 0.18);
+  --pos-paper-edge: #E4E4E7;
+}
+
+.dark .pos-device {
+  --pos-body: #1E1E22;
+  --pos-border: #3F3F46;
+  --pos-chip: #0A0A0A;
+  --pos-chip-hi: #52525B;
+  --pos-nfc: #71717A;
+  --pos-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  --pos-paper-edge: transparent;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
@@ -141,6 +163,7 @@ body {
     left: 50% !important;
     transform: translateX(-50%) !important;
     box-shadow: none !important;
+    border: none !important;
     filter: none !important;
     height: auto !important;
     opacity: 1 !important;
