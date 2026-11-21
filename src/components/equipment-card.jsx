@@ -135,7 +135,7 @@ export default function EquipmentCard({ item }) {
           </div>
 
           <Button variant="outline" size="sm" asChild>
-            <Link href={detailHref}>Details</Link>
+            <Link href={detailHref}>View Details</Link>
           </Button>
         </div>
       </div>
