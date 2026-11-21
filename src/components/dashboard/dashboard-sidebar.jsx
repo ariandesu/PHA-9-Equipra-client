@@ -19,7 +19,7 @@ import {
 import Logo from "@/components/layout/logo";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { initialsOf } from "@/components/layout/user-menu";
+import { initialsOf, LogoutButton } from "@/components/layout/user-menu";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -125,6 +125,10 @@ export default function DashboardSidebar({ user }) {
                     <ArrowLeft className="size-3.5" />
                     <span>{backLink.label}</span>
                   </Link>
+                  <LogoutButton
+                    onDone={() => setOpen(false)}
+                    className="text-xs [&_svg]:size-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  />
                 </div>
               </div>
             </SheetContent>
@@ -161,6 +165,7 @@ export default function DashboardSidebar({ user }) {
             <ArrowLeft className="size-3.5" aria-hidden="true" />
             <span>{backLink.label}</span>
           </Link>
+          <LogoutButton className="px-0 py-1.5 text-xs [&_svg]:size-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" />
 
           <div className="flex items-center gap-2.5 rounded-[12px] bg-raised dark:bg-[#161616] border border-border/60 p-2.5">
             <Avatar className="size-9 border border-border">
