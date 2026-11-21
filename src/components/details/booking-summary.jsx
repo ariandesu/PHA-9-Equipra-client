@@ -53,10 +53,7 @@ export default function BookingSummary({ item, quote, quantity, onSubmit, availa
             <span className="text-muted">Couldn&apos;t check availability. It&apos;s confirmed again at checkout.</span>
           )}
           {availabilityState === "idle" && (
-            <>
-              <Check className="size-3.5" aria-hidden="true" />
-              <span className="text-success">{item.quantity} units free for selected dates</span>
-            </>
+            <span className="text-muted">Pick dates to check availability</span>
           )}
         </p>
       </div>
