@@ -1,34 +1,34 @@
 # Equipra
 
-Equipra — equipment rental platform. Owners list heavy gear, an admin approves it, customers browse, book and pay with Stripe. The booking is confirmed only after successful payment.
+Equipra is a hire yard for heavy gear and event kit. Owners put up machines, an admin clears each listing, and customers find it, hold dates, and check out with Stripe. Nothing is confirmed until the money lands.
 
 - Live site: `https://equipra-client.vercel.app`
 - API: `https://equipra-server.vercel.app` ([PHA-9-Equipra-server repo](https://github.com/ariandesu/PHA-9-Equipra-server)) · [PHA-9-Equipra-client repo](https://github.com/ariandesu/PHA-9-Equipra-client)
 
-## Demo accounts
+## Try it
 
 | Role | Email | Password |
 | --- | --- | --- |
 | Admin | `admin@equipra.app` | `Admin@123456` |
-| Owner | `owner@karimhm.com` | `Rent@123456` |
-| Owner | `lensbox@bd.com` | `Rent@123456` |
-| Customer | `rafi@mail.com` | `Rent@123456` |
-| Customer | `tanvir@build.bd` | `Rent@123456` |
+| Owner | `mahfuz@riverbank-plant.test` | `Rent@123456` |
+| Owner | `tanisha@framecraft-studio.test` | `Rent@123456` |
+| Customer | `nabil@equipra-demo.test` | `Rent@123456` |
+| Customer | `siam@equipra-demo.test` | `Rent@123456` |
 
-Created by `npm run seed` (passwords come from `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD`). These are **demo test credentials**, not real secrets.
+Made by `npm run seed` (passwords come from `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD`). These are **demo test credentials**, not real secrets.
 
 - Stripe test card: 4242 4242 4242 4242, any future expiry date, any CVC.
-- Demo data is shared — please don't delete other users' listings.
+- The demo dataset is communal — please leave other people's rows alone.
 
-## Key features
+## What's inside
 
-**Everyone:** animated landing (hero, showcase, owner marquee, stats, featured equipment with tabs, 3D photo wall, category focus, how-it-works timeline, bento grid, reviews + FAQ, owner CTA), server-side catalog search/filters/sort/pagination with URL-restored filters, equipment details (gallery with zoom, spec grid, owner card), dark/light theme saved in localStorage, ⌘K command search, reduced-motion support, route-level loading, error and not-found states.
+**Across the site:** a landing page (hero, live showcase, owner strip, stats, featured gear with tabs, 3D photo wall, category cards, how-it-works walkway, value tiles, reviews + FAQ, owner call-to-action), a catalog with server-side search, filters, sort and paging whose state survives a reload, gear pages (photo zoom, spec grid, owner card), dark and light themes kept in localStorage, ⌘K search, reduced-motion support, and loading, error and missing-page states on every route.
 
-**Customers:** email/password and Google signup (role chosen at signup), favorites with heart state, booking modal with live total matching the server formula, Stripe Checkout, success page, My Rentals, favorites list, profile editing.
+**Hiring:** email/password and Google sign-up (pick customer or owner at signup), heart any listing, a hire modal with a live total that matches the server's maths, Stripe Checkout, a success page, My Rentals, a favorites shelf, profile editing.
 
-**Owners:** overview analytics (KPIs, monthly earnings, status mix), add equipment (imgbb upload or URL), my-equipment table (edits reset to pending, delete with confirm), rentals of own equipment.
+**Owning:** an overview (KPIs, monthly earnings, status split), add-a-machine (imgbb upload or link), a my-machines table (edits send the row back to pending, deletes ask first), hires of your own kit.
 
-**Admins:** platform analytics, all-users management (role change with confirm, remove; cannot change/remove self), equipment moderation (approve/reject/update/delete), all-rentals with status changes.
+**Adminning:** platform numbers, everyone management (role flips ask first, removals too; never your own row), listing moderation (clear, reject, edit, remove), every hire with status moves.
 
 ## Screenshots
 
@@ -50,32 +50,34 @@ Dark:
 ![Owner overview dark](docs/screenshots/12-owner-overview-analytics-dark.png)
 ![Admin overview dark](docs/screenshots/15-admin-overview-dark.png)
 
-## Packages
+## Tech used
 
-- `next` — App Router (route groups, server components, `src/proxy.js` guards).
-- `react` / `react-dom` — UI runtime.
-- `tailwindcss` + `tw-animate-css` + `@tailwindcss/turbopack` — design tokens, utilities, animations.
-- `next-themes` — light (default) / dark theme, saved in localStorage.
-- `radix-ui` + `class-variance-authority` + `clsx` + `tailwind-merge` — shadcn primitives (buttons, dialogs, forms, tables).
-- `better-auth` (+ `mongodb` adapter) — email/password + Google signup, sessions, roles.
-- `axios` — API client with JWT interceptor.
-- `@tanstack/react-query` — server state behind data hooks.
-- `react-hook-form` + `@hookform/resolvers` + `zod` — forms + validation (incl. BD phone, password rule).
-- `motion` — entrance/hover animation (reduced-motion aware).
-- `recharts` — owner/admin analytics charts.
-- `cmdk` — ⌘K command menu.
-- `sonner` — toasts.
-- `lucide-react` — icons.
-- `@number-flow/react` — animated stat numbers.
-- `jsonwebtoken` — dev-only token helper (tests); the real JWT comes from the server bridge.
+- `next` — App Router with route groups, server components and `src/proxy.js` route guards.
+- `react` / `react-dom` — interface runtime.
+- `tailwindcss` + `tw-animate-css` + `@tailwindcss/turbopack` — theme tokens, helper classes, motion utilities.
+- `next-themes` — theme toggle (light default), remembered in localStorage.
+- `radix-ui` + `class-variance-authority` + `clsx` + `tailwind-merge` — headless primitives behind the shadcn-style kit (buttons, dialogs, forms, tables).
+- `better-auth` (+ `mongodb` adapter) — email/password plus Google login, sessions, roles.
+- `axios` — HTTP client with a JWT hook.
+- `@tanstack/react-query` — async server state under the data hooks.
+- `react-hook-form` + `@hookform/resolvers` + `zod` — forms with schema checks (BD phone format, password rule).
+- `motion` — enter/hover effects that honor reduced motion.
+- `recharts` — dashboard charts for owners and admins.
+- `cmdk` — ⌘K quick search.
+- `sonner` — toast notes.
+- `lucide-react` — icon set.
+- `@number-flow/react` — rolling stat digits.
+- `jsonwebtoken` — test-only token minting; browsers get the real JWT from the server bridge.
 
-## Env vars (names only — values never committed; see `.env.example`)
+## Config
+
+Keys only here — real values stay out of git; see `.env.example`.
 
 `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_DATA_SOURCE`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `MONGODB_URI`, `DB_NAME`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `JWT_SECRET`, `JWT_ISSUER`, `JWT_AUDIENCE`, `NEXT_PUBLIC_IMGBB_KEY`, `SEED_ADMIN_PASSWORD`, `SEED_USER_PASSWORD`.
 
-Copy `.env.example` to `.env.local` and fill in the values.
+Duplicate `.env.example` as `.env.local` and fill it in.
 
-## Run locally + seed
+## Local setup
 
 ```bash
 npm install
@@ -96,13 +98,13 @@ npm run seed -- --db equipra_dev   # local development database
 npm run seed -- --db equipra       # production database
 ```
 
-Point the client at the API with `NEXT_PUBLIC_DATA_SOURCE=api` and `NEXT_PUBLIC_API_URL=http://localhost:5000/api`; leave the source as `mock` to work entirely on in-memory demo data.
+Aim the client at the API with `NEXT_PUBLIC_DATA_SOURCE=api` and `NEXT_PUBLIC_API_URL=http://localhost:5000/api`; keep the source as `mock` to run entirely on in-memory demo data.
 
-Only `equipra_dev` and `equipra` are accepted as seed DB names; anything else refuses before connecting. The seed is idempotent — re-running upserts rather than duplicating — and creates the demo users, the 13 demo equipment rows (row 11 unavailable, row 12 rejected, row 13 pending), sample bookings with payments, and favorites.
+Only `equipra_dev` and `equipra` work as seed DB names; anything else bails out before connecting. The seed upserts instead of duplicating, and builds the demo users, the 13 demo machines (row 11 out of stock, row 12 rejected, row 13 pending), sample hires with payments, and favorites.
 
-## Booking → payment → confirmation → completion
+## How a rental works
 
-1. "Continue to Stripe payment" creates a reservation (`pending` + `unpaid`, 30-minute hold) and a Stripe Checkout Session.
-2. The booking is confirmed only after successful payment: Stripe returns to the success page, which calls `/payments/confirm` (idempotent — safe on reload). The Stripe webhook (`/payments/webhook`, signature-verified) confirms it too.
-3. In production both paths are active: the success page calls `/payments/confirm`, and the Stripe webhook (`checkout.session.completed`) confirms the booking even if the customer closes the tab. Without Stripe keys the API returns `503 {"message":"Payments are not configured"}` and the booking modal shows that message.
-4. After the end date passes, paid + confirmed bookings flip to `completed`; expired unpaid holds become `cancelled` (hourly housekeeping + daily serverless cron).
+1. "Continue to Stripe payment" locks a hold (`pending` + `unpaid`, good for 30 minutes) and opens a Stripe Checkout Session.
+2. The hire only counts once money moves: Stripe lands back on the success page, which calls `/payments/confirm` (idempotent — reloading is harmless). The Stripe webhook (`checkout.session.completed`, signature-checked) confirms it as well.
+3. In production both confirmation paths run: the success page calls `/payments/confirm`, and the webhook confirms the hire even if the customer shuts the tab. With no Stripe keys the API answers `503 {"message":"Payments are not configured"}` and the hire modal passes that message on.
+4. Past the end date, paid + confirmed hires flip to `completed`; stale unpaid holds flip to `cancelled` (hourly housekeeping plus a daily serverless cron).
