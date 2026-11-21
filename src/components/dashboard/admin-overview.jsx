@@ -43,12 +43,12 @@ export default function AdminOverview() {
   }));
 
   const kpis = [
-    { label: "Total users", value: (data.totalUsers ?? 0).toLocaleString("en-IN"), delta: "+84", deltaTone: "text-success" },
-    { label: "Total equipment", value: (data.totalEquipment ?? 0).toLocaleString("en-IN"), delta: "+41", deltaTone: "text-success" },
-    { label: "Total bookings", value: (data.totalBookings ?? 0).toLocaleString("en-IN"), delta: "+112", deltaTone: "text-success" },
-    { label: "Pending approvals", value: (data.pendingApprovals ?? 0).toLocaleString("en-IN"), delta: "Review", deltaTone: "text-warning" },
-    { label: "Completed rentals", value: (data.completedRentals ?? 0).toLocaleString("en-IN"), delta: "97%", deltaTone: "text-info" },
-    { label: "Total revenue", value: formatBDT(data.totalRevenue ?? 0), delta: "+27%", deltaTone: "text-success", accent: true },
+    { label: "Total users", value: (data.totalUsers ?? 0).toLocaleString("en-IN") },
+    { label: "Total equipment", value: (data.totalEquipment ?? 0).toLocaleString("en-IN") },
+    { label: "Total bookings", value: (data.totalBookings ?? 0).toLocaleString("en-IN") },
+    { label: "Pending approvals", value: (data.pendingApprovals ?? 0).toLocaleString("en-IN") },
+    { label: "Completed rentals", value: (data.completedRentals ?? 0).toLocaleString("en-IN") },
+    { label: "Total revenue", value: formatBDT(data.totalRevenue ?? 0), accent: true },
   ];
 
   return (
@@ -71,10 +71,7 @@ export default function AdminOverview() {
                 : "p-5 flex flex-col justify-between"
             }
           >
-            <div className="flex items-start justify-between gap-2">
-              <p className={`text-xs font-medium ${kpi.accent ? "text-accent" : "text-muted"}`}>{kpi.label}</p>
-              <span className={`font-mono text-[11px] font-semibold ${kpi.deltaTone}`}>{kpi.delta}</span>
-            </div>
+            <p className={`text-xs font-medium ${kpi.accent ? "text-accent" : "text-muted"}`}>{kpi.label}</p>
             <p className={`font-mono text-2xl sm:text-3xl font-bold mt-3 ${kpi.accent ? "text-accent" : "text-foreground"}`}>
               {kpi.value}
             </p>
@@ -121,7 +118,6 @@ export default function AdminOverview() {
               <h2 className="text-base font-bold text-foreground">Revenue (৳ lakh)</h2>
               <p className="text-xs text-muted">Paid bookings only</p>
             </div>
-            <span className="font-mono text-[11px] font-semibold text-success">+27% MoM</span>
           </div>
 
           <div className="h-64 w-full pt-2">

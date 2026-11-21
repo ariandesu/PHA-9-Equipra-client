@@ -16,6 +16,7 @@ import {
 import GlowCard from "@/components/fx/glow-card";
 import { Button } from "@/components/ui/button";
 import { useOwnerAnalytics } from "@/lib/data/hooks";
+import { formatBDT } from "@/lib/money";
 
 const MONTH_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
@@ -33,11 +34,12 @@ export default function OwnerOverview({ userName = "Karim" }) {
     const monthNum = parseInt(m.month.split("-")[1], 10) - 1;
     return {
       month: MONTH_NAMES[monthNum] || m.month,
-      earnings: Math.round(m.earnings / 1000), // in thousands
+      earnings: Math.round((m.earnings ?? 0) / 1000), // in thousands
     };
   });
 
   const statusMix = data.statusMix ?? [];
+  const latestEarnings = data.monthly?.[data.monthly.length - 1]?.earnings ?? 0;
 
   return (
     <div className="flex flex-col gap-8 w-full text-left pb-12">
@@ -61,29 +63,29 @@ export default function OwnerOverview({ userName = "Karim" }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <GlowCard className="p-5 flex flex-col justify-between">
           <p className="text-xs text-muted font-medium">Listed equipment</p>
-          <p className="font-mono text-3xl font-bold text-foreground mt-2">{data.listed ?? 14}</p>
+          <p className="font-mono text-3xl font-bold text-foreground mt-2">{data.listed ?? 0}</p>
           <p className="text-[11px] text-muted mt-2 font-mono">
-            {data.approved ?? 11} approved · {data.pending ?? 2} pending · {data.rejected ?? 1} rejected
+            {data.approved ?? 0} approved · {data.pending ?? 0} pending · {data.rejected ?? 0} rejected
           </p>
         </GlowCard>
 
         <GlowCard className="p-5 flex flex-col justify-between">
           <p className="text-xs text-muted font-medium">Completed rentals</p>
-          <p className="font-mono text-3xl font-bold text-foreground mt-2">{data.completedRentals ?? 62}</p>
-          <p className="text-[11px] text-success mt-2 font-medium">+9 this month</p>
+          <p className="font-mono text-3xl font-bold text-foreground mt-2">{data.completedRentals ?? 0}</p>
+          <p className="text-[11px] text-muted mt-2">Completed bookings</p>
         </GlowCard>
 
         <GlowCard className="p-5 flex flex-col justify-between">
           <p className="text-xs text-muted font-medium">Total earnings</p>
-          <p className="font-mono text-3xl font-bold text-foreground mt-2">৳16.9 L</p>
+          <p className="font-mono text-3xl font-bold text-foreground mt-2">{formatBDT(data.totalEarnings ?? 0)}</p>
           <p className="text-[11px] text-muted mt-2">All-time, paid bookings</p>
         </GlowCard>
 
         {/* 4th card with orange gradient accent per 03 §5 */}
         <GlowCard className="p-5 flex flex-col justify-between bg-gradient-to-br from-surface to-accent/10 border-accent/30">
           <p className="text-xs text-accent font-medium">This month</p>
-          <p className="font-mono text-3xl font-bold text-accent mt-2">৳4.12 L</p>
-          <p className="text-[11px] text-accent mt-2 font-medium">+16% vs October</p>
+          <p className="font-mono text-3xl font-bold text-accent mt-2">{formatBDT(data.thisMonth ?? 0)}</p>
+          <p className="text-[11px] text-accent mt-2 font-medium">Paid bookings</p>
         </GlowCard>
       </div>
 
@@ -94,9 +96,9 @@ export default function OwnerOverview({ userName = "Karim" }) {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-base font-bold text-foreground">Monthly earnings (৳ thousand)</h2>
-              <p className="text-xs text-muted">2026 performance</p>
+              <p className="text-xs text-muted">Last 6 months</p>
             </div>
-            <span className="font-mono text-xs text-accent font-medium">Latest: ৳412k</span>
+            <span className="font-mono text-xs text-accent font-medium">Latest: {formatBDT(latestEarnings)}</span>
           </div>
 
           <div className="h-64 w-full pt-2">
@@ -129,7 +131,6 @@ export default function OwnerOverview({ userName = "Karim" }) {
         <div className="lg:col-span-5 xl:col-span-4 flex flex-col justify-between rounded-[22px] border border-border bg-surface p-5 sm:p-6 shadow-sm">
           <div>
             <h2 className="text-base font-bold text-foreground">Rental status mix</h2>
-            <p className="text-xs text-muted">100 total rentals</p>
           </div>
 
           <div className="h-52 w-full flex items-center justify-center relative my-2">
