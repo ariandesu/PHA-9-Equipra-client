@@ -7,7 +7,7 @@ import { isMongoConnectionError } from "@/lib/auth-cache";
 export const getServerSession = cache(async () => {
   try {
     const auth = await getAuth();
-    return auth.api.getSession({ headers: await headers() });
+    return await auth.api.getSession({ headers: await headers() });
   } catch (error) {
     // A closed/failed topology must not be reused: drop it, then rethrow so the
     // caller still fails visibly instead of silently looking signed out.
