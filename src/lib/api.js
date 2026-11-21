@@ -47,19 +47,22 @@ async function getToken() {
         credentials: 'same-origin',
       });
 
-      // 401 means anonymous — not an error, just no token. Cache for 30s.
-      if (res.status === 401) {
+      if (!res.ok) {
+        throw new Error(`Failed to fetch token: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      // Anonymous visitors get { token: null } with a 200 — not an error,
+      // just no token. Cache that for 30s like before.
+      if (data.token === null) {
         cachedToken = null;
         cachedExpiresAt = null;
         anonymousExpiresAt = Date.now() + 30 * 1000;
         return null;
       }
 
-      if (!res.ok) {
-        throw new Error(`Failed to fetch token: ${res.status}`);
-      }
-
-      const { token, expiresAt } = await res.json();
+      const { token, expiresAt } = data;
       cachedToken = token;
       cachedExpiresAt = new Date(expiresAt).getTime();
       anonymousExpiresAt = 0;

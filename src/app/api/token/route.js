@@ -17,9 +17,13 @@ export async function GET() {
     return Response.json({ message: 'Authentication request failed' }, { status: 503 });
   }
 
-  // Anonymous visitors always get 401, even if signing isn't configured.
+  // Anonymous visitors get a null token with a 200, so logged-out browsing
+  // never reports a 401 for the probe.
   if (!session || !session.user) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+    return Response.json({ token: null }, {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   }
 
   // Only signed-in users need signing config.
