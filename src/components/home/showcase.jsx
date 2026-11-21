@@ -16,7 +16,7 @@ const SHOWCASE_ITEM = {
 };
 
 const HERO_PHOTO =
-  "https://images.unsplash.com/photo-1778066994998-97f74a5bf901?w=1200&q=75&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1621922688758-359fc864071e?w=1200&q=75&auto=format&fit=crop";
 
 export default function Showcase() {
   return (

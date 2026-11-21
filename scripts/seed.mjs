@@ -52,7 +52,7 @@ if (!process.env.MONGODB_URI) {
 process.env.DB_NAME = dbName;
 
 const SEED_ACCOUNTS = [
-  { email: 'admin@equipra.app', name: 'Sumaiya Akter', password: process.env.SEED_ADMIN_PASSWORD, role: 'admin' },
+  { email: 'admin@equipra.app', name: 'Nasrin Akter', password: process.env.SEED_ADMIN_PASSWORD, role: 'admin' },
   { email: 'mahfuz@riverbank-plant.test', name: 'Riverbank Plant', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
   { email: 'tanisha@framecraft-studio.test', name: 'FrameCraft Studio', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
   { email: 'nabil@equipra-demo.test', name: 'Nabil Rahman', password: process.env.SEED_USER_PASSWORD, role: 'customer' },

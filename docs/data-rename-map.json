@@ -1,47 +1,303 @@
 {
   "equipment": [
-    { "oldName": "Hydraulic Excavator 20T — CAT 320", "newName": "Crawler Bulldozer 15T — SD16", "oldPrice": 18500, "newPrice": 19750 },
-    { "oldName": "Cinema Camera Shoulder Rig + 7\" Monitor", "newName": "Mirrorless Video Kit with Gimbal", "oldPrice": 6200, "newPrice": 5400 },
-    { "oldName": "Ford E-Series Cargo Van (1.5T)", "newName": "Mini Covered Truck 1T", "oldPrice": 32000, "newPrice": 27500 },
-    { "oldName": "Farm Tractor with Harvest Trailer", "newName": "Diesel Power Tiller with Trolley", "oldPrice": 58000, "newPrice": 46000 },
-    { "oldName": "DJI Mavic Mini Drone + 3 Batteries", "newName": "Action Camera Adventure Kit", "oldPrice": 3500, "newPrice": 2900 },
-    { "oldName": "Line Array PA System (4-box hang)", "newName": "Column PA Pair with Mixer", "oldPrice": 12000, "newPrice": 7400 },
-    { "oldName": "Demolition Excavator 13T with Breaker", "newName": "Mini Excavator 3.5T", "oldPrice": 21000, "newPrice": 13400 },
-    { "oldName": "Sony FX3 Cinema Cage Kit + Lenses", "newName": "LED Panel Light Trio Kit", "oldPrice": 4100, "newPrice": 3800 },
-    { "oldName": "Atlas Copco 60kVA Mobile Generator", "newName": "Portable Diesel Genset 25kVA", "oldPrice": 15000, "newPrice": 11800 },
-    { "oldName": "Stage Truss 30ft + 8 Moving Heads", "newName": "Par Can Light Set (8 pcs)", "oldPrice": 9000, "newPrice": 6600 },
-    { "oldName": "Studio Cinema Camera with Cine Prime", "newName": "Vintage 35mm Film Camera", "oldPrice": 9800, "newPrice": 8900 },
-    { "oldName": "Site Excavator (CAT, 2019)", "newName": "Used Backhoe Loader (2016)", "oldPrice": 16000, "newPrice": 14200 },
-    { "oldName": "Atlas Copco 60kVA Generator (2nd unit)", "newName": "Canopy Genset 40kVA — Backup Fleet", "oldPrice": 15000, "newPrice": 16900 }
+    {
+      "oldName": "Hydraulic Excavator 20T — CAT 320",
+      "newName": "Crawler Bulldozer 15T — SD16",
+      "oldPrice": 18500,
+      "newPrice": 19750,
+      "id": "eq-001",
+      "image": "https://images.unsplash.com/photo-1621922688758-359fc864071e",
+      "newBrand": "Shantui",
+      "newModel": "SD16",
+      "newDescription": "15-tonne crawler dozer with a straight blade and ripper shank, serviced every 250 hours and ready for land development, road beds and pond excavation.",
+      "newLocation": "Shipyard Road, Khulna",
+      "newTerms": "Minimum 1 day. Renter arranges fuel and an operator. Delivery inside Khulna included; cancellations 48h before start are fully refunded."
+    },
+    {
+      "oldName": "Cinema Camera Shoulder Rig + 7\" Monitor",
+      "newName": "Mirrorless Video Kit with Gimbal",
+      "oldPrice": 6200,
+      "newPrice": 5400,
+      "id": "eq-002",
+      "image": "https://images.unsplash.com/photo-1554048612-b6a482bc67e5",
+      "newBrand": "Panasonic",
+      "newModel": "Lumix S5 II",
+      "newDescription": "Full-frame mirrorless body with a 24–70mm f/2.8 lens, single-handle gimbal and two batteries — a run-and-gun package for weddings, music videos and documentaries.",
+      "newLocation": "Mirpur, Dhaka",
+      "newTerms": "Minimum 1 day. Handle with care. Liability for damage beyond normal wear."
+    },
+    {
+      "oldName": "Ford E-Series Cargo Van (1.5T)",
+      "newName": "Mini Covered Truck 1T",
+      "oldPrice": 32000,
+      "newPrice": 27500,
+      "id": "eq-003",
+      "image": "https://images.unsplash.com/photo-1519003722824-194d4455a60c",
+      "newBrand": "Tata",
+      "newModel": "Ace HT",
+      "newDescription": "One-tonne covered mini truck with a dry box body and load rails, suited to shop restocking, house shifting and supply runs around Jashore.",
+      "newLocation": "Benapole, Jashore",
+      "newTerms": "Minimum 1 week. Fuel by renter. Driver must hold a valid licence."
+    },
+    {
+      "oldName": "Farm Tractor with Harvest Trailer",
+      "newName": "Diesel Power Tiller with Trolley",
+      "oldPrice": 58000,
+      "newPrice": 46000,
+      "id": "eq-004",
+      "image": "https://images.unsplash.com/photo-1530267981375-f0de937f5f13",
+      "newBrand": "Sifang",
+      "newModel": "SG-15",
+      "newDescription": "15 HP diesel power tiller with a matching trolley, set up for ploughing, threshing transport and hauling harvest across Mymensingh fields.",
+      "newLocation": "Trishal, Mymensingh",
+      "newTerms": "Minimum 1 month. Fuel by renter. Operator not included."
+    },
+    {
+      "oldName": "DJI Mavic Mini Drone + 3 Batteries",
+      "newName": "Action Camera Adventure Kit",
+      "oldPrice": 3500,
+      "newPrice": 2900,
+      "id": "eq-005",
+      "image": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4",
+      "newBrand": "GoPro",
+      "newModel": "Hero 12",
+      "newDescription": "Waterproof action camera with three batteries, a chest mount and a floating grip — helmet-cam footage for rides, rivers and rooftop shoots.",
+      "newLocation": "Kolatoli, Cox's Bazar",
+      "newTerms": "Minimum 1 day. Rinse after salt water. Deposit required."
+    },
+    {
+      "oldName": "Line Array PA System (4-box hang)",
+      "newName": "Column PA Pair with Mixer",
+      "oldPrice": 12000,
+      "newPrice": 7400,
+      "id": "eq-006",
+      "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4",
+      "newBrand": "Behringer",
+      "newModel": "Eurolive B215",
+      "newDescription": "Two column loudspeakers with an 8-channel mixer and stands — clear speech and playback for courtyards, classrooms and 300-guest gatherings.",
+      "newLocation": "Satmatha, Bogura",
+      "newTerms": "Minimum 1 day. Setup guidance available. Cables included."
+    },
+    {
+      "oldName": "Demolition Excavator 13T with Breaker",
+      "newName": "Mini Excavator 3.5T",
+      "oldPrice": 21000,
+      "newPrice": 13400,
+      "id": "eq-007",
+      "image": "https://images.unsplash.com/photo-1580901368919-7738efb0f87e",
+      "newBrand": "Kubota",
+      "newModel": "U35-4",
+      "newDescription": "Compact 3.5-tonne excavator with zero tail swing for narrow lanes, basement digs and drainage work where a full-size machine cannot reach.",
+      "newLocation": "Ashulia, Dhaka",
+      "newTerms": "Minimum 1 day. Fuel by renter. Delivery not included."
+    },
+    {
+      "oldName": "Sony FX3 Cinema Cage Kit + Lenses",
+      "newName": "LED Panel Light Trio Kit",
+      "oldPrice": 4100,
+      "newPrice": 3800,
+      "id": "eq-008",
+      "image": "https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b",
+      "newBrand": "Godox",
+      "newModel": "P260C",
+      "newDescription": "Three bi-colour LED panels with stands, diffusers and battery plates — soft key light for interviews, product shoots and small sets.",
+      "newLocation": "Shyamoli, Dhaka",
+      "newTerms": "Minimum 1 day. Careful handling required."
+    },
+    {
+      "oldName": "Atlas Copco 60kVA Mobile Generator",
+      "newName": "Portable Diesel Genset 25kVA",
+      "oldPrice": 15000,
+      "newPrice": 11800,
+      "id": "eq-009",
+      "image": "https://images.unsplash.com/photo-1759692071712-adc78a8516c8",
+      "newBrand": "Kirloskar",
+      "newModel": "KG1-25",
+      "newDescription": "Towable 25 kVA diesel genset with an automatic changeover panel, sized for site offices, workshops and backup during load-shedding.",
+      "newLocation": "Keraniganj, Dhaka",
+      "newTerms": "Minimum 1 week. Fuel by renter."
+    },
+    {
+      "oldName": "Stage Truss 30ft + 8 Moving Heads",
+      "newName": "Par Can Light Set (8 pcs)",
+      "oldPrice": 9000,
+      "newPrice": 6600,
+      "id": "eq-010",
+      "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819",
+      "newBrand": "Chauvet",
+      "newModel": "SlimPAR 64",
+      "newDescription": "Eight LED par cans with a DMX controller and clamps for stage washes, facades and event backdrops.",
+      "newLocation": "Rangpur",
+      "newTerms": "Minimum 1 day. Setup assistance included."
+    },
+    {
+      "oldName": "Studio Cinema Camera with Cine Prime",
+      "newName": "Vintage 35mm Film Camera",
+      "oldPrice": 9800,
+      "newPrice": 8900,
+      "id": "eq-011",
+      "image": "https://images.unsplash.com/photo-1452587925148-ce544e77e70d",
+      "newBrand": "Canon",
+      "newModel": "AE-1",
+      "newDescription": "Fully mechanical 35mm film body with a 50mm f/1.8 — a characterful stills camera for experimental shoots and collectors.",
+      "newLocation": "Barishal",
+      "newTerms": "Minimum 1 day. Insurance required."
+    },
+    {
+      "oldName": "Site Excavator (CAT, 2019)",
+      "newName": "Used Backhoe Loader (2016)",
+      "oldPrice": 16000,
+      "newPrice": 14200,
+      "id": "eq-012",
+      "image": "https://images.unsplash.com/photo-1778066994998-97f74a5bf901",
+      "newBrand": "JCB",
+      "newModel": "3CX",
+      "newDescription": "2016 backhoe loader kept on standby for trenching and loading work; sold as seen with recent service records.",
+      "newLocation": "Natore",
+      "newTerms": "Minimum 1 day. Fuel by renter."
+    },
+    {
+      "oldName": "Atlas Copco 60kVA Generator (2nd unit)",
+      "newName": "Canopy Genset 40kVA — Backup Fleet",
+      "oldPrice": 15000,
+      "newPrice": 16900,
+      "id": "eq-013",
+      "image": "https://i.ibb.co/99PVFQhr/canopy-genset-40kva-backup.jpg",
+      "newBrand": "Cummins",
+      "newModel": "C40D5P",
+      "newDescription": "A second canopy genset added for factory backup and event power across the Narayanganj industrial belt.",
+      "newLocation": "Fatullah, Narayanganj",
+      "newTerms": "Minimum 1 week. Fuel by renter."
+    }
   ],
   "owners": [
-    { "oldName": "Karim Heavy Machinery", "newName": "Riverbank Plant", "oldEmail": "owner@karimhm.com", "newEmail": "mahfuz@riverbank-plant.test" },
-    { "oldName": "LensBox BD", "newName": "FrameCraft Studio", "oldEmail": "lensbox@bd.com", "newEmail": "tanisha@framecraft-studio.test" },
-    { "oldName": "DriveLine Logistics", "newName": "Sheba Transport", "oldEmail": "drive@line.com", "newEmail": "arman@sheba-transport.test" },
-    { "oldName": "AgroRent Rajshahi", "newName": "GreenField Agro", "oldEmail": "agro@rent.bd", "newEmail": "ripon@greenfield-agro.test" },
-    { "oldName": "PowerHub Comilla", "newName": "VoltEdge Power", "oldEmail": "power@hub.com", "newEmail": "sakib@voltedge-power.test" },
-    { "oldName": "SoundCraft BD", "newName": "StageLine Events", "oldEmail": "sound@craft.bd", "newEmail": "priya@stageline-events.test" },
-    { "oldName": "Utsab Events", "newName": "Dholaikhal Machinery", "oldEmail": "utsab@events.bd", "newEmail": "hossain@dholaikhal-machinery.test" }
+    {
+      "oldName": "Karim Heavy Machinery",
+      "newName": "Riverbank Plant",
+      "oldEmail": "owner@karimhm.com",
+      "newEmail": "mahfuz@riverbank-plant.test"
+    },
+    {
+      "oldName": "LensBox BD",
+      "newName": "FrameCraft Studio",
+      "oldEmail": "lensbox@bd.com",
+      "newEmail": "tanisha@framecraft-studio.test"
+    },
+    {
+      "oldName": "DriveLine Logistics",
+      "newName": "Sheba Transport",
+      "oldEmail": "drive@line.com",
+      "newEmail": "arman@sheba-transport.test"
+    },
+    {
+      "oldName": "AgroRent Rajshahi",
+      "newName": "GreenField Agro",
+      "oldEmail": "agro@rent.bd",
+      "newEmail": "ripon@greenfield-agro.test"
+    },
+    {
+      "oldName": "PowerHub Comilla",
+      "newName": "VoltEdge Power",
+      "oldEmail": "power@hub.com",
+      "newEmail": "sakib@voltedge-power.test"
+    },
+    {
+      "oldName": "SoundCraft BD",
+      "newName": "StageLine Events",
+      "oldEmail": "sound@craft.bd",
+      "newEmail": "priya@stageline-events.test"
+    },
+    {
+      "oldName": "Utsab Events",
+      "newName": "Dholaikhal Machinery",
+      "oldEmail": "utsab@events.bd",
+      "newEmail": "hossain@dholaikhal-machinery.test"
+    }
   ],
   "customers": [
-    { "oldName": "Rafi Chowdhury", "newName": "Nabil Rahman", "oldEmail": "rafi@mail.com", "newEmail": "nabil@equipra-demo.test" },
-    { "oldName": "Tanvir Ahmed", "newName": "Siam Hossain", "oldEmail": "tanvir@build.bd", "newEmail": "siam@equipra-demo.test" },
-    { "oldName": "Mehedi Hasan", "newName": "Rifat Karim", "oldEmail": "mehedi.h@mail.com", "newEmail": "rifat@equipra-demo.test" },
-    { "oldName": "Sabbir Rahman", "newName": "Joyonto Das", "oldEmail": "sabbir@infra.bd", "newEmail": "joyonto@equipra-demo.test" },
-    { "oldName": "Nusrat Jahan", "newName": "Mim Akter", "oldEmail": "nusrat.j@mail.com", "newEmail": "mim@equipra-demo.test" },
-    { "oldName": "Farhan Kabir", "newName": "Asif Mahmud", "oldEmail": "farhan@frame.bd", "newEmail": "asif@equipra-demo.test" },
-    { "oldName": "Sadia Islam", "newName": "Tania Sultana", "oldEmail": "sadia.farm@mail.com", "newEmail": "tania@equipra-demo.test" }
+    {
+      "oldName": "Rafi Chowdhury",
+      "newName": "Nabil Rahman",
+      "oldEmail": "rafi@mail.com",
+      "newEmail": "nabil@equipra-demo.test"
+    },
+    {
+      "oldName": "Tanvir Ahmed",
+      "newName": "Siam Hossain",
+      "oldEmail": "tanvir@build.bd",
+      "newEmail": "siam@equipra-demo.test"
+    },
+    {
+      "oldName": "Mehedi Hasan",
+      "newName": "Rifat Karim",
+      "oldEmail": "mehedi.h@mail.com",
+      "newEmail": "rifat@equipra-demo.test"
+    },
+    {
+      "oldName": "Sabbir Rahman",
+      "newName": "Joyonto Das",
+      "oldEmail": "sabbir@infra.bd",
+      "newEmail": "joyonto@equipra-demo.test"
+    },
+    {
+      "oldName": "Nusrat Jahan",
+      "newName": "Mim Akter",
+      "oldEmail": "nusrat.j@mail.com",
+      "newEmail": "mim@equipra-demo.test"
+    },
+    {
+      "oldName": "Farhan Kabir",
+      "newName": "Asif Mahmud",
+      "oldEmail": "farhan@frame.bd",
+      "newEmail": "asif@equipra-demo.test"
+    },
+    {
+      "oldName": "Sadia Islam",
+      "newName": "Tania Sultana",
+      "oldEmail": "sadia.farm@mail.com",
+      "newEmail": "tania@equipra-demo.test"
+    }
   ],
   "bookings": [
-    { "id": "bk-001", "totalAmount": 46000 },
-    { "id": "bk-002", "totalAmount": 10800 },
-    { "id": "bk-003", "totalAmount": 14800 },
-    { "id": "bk-004", "totalAmount": 7400 },
-    { "id": "bk-005", "totalAmount": 21600 },
-    { "id": "bk-006", "totalAmount": 67000 },
-    { "id": "bk-007", "totalAmount": 5800 },
-    { "id": "bk-008", "totalAmount": 59250 },
-    { "id": "bk-009", "totalAmount": 59250 },
-    { "id": "bk-010", "totalAmount": 27500 }
+    {
+      "id": "bk-001",
+      "totalAmount": 46000
+    },
+    {
+      "id": "bk-002",
+      "totalAmount": 10800
+    },
+    {
+      "id": "bk-003",
+      "totalAmount": 14800
+    },
+    {
+      "id": "bk-004",
+      "totalAmount": 7400
+    },
+    {
+      "id": "bk-005",
+      "totalAmount": 21600
+    },
+    {
+      "id": "bk-006",
+      "totalAmount": 67000
+    },
+    {
+      "id": "bk-007",
+      "totalAmount": 5800
+    },
+    {
+      "id": "bk-008",
+      "totalAmount": 59250
+    },
+    {
+      "id": "bk-009",
+      "totalAmount": 59250
+    },
+    {
+      "id": "bk-010",
+      "totalAmount": 27500
+    }
   ]
 }

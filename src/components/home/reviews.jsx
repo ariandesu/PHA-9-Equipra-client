@@ -82,7 +82,7 @@ export default function Reviews() {
           <span aria-hidden="true">●</span> CUSTOMER REVIEWS
         </p>
         <h2 className="text-3xl sm:text-5xl lg:text-[52px] font-bold tracking-[-0.045em] bg-gradient-to-b from-foreground to-muted bg-clip-text text-transparent leading-[1.05]">
-          Hauled, filmed, powered — rated 4.9.
+          Hauled, filmed, powered — rated 4.8.
         </h2>
       </div>
 
