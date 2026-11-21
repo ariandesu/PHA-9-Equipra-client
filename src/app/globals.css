@@ -108,6 +108,14 @@ body {
   }
 }
 
+/* Theme toggle: the circular clip-path is the only transition, so the browser's
+   default cross-fade must not run underneath it. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 @media print {
   header,
   footer {
