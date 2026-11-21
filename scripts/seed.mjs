@@ -53,22 +53,22 @@ process.env.DB_NAME = dbName;
 
 const SEED_ACCOUNTS = [
   { email: 'admin@equipra.app', name: 'Sumaiya Akter', password: process.env.SEED_ADMIN_PASSWORD, role: 'admin' },
-  { email: 'owner@karimhm.com', name: 'Karim Heavy Machinery', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
-  { email: 'lensbox@bd.com', name: 'LensBox BD', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
-  { email: 'rafi@mail.com', name: 'Rafi Chowdhury', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
-  { email: 'tanvir@build.bd', name: 'Tanvir Ahmed', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'mahfuz@riverbank-plant.test', name: 'Riverbank Plant', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'tanisha@framecraft-studio.test', name: 'FrameCraft Studio', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'nabil@equipra-demo.test', name: 'Nabil Rahman', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'siam@equipra-demo.test', name: 'Siam Hossain', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
   // Counterparts referenced by the demo bookings/favorites so those rows can be
   // seeded too (they appear in the customer, owner and admin booking tables).
-  { email: 'sadia.farm@mail.com', name: 'Sadia Islam', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
-  { email: 'farhan@frame.bd', name: 'Farhan Kabir', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
-  { email: 'nusrat.j@mail.com', name: 'Nusrat Jahan', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
-  { email: 'mehedi.h@mail.com', name: 'Mehedi Hasan', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
-  { email: 'sabbir@infra.bd', name: 'Sabbir Rahman', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
-  { email: 'sound@craft.bd', name: 'SoundCraft BD', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
-  { email: 'power@hub.com', name: 'PowerHub Comilla', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
-  { email: 'drive@line.com', name: 'DriveLine Logistics', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
-  { email: 'agro@rent.bd', name: 'AgroRent Rajshahi', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
-  { email: 'utsab@events.bd', name: 'Utsab Events', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'tania@equipra-demo.test', name: 'Tania Sultana', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'asif@equipra-demo.test', name: 'Asif Mahmud', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'mim@equipra-demo.test', name: 'Mim Akter', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'rifat@equipra-demo.test', name: 'Rifat Karim', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'joyonto@equipra-demo.test', name: 'Joyonto Das', password: process.env.SEED_USER_PASSWORD, role: 'customer' },
+  { email: 'priya@stageline-events.test', name: 'StageLine Events', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'sakib@voltedge-power.test', name: 'VoltEdge Power', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'arman@sheba-transport.test', name: 'Sheba Transport', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'ripon@greenfield-agro.test', name: 'GreenField Agro', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
+  { email: 'hossain@dholaikhal-machinery.test', name: 'Dholaikhal Machinery', password: process.env.SEED_USER_PASSWORD, role: 'owner' },
 ];
 
 const client = new MongoClient(process.env.MONGODB_URI);
@@ -116,13 +116,13 @@ async function main() {
   // Equipment rows come from the same data file the mock source uses, so the
   // demo catalog is identical in both modes. Statuses are preserved verbatim.
   const ownerByMockId = {
-    o1: usersByEmail['owner@karimhm.com'],
-    o2: usersByEmail['lensbox@bd.com'],
-    o3: usersByEmail['drive@line.com'],
-    o4: usersByEmail['agro@rent.bd'],
-    o5: usersByEmail['power@hub.com'],
-    o6: usersByEmail['sound@craft.bd'],
-    o7: usersByEmail['utsab@events.bd'],
+    o1: usersByEmail['mahfuz@riverbank-plant.test'],
+    o2: usersByEmail['tanisha@framecraft-studio.test'],
+    o3: usersByEmail['arman@sheba-transport.test'],
+    o4: usersByEmail['ripon@greenfield-agro.test'],
+    o5: usersByEmail['sakib@voltedge-power.test'],
+    o6: usersByEmail['priya@stageline-events.test'],
+    o7: usersByEmail['hossain@dholaikhal-machinery.test'],
   };
 
   for (const row of demoEquipment) {
@@ -254,7 +254,7 @@ async function main() {
   }
 
   for (const favorite of demoFavorites) {
-    const customer = await db.collection('user').findOne({ email: 'rafi@mail.com' });
+    const customer = await db.collection('user').findOne({ email: 'nabil@equipra-demo.test' });
     if (!customer) continue;
 
     const source = demoEquipment.find((row) => row.id === favorite.equipmentId);

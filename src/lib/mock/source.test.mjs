@@ -20,7 +20,7 @@ function bookingBody(extra = {}) {
   };
 }
 
-test('the mock owner is Karim Heavy Machinery (o1)', async () => {
+test('the mock owner is Riverbank Plant (o1)', async () => {
   const mine = await mockSource.myEquipment({});
   assert.equal(mine.total, 3);
   assert.ok(mine.items.every((item) => item.owner.id === 'o1'));
@@ -65,16 +65,16 @@ test('getFeatured returns eq-001 through eq-006 in that exact order', async () =
   );
 });
 
-test('createEquipment stamps the owner as Karim (o1)', async () => {
+test('createEquipment stamps the owner as Riverbank (o1)', async () => {
   const created = await mockSource.createEquipment({
     name: 'Test Wheel Loader',
     category: 'Construction Equipment',
-    location: 'Gazipur, Dhaka',
-    price: 12000,
+    location: 'Shipyard Road, Khulna',
+    price: 13000,
     rentalType: 'daily',
     quantity: 1,
   });
   assert.equal(created.data.owner.id, 'o1');
-  assert.equal(created.data.owner.name, 'Karim Heavy Machinery');
+  assert.equal(created.data.owner.name, 'Riverbank Plant');
   assert.equal(created.data.status, 'pending');
 });

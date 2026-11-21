@@ -1,0 +1,47 @@
+{
+  "equipment": [
+    { "oldName": "Hydraulic Excavator 20T — CAT 320", "newName": "Crawler Bulldozer 15T — SD16", "oldPrice": 18500, "newPrice": 19750 },
+    { "oldName": "Cinema Camera Shoulder Rig + 7\" Monitor", "newName": "Mirrorless Video Kit with Gimbal", "oldPrice": 6200, "newPrice": 5400 },
+    { "oldName": "Ford E-Series Cargo Van (1.5T)", "newName": "Mini Covered Truck 1T", "oldPrice": 32000, "newPrice": 27500 },
+    { "oldName": "Farm Tractor with Harvest Trailer", "newName": "Diesel Power Tiller with Trolley", "oldPrice": 58000, "newPrice": 46000 },
+    { "oldName": "DJI Mavic Mini Drone + 3 Batteries", "newName": "Action Camera Adventure Kit", "oldPrice": 3500, "newPrice": 2900 },
+    { "oldName": "Line Array PA System (4-box hang)", "newName": "Column PA Pair with Mixer", "oldPrice": 12000, "newPrice": 7400 },
+    { "oldName": "Demolition Excavator 13T with Breaker", "newName": "Mini Excavator 3.5T", "oldPrice": 21000, "newPrice": 13400 },
+    { "oldName": "Sony FX3 Cinema Cage Kit + Lenses", "newName": "LED Panel Light Trio Kit", "oldPrice": 4100, "newPrice": 3800 },
+    { "oldName": "Atlas Copco 60kVA Mobile Generator", "newName": "Portable Diesel Genset 25kVA", "oldPrice": 15000, "newPrice": 11800 },
+    { "oldName": "Stage Truss 30ft + 8 Moving Heads", "newName": "Par Can Light Set (8 pcs)", "oldPrice": 9000, "newPrice": 6600 },
+    { "oldName": "Studio Cinema Camera with Cine Prime", "newName": "Vintage 35mm Film Camera", "oldPrice": 9800, "newPrice": 8900 },
+    { "oldName": "Site Excavator (CAT, 2019)", "newName": "Used Backhoe Loader (2016)", "oldPrice": 16000, "newPrice": 14200 },
+    { "oldName": "Atlas Copco 60kVA Generator (2nd unit)", "newName": "Canopy Genset 40kVA — Backup Fleet", "oldPrice": 15000, "newPrice": 16900 }
+  ],
+  "owners": [
+    { "oldName": "Karim Heavy Machinery", "newName": "Riverbank Plant", "oldEmail": "owner@karimhm.com", "newEmail": "mahfuz@riverbank-plant.test" },
+    { "oldName": "LensBox BD", "newName": "FrameCraft Studio", "oldEmail": "lensbox@bd.com", "newEmail": "tanisha@framecraft-studio.test" },
+    { "oldName": "DriveLine Logistics", "newName": "Sheba Transport", "oldEmail": "drive@line.com", "newEmail": "arman@sheba-transport.test" },
+    { "oldName": "AgroRent Rajshahi", "newName": "GreenField Agro", "oldEmail": "agro@rent.bd", "newEmail": "ripon@greenfield-agro.test" },
+    { "oldName": "PowerHub Comilla", "newName": "VoltEdge Power", "oldEmail": "power@hub.com", "newEmail": "sakib@voltedge-power.test" },
+    { "oldName": "SoundCraft BD", "newName": "StageLine Events", "oldEmail": "sound@craft.bd", "newEmail": "priya@stageline-events.test" },
+    { "oldName": "Utsab Events", "newName": "Dholaikhal Machinery", "oldEmail": "utsab@events.bd", "newEmail": "hossain@dholaikhal-machinery.test" }
+  ],
+  "customers": [
+    { "oldName": "Rafi Chowdhury", "newName": "Nabil Rahman", "oldEmail": "rafi@mail.com", "newEmail": "nabil@equipra-demo.test" },
+    { "oldName": "Tanvir Ahmed", "newName": "Siam Hossain", "oldEmail": "tanvir@build.bd", "newEmail": "siam@equipra-demo.test" },
+    { "oldName": "Mehedi Hasan", "newName": "Rifat Karim", "oldEmail": "mehedi.h@mail.com", "newEmail": "rifat@equipra-demo.test" },
+    { "oldName": "Sabbir Rahman", "newName": "Joyonto Das", "oldEmail": "sabbir@infra.bd", "newEmail": "joyonto@equipra-demo.test" },
+    { "oldName": "Nusrat Jahan", "newName": "Mim Akter", "oldEmail": "nusrat.j@mail.com", "newEmail": "mim@equipra-demo.test" },
+    { "oldName": "Farhan Kabir", "newName": "Asif Mahmud", "oldEmail": "farhan@frame.bd", "newEmail": "asif@equipra-demo.test" },
+    { "oldName": "Sadia Islam", "newName": "Tania Sultana", "oldEmail": "sadia.farm@mail.com", "newEmail": "tania@equipra-demo.test" }
+  ],
+  "bookings": [
+    { "id": "bk-001", "totalAmount": 46000 },
+    { "id": "bk-002", "totalAmount": 10800 },
+    { "id": "bk-003", "totalAmount": 14800 },
+    { "id": "bk-004", "totalAmount": 7400 },
+    { "id": "bk-005", "totalAmount": 21600 },
+    { "id": "bk-006", "totalAmount": 67000 },
+    { "id": "bk-007", "totalAmount": 5800 },
+    { "id": "bk-008", "totalAmount": 59250 },
+    { "id": "bk-009", "totalAmount": 59250 },
+    { "id": "bk-010", "totalAmount": 27500 }
+  ]
+}
