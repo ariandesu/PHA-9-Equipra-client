@@ -54,9 +54,7 @@ export default function AdminOverview() {
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-[22px] border border-border bg-surface p-16 text-center">
-        <LoadError title="Couldn&apos;t load analytics" onRetry={refetch} />
-      </div>
+      <LoadError title="Couldn&apos;t load analytics" onRetry={refetch} />
     );
   }
 

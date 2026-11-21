@@ -29,7 +29,7 @@ export default function ActiveFilters({
           </span>
         ) : (
           <span className="font-medium text-foreground">
-            Showing {itemsCount > 0 ? `1&ndash;${itemsCount}` : 0} of {total}
+            Showing {itemsCount > 0 ? `1–${itemsCount}` : 0} of {total}
           </span>
         )}
 
