@@ -33,6 +33,10 @@ async function getEquipment(id) {
   return request(api.get(`/equipment/${id}`));
 }
 
+async function getAvailability(id, start, end) {
+  return request(api.get(`/equipment/${id}/availability`, { params: { start, end } }));
+}
+
 async function getStats() {
   return request(api.get('/stats/public'));
 }
@@ -139,6 +143,7 @@ export const apiSource = {
   getFeatured,
   getCategories,
   getEquipment,
+  getAvailability,
   getStats,
   listFavorites,
   getFavoriteIds,

@@ -4,7 +4,10 @@ import { Check } from "lucide-react";
 import MovingBorder from "@/components/fx/moving-border";
 import { formatBDT } from "@/lib/money";
 
-export default function BookingSummary({ item, quote, quantity, onSubmit }) {
+export default function BookingSummary({ item, quote, quantity, onSubmit, availability, submitDisabled = false }) {
+  const availabilityState = availability?.state || "idle";
+  const available = availability?.available ?? 0;
+  const total = availability?.total ?? item.quantity;
   return (
     <div className="relative md:col-span-5 flex flex-col justify-between border-t md:border-t-0 md:border-l border-border bg-surface/50 p-6 sm:p-8 overflow-hidden text-left">
       <div aria-hidden="true" className="fx-dots pointer-events-none absolute inset-0 opacity-40" />
@@ -33,9 +36,28 @@ export default function BookingSummary({ item, quote, quantity, onSubmit }) {
           <span className="font-mono text-2xl font-bold text-accent">{formatBDT(quote.totalAmount)}</span>
         </div>
 
-        <p className="flex items-center gap-1.5 text-xs text-success pt-1">
-          <Check className="size-3.5" aria-hidden="true" />
-          <span>{item.quantity} units free for selected dates</span>
+        <p aria-live="polite" className="flex items-center gap-1.5 text-xs pt-1">
+          {availabilityState === "loading" && (
+            <span className="text-muted">Checking availability…</span>
+          )}
+          {availabilityState === "success" && available > 0 && (
+            <>
+              <Check className="size-3.5" aria-hidden="true" />
+              <span className="text-success">{available} of {total} units free for these dates</span>
+            </>
+          )}
+          {availabilityState === "success" && available === 0 && (
+            <span className="text-danger">No units free for these dates. Try other dates.</span>
+          )}
+          {availabilityState === "error" && (
+            <span className="text-muted">Couldn&apos;t check availability. It&apos;s confirmed again at checkout.</span>
+          )}
+          {availabilityState === "idle" && (
+            <>
+              <Check className="size-3.5" aria-hidden="true" />
+              <span className="text-success">{item.quantity} units free for selected dates</span>
+            </>
+          )}
         </p>
       </div>
 
@@ -44,7 +66,8 @@ export default function BookingSummary({ item, quote, quantity, onSubmit }) {
           <button
             type="button"
             onClick={onSubmit}
-            className="flex h-11 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90"
+            disabled={submitDisabled}
+            className="flex h-11 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Continue to secure payment
           </button>

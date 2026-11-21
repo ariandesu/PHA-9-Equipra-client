@@ -26,6 +26,21 @@ export function useEquipment(id) {
   });
 }
 
+const THIRTY_SECONDS = 30 * 1000;
+
+export function useAvailability(id, start, end) {
+  return useQuery({
+    queryKey: ['availability', id, start, end],
+    queryFn: () => apiSource.getAvailability(id, start, end),
+    enabled: Boolean(id && start && end && start >= todayUTC() && end >= start),
+    staleTime: THIRTY_SECONDS,
+  });
+}
+
+function todayUTC() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export function useFeatured() {
   return useQuery({
     queryKey: ['equipment', 'featured'],

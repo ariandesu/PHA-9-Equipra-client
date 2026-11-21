@@ -10,7 +10,7 @@ import MultiStepLoader from "@/components/fx/multi-step-loader";
 import BookingForm from "@/components/details/booking-form";
 import BookingSummary from "@/components/details/booking-summary";
 import { quoteBooking } from "@/lib/pricing";
-import { useCreateBooking, useCreateCheckout } from "@/lib/data/hooks";
+import { useAvailability, useCreateBooking, useCreateCheckout } from "@/lib/data/hooks";
 
 const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
 
@@ -35,12 +35,22 @@ export default function BookingModal({ item, open, onOpenChange }) {
   const [notes, setNotes] = useState("Site gate opens at 7am. Please call 30 minutes before arrival.");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const availabilityQuery = useAvailability(item.id, startDate, endDate);
+  const availabilityData = availabilityQuery.data?.data;
+  const datesValid = Boolean(startDate) && Boolean(endDate) && startDate >= todayUTC() && endDate >= startDate;
+  let availabilityState = availabilityData ? "success" : "loading";
+  if (!datesValid) availabilityState = "idle";
+  else if (availabilityQuery.isError) availabilityState = "error";
+  const maxQty = availabilityState === "success" ? availabilityData.available : item.quantity;
+  const effectiveQty = maxQty >= 1 ? Math.min(Math.max(quantity, 1), maxQty) : quantity;
+  const soldOut = maxQty === 0;
+
   const quote = quoteBooking({
     startDate: startDate || todayUTC(),
     endDate: endDate || startDate || todayUTC(),
     rentalType: item.rentalType,
     price: item.price,
-    quantity,
+    quantity: effectiveQty,
   });
 
   async function handleSubmit(e) {
@@ -50,7 +60,7 @@ export default function BookingModal({ item, open, onOpenChange }) {
     const schema = z.object({
       startDate: z.string().min(1, "Start date is required"),
       endDate: z.string().min(1, "End date is required"),
-      quantity: z.number().int().min(1).max(item.quantity, `Max available is ${item.quantity}`),
+      quantity: z.number().int().min(1).max(maxQty, `Only ${maxQty} unit(s) free for these dates`),
       phone: z.string().regex(BD_PHONE_REGEX, "Enter a valid Bangladesh phone number"),
       address: z.string().trim().min(3, "Please enter a complete delivery address"),
       notes: z.string().optional(),
@@ -65,7 +75,7 @@ export default function BookingModal({ item, open, onOpenChange }) {
     const parsed = schema.safeParse({
       startDate,
       endDate,
-      quantity,
+      quantity: effectiveQty,
       phone: cleanPhone,
       address,
       notes,
@@ -82,7 +92,7 @@ export default function BookingModal({ item, open, onOpenChange }) {
         equipmentId: item.id,
         startDate,
         endDate,
-        quantity,
+        quantity: effectiveQty,
         phone: cleanPhone,
         address: address.trim(),
         notes: notes.trim(),
@@ -155,8 +165,9 @@ export default function BookingModal({ item, open, onOpenChange }) {
             setStartDate={setStartDate}
             endDate={endDate}
             setEndDate={setEndDate}
-            quantity={quantity}
+            quantity={effectiveQty}
             setQuantity={setQuantity}
+            maxQty={maxQty}
             phone={phone}
             setPhone={setPhone}
             address={address}
@@ -170,8 +181,14 @@ export default function BookingModal({ item, open, onOpenChange }) {
           <BookingSummary
             item={item}
             quote={quote}
-            quantity={quantity}
+            quantity={effectiveQty}
             onSubmit={() => document.getElementById("submit-booking-btn")?.click()}
+            availability={{
+              state: availabilityState,
+              available: availabilityData?.available ?? 0,
+              total: availabilityData?.total ?? item.quantity,
+            }}
+            submitDisabled={soldOut}
           />
         </div>
       )}

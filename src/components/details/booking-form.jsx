@@ -10,6 +10,7 @@ export default function BookingForm({
   setEndDate,
   quantity,
   setQuantity,
+  maxQty,
   phone,
   setPhone,
   address,
@@ -53,7 +54,7 @@ export default function BookingForm({
 
       <div className="flex items-center justify-between border-y border-border py-3">
         <label htmlFor="booking-quantity" className="text-xs font-medium text-muted">Quantity</label>
-        <QuantityInput id="booking-quantity" value={quantity} min={1} max={item.quantity} onChange={setQuantity} />
+        <QuantityInput id="booking-quantity" value={quantity} min={1} max={maxQty ?? item.quantity} onChange={setQuantity} />
       </div>
 
       <div>
