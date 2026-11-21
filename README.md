@@ -30,6 +30,15 @@ Created by `npm run seed` (passwords come from `SEED_ADMIN_PASSWORD` / `SEED_USE
 
 **Admins:** platform analytics, all-users management (role change with confirm, remove; cannot change/remove self), equipment moderation (approve/reject/update/delete), all-rentals with status changes.
 
+## Screenshots
+
+![Home](docs/screenshots/01-home-desktop-1440.png)
+![All equipment](docs/screenshots/04-all-equipment.png)
+![Equipment details](docs/screenshots/05-equipment-details.png)
+![My rentals](docs/screenshots/09-customer-my-rentals.png)
+![Owner overview](docs/screenshots/12-owner-overview-analytics.png)
+![Admin overview](docs/screenshots/15-admin-overview.png)
+
 ## Packages
 
 - `next` — App Router (route groups, server components, `src/proxy.js` guards).
@@ -84,5 +93,5 @@ Only `equipra_dev` and `equipra` are accepted as seed DB names; anything else re
 
 1. "Continue to Stripe payment" creates a reservation (`pending` + `unpaid`, 30-minute hold) and a Stripe Checkout Session.
 2. The booking is confirmed only after successful payment: Stripe returns to the success page, which calls `/payments/confirm` (idempotent — safe on reload). The Stripe webhook (`/payments/webhook`, signature-verified) confirms it too.
-3. Until the server has `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` set, checkout returns `503 {"message":"Payments are not configured"}` and the booking modal reports that gracefully instead of failing.
+3. In production both paths are active: the success page calls `/payments/confirm`, and the Stripe webhook (`checkout.session.completed`) confirms the booking even if the customer closes the tab. Without Stripe keys the API returns `503 {"message":"Payments are not configured"}` and the booking modal shows that message.
 4. After the end date passes, paid + confirmed bookings flip to `completed`; expired unpaid holds become `cancelled` (hourly housekeeping + daily serverless cron).
