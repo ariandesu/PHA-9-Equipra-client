@@ -20,7 +20,7 @@ export default function LogoCloud() {
     <section className="relative w-full overflow-hidden py-10 sm:py-14 text-center">
       <div className="mx-auto max-w-[1100px] px-4 pb-6">
         <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
-          TRUSTED BY 300+ VERIFIED EQUIPMENT OWNERS
+          TRUSTED BY VERIFIED EQUIPMENT OWNERS
         </p>
       </div>
 
