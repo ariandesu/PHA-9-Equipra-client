@@ -70,7 +70,7 @@ export default function AuthShell({ children }) {
 
           <div className="relative flex h-full flex-col justify-end gap-4 p-10">
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57]">
-              1,240+ approved listings
+              Admin-approved listings
             </p>
             <p className="max-w-sm bg-gradient-to-b from-foreground to-muted bg-clip-text text-4xl font-bold leading-tight tracking-[-0.045em] text-transparent">
               One account. Rent gear or list your own.

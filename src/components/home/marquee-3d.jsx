@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { useStats } from "@/lib/data/hooks";
 import "@/components/fx/fx.css";
 
 const PHOTO_URLS = [
@@ -29,6 +30,8 @@ const COLUMNS = Array.from({ length: 9 }, (_, c) =>
 
 export default function Marquee3D() {
   const reduced = useReducedMotion();
+  const { data: statsData } = useStats();
+  const listings = statsData?.data?.listings;
 
   return (
     <section className="relative w-full py-16 sm:py-24">
@@ -104,7 +107,7 @@ export default function Marquee3D() {
               <span aria-hidden="true">●</span> THE WHOLE YARD
             </p>
             <h2 className="text-3xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-foreground leading-[1.05]">
-              1,240+ machines.
+              {typeof listings === "number" ? `${listings.toLocaleString("en-IN")} machines.` : "Every machine."}
               <br />
               <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
                 One marketplace.
