@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 export default function OwnerCTA() {
   return (
     <section className="relative w-full overflow-hidden">
-      <LampContainer>
-        <BackgroundBeams />
-
+      <BackgroundBeams className="z-0" />
+      <LampContainer className="z-10">
         <div className="relative z-10 flex max-w-2xl flex-col items-center text-center">
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-primary dark:text-[#FF8A57] flex items-center gap-1.5 mb-3">
             <span aria-hidden="true">●</span> FOR EQUIPMENT OWNERS

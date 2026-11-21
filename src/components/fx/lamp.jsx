@@ -72,7 +72,7 @@ export default function LampContainer({ children, className = "" }) {
         <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-background" />
       </div>
 
-      <div className="relative z-50 -mt-24 flex flex-col items-center px-4">
+      <div className="relative z-50 -mt-24 flex flex-col items-center px-4 pb-20 sm:pb-28">
         {children}
       </div>
     </div>

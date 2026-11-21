@@ -8,12 +8,12 @@ const paths = [
   "M120 80 Q 240 20 360 80",
 ];
 
-export default function BackgroundBeams() {
+export default function BackgroundBeams({ className = "" }) {
   const reduced = useReducedMotion();
 
   return (
     <div
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
       aria-hidden="true"
     >
       <svg
