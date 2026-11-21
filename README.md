@@ -32,12 +32,23 @@ Created by `npm run seed` (passwords come from `SEED_ADMIN_PASSWORD` / `SEED_USE
 
 ## Screenshots
 
+Light:
+
 ![Home](docs/screenshots/01-home-desktop-1440.png)
 ![All equipment](docs/screenshots/04-all-equipment.png)
 ![Equipment details](docs/screenshots/05-equipment-details.png)
 ![My rentals](docs/screenshots/09-customer-my-rentals.png)
 ![Owner overview](docs/screenshots/12-owner-overview-analytics.png)
 ![Admin overview](docs/screenshots/15-admin-overview.png)
+
+Dark:
+
+![Home dark](docs/screenshots/01-home-desktop-1440-dark.png)
+![All equipment dark](docs/screenshots/04-all-equipment-dark.png)
+![Equipment details dark](docs/screenshots/05-equipment-details-dark.png)
+![My rentals dark](docs/screenshots/09-customer-my-rentals-dark.png)
+![Owner overview dark](docs/screenshots/12-owner-overview-analytics-dark.png)
+![Admin overview dark](docs/screenshots/15-admin-overview-dark.png)
 
 ## Packages
 
