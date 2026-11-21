@@ -153,4 +153,8 @@ body {
   [data-receipt-clip] {
     overflow: visible !important;
   }
+
+  [data-receipt-scale] {
+    transform: none !important;
+  }
 }

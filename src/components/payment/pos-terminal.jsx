@@ -19,10 +19,11 @@ const STATUS_CONFIG = {
   error: { text: "DECLINED", tone: "text-[#f87171]" },
 };
 
-export default function POSTerminal({ status = "idle" }) {
+export default function POSTerminal({ status = "idle", scale = 1 }) {
   const reduced = useReducedMotion();
   const isConfirming = status === "confirming";
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.idle;
+  const width = TERMINAL_WIDTH * scale;
 
   return (
     <motion.div
@@ -33,7 +34,7 @@ export default function POSTerminal({ status = "idle" }) {
           : { duration: 0.15 }
       }
       className="relative z-10"
-      style={{ width: TERMINAL_WIDTH }}
+      style={{ width: width }}
     >
       <Image
         src="/images/pos-terminal.webp"
@@ -41,7 +42,7 @@ export default function POSTerminal({ status = "idle" }) {
         width={374}
         height={600}
         priority
-        sizes="220px"
+        sizes={`${Math.round(width)}px`}
         className={cn(
           "h-auto w-full select-none",
           "drop-shadow-[0_10px_18px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_32px_rgba(0,0,0,0.65)]"
@@ -70,9 +71,10 @@ export default function POSTerminal({ status = "idle" }) {
               : { duration: 0.15 }
           }
           className={cn(
-            "px-1 text-center font-mono text-[9px] font-semibold leading-tight tracking-[0.06em]",
+            "px-1 text-center font-mono font-semibold leading-tight tracking-[0.06em]",
             config.tone
           )}
+          style={{ fontSize: Math.max(7, 9 * scale) }}
         >
           {config.text}
         </motion.span>

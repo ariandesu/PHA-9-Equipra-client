@@ -3,10 +3,8 @@
 import { useCallback, useState } from "react";
 import POSTerminal, { SLOT, TERMINAL_ASPECT, TERMINAL_WIDTH } from "@/components/payment/pos-terminal";
 import ReceiptPaper from "@/components/payment/receipt-paper";
+import { usePrinterScale } from "@/components/payment/use-printer-scale";
 import { formatBDT } from "@/lib/money";
-
-const TERMINAL_HEIGHT = TERMINAL_WIDTH * TERMINAL_ASPECT;
-const SLOT_OFFSET = (SLOT.y / 100) * TERMINAL_HEIGHT;
 
 export default function ReceiptPrinter({
   status,
@@ -19,11 +17,17 @@ export default function ReceiptPrinter({
   const total = booking?.totalAmount ?? (isDemo ? 55500 : null);
   const isConfirmed = status === "confirmed";
 
+  const scale = usePrinterScale();
+  const terminalWidth = TERMINAL_WIDTH * scale;
+  const terminalHeight = terminalWidth * TERMINAL_ASPECT;
+  const slotOffset = (SLOT.y / 100) * terminalHeight;
+
   const [paperHeight, setPaperHeight] = useState(0);
 
   // Measure the receipt once it mounts so the space above the terminal matches
   // what actually prints; without it the bare card would jump and the torn top
-  // edge could be clipped by the card's rounded frame.
+  // edge could be clipped by the card's rounded frame. offsetHeight ignores the
+  // visual scale, so the reserved space multiplies by scale explicitly.
   const measurePaper = useCallback((node) => {
     if (!node) return undefined;
     const sync = () => setPaperHeight(node.offsetHeight);
@@ -33,15 +37,16 @@ export default function ReceiptPrinter({
     return () => observer.disconnect();
   }, []);
 
-  const reserved = isConfirmed && paperHeight ? Math.max(paperHeight - SLOT_OFFSET, 0) : 0;
-  const clipHeight = Math.max(paperHeight, TERMINAL_HEIGHT);
+  const scaledPaper = paperHeight * scale;
+  const reserved = isConfirmed && paperHeight ? Math.max(scaledPaper - slotOffset, 0) : 0;
+  const clipHeight = Math.max(scaledPaper, terminalHeight);
 
   return (
     <div className="flex w-full flex-col items-center">
-      <div className="relative flex flex-col items-center" style={{ width: TERMINAL_WIDTH }}>
+      <div className="relative flex flex-col items-center" style={{ width: terminalWidth }}>
         <div aria-hidden="true" style={{ height: reserved, width: "100%" }} />
 
-        <POSTerminal status={status} />
+        <POSTerminal status={status} scale={scale} />
 
         {isConfirmed && (
           <div
@@ -50,12 +55,18 @@ export default function ReceiptPrinter({
             style={{
               left: `${SLOT.left}%`,
               width: `calc(${SLOT.right - SLOT.left}% - 6px)`,
-              bottom: TERMINAL_HEIGHT - SLOT_OFFSET,
+              bottom: terminalHeight - slotOffset,
               height: clipHeight,
             }}
           >
-            {/* Bottom-anchored inside the clip so the paper rises out of the slot. */}
-            <div className="absolute inset-x-0 bottom-0 flex justify-center" ref={measurePaper}>
+            {/* Bottom-anchored and scaled about the bottom edge, so the paper
+                rises out of the slot while its layout stays at 150px. */}
+            <div
+              data-receipt-scale
+              className="absolute inset-x-0 bottom-0 flex justify-center"
+              ref={measurePaper}
+              style={{ transform: `scale(${scale})`, transformOrigin: "50% 100%" }}
+            >
               <ReceiptPaper
                 booking={booking}
                 sessionId={sessionId}
