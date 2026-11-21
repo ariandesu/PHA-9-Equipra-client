@@ -6,6 +6,15 @@ import { Check } from "lucide-react";
 import ContainerScroll from "@/components/fx/container-scroll";
 import { formatBDT } from "@/lib/money";
 
+const SHOWCASE_ITEM = {
+  name: "Crawler Bulldozer 15T — SD16",
+  location: "Shipyard Road, Khulna",
+  pricePerDay: 19750,
+  units: 2,
+  days: 3,
+  quantity: 1,
+};
+
 const HERO_PHOTO =
   "https://images.unsplash.com/photo-1778066994998-97f74a5bf901?w=1200&q=75&auto=format&fit=crop";
 
@@ -21,7 +30,7 @@ export default function Showcase() {
             <span className="size-3 rounded-full bg-[#27C93F]" />
           </div>
           <div className="max-w-[170px] sm:max-w-none truncate whitespace-nowrap rounded-full border border-white/10 bg-black/40 px-3 sm:px-4 py-1 font-mono text-[11px] text-[#A3A3A3]">
-            equipra.app/equipment/cat-320
+            equipra.app/equipment/dozer-sd16
           </div>
           <div className="w-12" aria-hidden="true" />
         </div>
@@ -33,7 +42,7 @@ export default function Showcase() {
             <Image
               fill
               src={HERO_PHOTO}
-              alt="CAT 320 Hydraulic Excavator on construction site"
+              alt="SD16 crawler bulldozer grading a plot"
               sizes="(max-width: 1200px) 100vw, 1100px"
               priority
               className="object-cover"
@@ -48,10 +57,10 @@ export default function Showcase() {
             {/* Bottom-left equipment title overlay */}
             <div className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 flex flex-col items-start gap-1 sm:gap-2 text-left text-white max-w-[calc(100%-1.5rem)] sm:max-w-md">
               <span className="rounded-full border border-white/15 bg-black/60 px-2 sm:px-2.5 py-0.5 font-mono text-[10px] sm:text-xs uppercase tracking-widest text-primary backdrop-blur">
-                CONSTRUCTION · GAZIPUR
+                CONSTRUCTION · KHULNA
               </span>
               <h2 className="text-base sm:text-2xl font-bold tracking-tight text-white drop-shadow-md">
-                Hydraulic Excavator 20T — CAT 320
+                {SHOWCASE_ITEM.name}
               </h2>
             </div>
           </div>
@@ -62,7 +71,7 @@ export default function Showcase() {
             <div className="flex items-baseline justify-between border-b border-white/10 pb-3">
               <div>
                 <span className="font-mono text-xl sm:text-2xl font-bold text-white">
-                  {formatBDT(18500)}
+                  {formatBDT(SHOWCASE_ITEM.pricePerDay)}
                 </span>
                 <span className="text-xs text-[#A3A3A3]"> per day</span>
               </div>
@@ -86,21 +95,21 @@ export default function Showcase() {
 
             {/* Total calculation */}
             <div className="flex items-center justify-between py-2 text-xs">
-              <span className="text-[#A3A3A3]">3 days × 1 unit</span>
+              <span className="text-[#A3A3A3]">{SHOWCASE_ITEM.days} days × {SHOWCASE_ITEM.quantity} unit</span>
               <span className="font-mono font-semibold text-white">
-                {formatBDT(55500)}
+                {formatBDT(SHOWCASE_ITEM.pricePerDay * SHOWCASE_ITEM.days * SHOWCASE_ITEM.quantity)}
               </span>
             </div>
 
             {/* Availability */}
             <div className="flex items-center gap-1.5 pb-3 text-[11px] text-success">
               <Check className="size-3.5 shrink-0" aria-hidden="true" />
-              <span>2 units free for these dates</span>
+              <span>{SHOWCASE_ITEM.units} of {SHOWCASE_ITEM.units} units open</span>
             </div>
 
             {/* Book Now Button */}
             <Link
-              href="/equipment/eq-001"
+              href={`/equipment?search=${encodeURIComponent(SHOWCASE_ITEM.name)}`}
               className="flex w-full items-center justify-center rounded-full bg-primary py-2.5 sm:py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               Book now
