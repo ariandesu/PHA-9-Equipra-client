@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import POSTerminal, { SLOT, TERMINAL_ASPECT, TERMINAL_WIDTH } from "@/components/payment/pos-terminal";
 import ReceiptPaper from "@/components/payment/receipt-paper";
+import SuccessBurst from "@/components/payment/success-burst";
 import { usePrinterScale } from "@/components/payment/use-printer-scale";
 import { formatBDT } from "@/lib/money";
 
@@ -40,6 +41,8 @@ export default function ReceiptPrinter({
   const scaledPaper = paperHeight * scale;
   const reserved = isConfirmed && paperHeight ? Math.max(scaledPaper - slotOffset, 0) : 0;
   const clipHeight = Math.max(scaledPaper, terminalHeight);
+  const screenY = reserved + terminalHeight * 0.417;
+  const burstY = reserved + slotOffset;
 
   return (
     <div className="pos-device flex w-full flex-col items-center">
@@ -74,6 +77,16 @@ export default function ReceiptPrinter({
                 onPrinted={onPrinted}
               />
             </div>
+          </div>
+        )}
+
+        {isConfirmed && (
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+            style={{ zIndex: 5 }}
+          >
+            <SuccessBurst screenY={screenY} slotY={burstY} />
           </div>
         )}
       </div>

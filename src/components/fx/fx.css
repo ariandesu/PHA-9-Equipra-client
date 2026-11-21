@@ -218,30 +218,16 @@
   animation-play-state: paused;
 }
 
-/* 03 §4 Meteors: 8-14 absolutely positioned streaks, CSS keyframes */
-@keyframes fx-meteor {
-  0% {
-    transform: rotate(215deg) translateX(0);
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(215deg) translateX(-500px);
-    opacity: 0;
-  }
+/* Payment success backdrop: dots fading out from the printer column.
+   Static (no animation); dot colours still come from .fx-dots. */
+.fx-dots-success {
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 0%, transparent 70%);
 }
 
-.fx-meteor {
-  position: absolute;
-  height: 2px;
-  width: 50px;
-  background: linear-gradient(to right, rgba(255, 106, 43, 0), var(--accent));
-  animation: fx-meteor 5s linear infinite;
+@media (min-width: 1024px) {
+  .fx-dots-success {
+    -webkit-mask-image: radial-gradient(ellipse at 25% 60%, #000 0%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 25% 60%, #000 0%, transparent 70%);
+  }
 }
-
-
-
-
-

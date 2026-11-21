@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { Printer } from "lucide-react";
-import Meteors from "@/components/fx/meteors";
+import DotBackground from "@/components/fx/dot-background";
 import ReceiptPrinter from "@/components/payment/receipt-printer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -87,7 +87,7 @@ function PaymentSuccessContent() {
   return (
     <div className="flex min-h-[75vh] items-center justify-center px-4 py-8 lg:py-10">
       <div className="relative w-full max-w-lg lg:max-w-3xl overflow-hidden rounded-[24px] border border-border bg-surface px-5 py-7 sm:p-9 shadow-2xl text-center">
-        <Meteors number={12} />
+        <DotBackground className="fx-dots-success" />
 
         <div className="lg:grid lg:grid-cols-[300px_1fr] lg:gap-8 lg:items-end">
           <div>
