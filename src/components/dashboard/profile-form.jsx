@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Upload, Loader2 } from "lucide-react";
@@ -8,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useMe, useUpdateMe } from "@/lib/data/hooks";
 import { uploadToImgbb } from "@/lib/imgbb";
+import { authClient, useSession } from "@/lib/auth-client";
 import { initialsOf } from "@/components/layout/user-menu";
 
 const BD_PHONE_REGEX = /^(?:\+?880|0)1[3-9]\d{8}$/;
@@ -22,7 +24,9 @@ const profileSchema = z.object({
 });
 
 function InnerProfileForm({ user, role, onSaveSuccess }) {
+  const router = useRouter();
   const updateMe = useUpdateMe();
+  const sessionQuery = useSession();
   const [name, setName] = useState(user?.name || "");
   const [image, setImage] = useState(user?.image || "");
   const [phone, setPhone] = useState(user?.phone || "");
@@ -58,10 +62,21 @@ function InnerProfileForm({ user, role, onSaveSuccess }) {
       setIsSaving(true);
       await updateMe.mutateAsync({
         name: name.trim(),
-        image: image.trim() || null,
+        image: image.trim(),
         phone: phone ? phone.replace(/[\s-]/g, "") : "",
         address: address.trim(),
       });
+      try {
+        // The session user is served from the signed cookie cache, which the
+        // PATCH above cannot touch. Re-reading from the database rewrites the
+        // cookie, then both avatar consumers pick it up: the client session
+        // store (navbar) and the server layout (sidebar) via router.refresh().
+        await authClient.getSession({ query: { disableCookieCache: true } });
+        await sessionQuery.refetch();
+        router.refresh();
+      } catch {
+        // Best effort only: the profile is saved, avatars catch up on reload.
+      }
       toast.success("Profile saved successfully");
       onSaveSuccess?.();
     } catch (err) {
